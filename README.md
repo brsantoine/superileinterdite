@@ -1,7 +1,7 @@
 #superileinterdite
 
 <h3>----------POUR INITIALISER UN REPO----------</h3>
-  <p> NETBEANSPROJECT/superileinterdite puis faire <p>
+  <p> NetBeansProjects/superileinterdite puis faire <p>
   <p>git init repository</p>
   <p>git remote add origin < url ></p>
 
