@@ -1,5 +1,10 @@
 #superileinterdite
 
+<h3>----------POUR INITIALISER UN REPO----------</h3>
+  <p> NETBEANSPROJECT/superileinterdite puis faire <p>
+  <p>git init repository</p>
+  <p>git remote add origin < url ></p>
+
 <h3> ----------POUR ENVOYER DES CHANGEMENTS---------- </h3>
   
  <p>git add .</p>
@@ -15,6 +20,4 @@
 <h3>----------POUR RECUPERER DES CHANGEMENTS DEPUIS GITHUB----------</h3>
 <p>git pull origin < nom_branche ></p>
 
-<h3>----------POUR INITIALISER UN REPO----------</h3>
-  <p>git init repository</p>
-  <p>git remote add < origin > < url ></p>
+
