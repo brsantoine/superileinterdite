@@ -452,63 +452,67 @@ public class Controleur implements Observateur {
 	public void traiterMessage(Message m) {
             switch (m.getCommande()) {
                 case CHOISIR_TUILE:
-		                if(modeDeplacement){
+                    if(modeDeplacement){
+                       this.actionFinie();
+                       // Enleve l'aventurier da la tuile ou il etait
+                       this.aQuiLeTour().getTuile().removeAventurier(this.aQuiLeTour());   
+                       // Change la tuile de l'aventurier
+                       this.aQuiLeTour().updateTuile(this.getGrille().getTuiles().get(m.getIdTuile()));
+                       // Met un aventurier sur la nouvelle tuile
+                       this.getGrille().getTuiles().get(m.getIdTuile()).addAventurier(this.aQuiLeTour());
 
-                     this.actionFinie();
+                       ihmJeu.getGrille().updateDeplacement(lesJoueurs);
+                       tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
+                       ihmJeu.getGrille().afficherTuilesDeplacer(tAccess);
 
-                    // Enleve l'aventurier da la tuile ou il etait
-                    this.aQuiLeTour().getTuile().removeAventurier(this.aQuiLeTour());   
-                    // Change la tuile de l'aventurier
-                    this.aQuiLeTour().updateTuile(this.getGrille().getTuiles().get(m.getIdTuile()));
-                    // Met un aventurier sur la nouvelle tuile
-                    this.getGrille().getTuiles().get(m.getIdTuile()).addAventurier(this.aQuiLeTour());
+                       // Si un plongeur est sur une case coulée il ne peut pas finir le tour
+                       if (this.aQuiLeTour().getTuile().getEtat() == "coulé") {   
+                           ihmJeu.impossibleFinTour();
+                       } else {
+                           ihmJeu.possibleFinTour();
+                       }
 
-                    ihmJeu.getGrille().updateDeplacement(lesJoueurs);
-                    tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
-                    ihmJeu.getGrille().afficherTuilesDeplacer(tAccess);
+                       //if((this.aQuiLeTour()).getRole()=="pilote"){
+                       //    this.actionFinie(); // pas encore fini ca fait -1 dans tout les cas
+                       //}
 
-                    // Si un plongeur est sur une case coulée il ne peut pas finir le tour
-                    if (this.aQuiLeTour().getTuile().getEtat() == "coulé") {   
-                        ihmJeu.impossibleFinTour();
-                    } else {
-                        ihmJeu.possibleFinTour();
+                       // Détecte si le joueur peut encore jouer
+                       if(this.getActions()>0){                                    
+                           this.tourDeJeu();
+                       }
+                       else{
+                           this.finTour();
+                       }                   
+
+                    } else if (modeAssechement) {
+
+                        this.getGrille().getTuiles().get(m.getIdTuile()).assecherTuile(); 
+//                        ihm.afficherTuilesAssecher(tAssech);
+                        tAssech = this.aQuiLeTour().TuilesAssechables(laGrille);
+                        ihmJeu.getGrille().afficherTuilesAssecher(tAssech);
+
+                        // Gere le double assechement d'un ingenieur
+                        if(this.aQuiLeTour().getRole()=="ingenieur" && !doubleAssechement){            
+                            doubleAssechement=true;
+                            this.actionFinie();
+                        } 
+                        else if(this.aQuiLeTour().getRole()=="ingenieur" && doubleAssechement){
+                            doubleAssechement=false;
+                        } else {
+                            this.actionFinie();
+                        }
+                        ihmJeu.updateActions(this.getActions());
+
+                        // Detecte si le joueur peut encore jouer
+                        if(this.getActions()>0){                                   
+                            this.tourDeJeu();
+                        } 
+                        else{
+                            this.finTour();
+                        }
                     }
-                     
-                    //if((this.aQuiLeTour()).getRole()=="pilote"){
-                    //    this.actionFinie(); // pas encore fini ca fait -1 dans tout les cas
-                    //}
-                    
-                    // Détecte si le joueur peut encore jouer
-                    if(this.getActions()>0){                                    
-                         this.tourDeJeu();
-                     }
-                     else{
-                         this.finTour();
-                     }
-                      
-                    } else if (modeAssechement) {
-                      this.getGrille().getTuiles().get(m.getIdTuile()).assecherTuile(); 
-//                     ihm.afficherTuilesAssecher(tAssech);
 
-                     if(this.aQuiLeTour().getRole()=="ingenieur" && !doubleAssechement){            //gere le double assechement d'un ingenieur
-                         doubleAssechement=true;
-                         this.actionFinie();
-                     } 
-                     else if(this.aQuiLeTour().getRole()=="ingenieur" && doubleAssechement){
-                         doubleAssechement=false;
-                     } else {
-                         this.actionFinie();
-                     }
-                    ihmPlateau.updateActions(this.getActions());
-                     
-                     if(this.getActions()>0){                                   // detecte si le joueur peut encore jouer
-                         this.tourDeJeu();
-                     } 
-                     else{
-                         this.finTour();
-                     }
-                      
-                    break;
+                break;
   
                 case SE_DEPLACER:
 
@@ -538,9 +542,12 @@ public class Controleur implements Observateur {
                     else{
                         this.finTour();
                     }
+                    
                 break;  
-                  
+ 
+                
                 case ASSECHER: 
+                    
                     modeAssechement = true;
                     modeDeplacement = false;
                     //ihm.afficherTuilesAssecher(this.aQuiLeTour().TuilesAssechables(this.getGrille()));
@@ -548,7 +555,8 @@ public class Controleur implements Observateur {
                     
                 break;
 
-                      case COMMENCER_JEU:
+                case COMMENCER_JEU:
+                    
                     ihmMenu.cacher();
                      
                     this.commencerJeu();
@@ -561,11 +569,6 @@ public class Controleur implements Observateur {
                         listeJoueurs.add(this.lesJoueurs.get(i));
                     }
 
-                    
-
-                    
-
-                    
                     // Toute la grille est inondée
                     for (Tuile tuile : laGrille.getTuiles()) {
                         tuile.inonderTuile();
@@ -585,10 +588,11 @@ public class Controleur implements Observateur {
 
                 break;
                 // Pas commencé le code
-                      case DONNER:                       
+                
+                case DONNER:                       
 
                     // Detecte si le joueur peut encore jouer
-                   this.actionFinie();                                         
+                    this.actionFinie();                                         
                     if(this.getActions()>0){
                         this.tourDeJeu();
                     }
@@ -596,8 +600,11 @@ public class Controleur implements Observateur {
                         this.finTour();
                     }
                 break;
+                
+                
                 // Pas commencé le code
-                      case RECUPERER_TRESOR:                       
+                case RECUPERER_TRESOR:   
+                    
                     // this.gagnerTresor(tresor);
                     this.actionFinie();
                     
@@ -611,60 +618,56 @@ public class Controleur implements Observateur {
                     
                 break;
                  
-                      case FIN_TOUR:                            
+                
+                case FIN_TOUR:                            
                     this.finTour();
                 break;
     
     
-                  case CARTE_MAIN_PLEINE:
-                  // idAvent les cartes en haut
-                  // idCarte les cartes en qu il a
-                  aQuiLeTour().defausserCarte(aQuiLeTour().getCartes().get(m.getIdCarte()));
-                  aQuiLeTour().addCarte((CarteMain) PileTresor.getSesCartes().get(m.getIdAventurier()));
-                  ((CarteMain)PileTresor.getSesCartes().get(m.getIdAventurier())).changerProprio(aQuiLeTour().getRole());
-                  defausseTresor.addPile(PileTresor.getSesCartes().get(m.getIdAventurier()));
-                  PileTresor.RemoveCarte(PileTresor.getSesCartes().get(m.getIdAventurier()));   
+                case CARTE_MAIN_PLEINE:
+                    // idAvent les cartes en haut
+                    // idCarte les cartes en qu il a
+                    aQuiLeTour().defausserCarte(aQuiLeTour().getCartes().get(m.getIdCarte()));
+                    aQuiLeTour().addCarte((CarteMain) PileTresor.getSesCartes().get(m.getIdAventurier()));
+                    ((CarteMain)PileTresor.getSesCartes().get(m.getIdAventurier())).changerProprio(aQuiLeTour().getRole());
+                    defausseTresor.addPile(PileTresor.getSesCartes().get(m.getIdAventurier()));
+                    PileTresor.RemoveCarte(PileTresor.getSesCartes().get(m.getIdAventurier()));   
 
+                break;
 
-              break;
+            }
+        }
 
-	}
-
-        
-        
-        
-        
-        
         // Regarde si les joueurs peuvent encore gagner
 	public boolean victoirePossible() {      
             
-                int x=0;
-                // Regarde si un aventurier est mort
-		for(Aventurier a : this.getJoueurs()){
-                    if(a.getEtat()==false){                                     
-                        return false;
-                    }
-                }
-                
-                // Regarde si les deux tuileTresors d'un tresor sont coulées 
-                for(Tresors t: this.getTresors()){
-                    for(TuileTresor tt : t.getSesTuiles()){                                                                                
-                        if(tt.getEtat()=="coulé"){                              
-                            x++;
-                        }
-                    }
-                    
-                    // Return false si le tresor n'a pas été pris  (pas commencer le code et que ses deux tuiles tresors ont été coulées).
-                    if(t.getEtat()==false && x==2){                             
-                        return false;                                         
-                    }
-                }
-                // Regarde si le niveau d'eau est egal a 10
-                if(this.getNiveauEau()==10){                                         
+            int x=0;
+            // Regarde si un aventurier est mort
+            for(Aventurier a : this.getJoueurs()){
+                if(a.getEtat()==false){                                     
                     return false;
                 }
-                // (manque si le heliport est coulé ou non)
-                return true;
+            }
+
+            // Regarde si les deux tuileTresors d'un tresor sont coulées 
+            for(Tresors t: this.getTresors()){
+                for(TuileTresor tt : t.getSesTuiles()){                                                                                
+                    if(tt.getEtat()=="coulé"){                              
+                        x++;
+                    }
+                }
+
+                // Return false si le tresor n'a pas été pris  (pas commencer le code et que ses deux tuiles tresors ont été coulées).
+                if(t.getEtat()==false && x==2){                             
+                    return false;                                         
+                }
+            }
+            // Regarde si le niveau d'eau est egal a 10
+            if(this.getNiveauEau()==10){                                         
+                return false;
+            }
+            // (manque si le heliport est coulé ou non)
+            return true;
         }
 
 
