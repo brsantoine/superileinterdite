@@ -16,16 +16,9 @@
 //    public VueAventurier() {
 //        
 //
-//        // ---------------------------------------------------------------------
-//        // ---------------------------  GAME WINDOW  ---------------------------
-//        // ---------------------------------------------------------------------
+
 //        
-//        // -------- Setup window --------
-//        gameWindow = new JFrame();
-//        gameWindow.setTitle("Ile Interdite");
-//        gameWindow.setLayout(new BorderLayout(200,10));
-//        gameWindow.setSize(1440, 900);
-//        gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
+
 //        
 //        // -------- Main window --------
 //        JPanel gamePanelNorth = new JPanel();

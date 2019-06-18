@@ -15,7 +15,7 @@ public class Controleur implements Observateur {
 	private ArrayList<VueAventurier> ihmAventuriers;
         private VueMenu ihmMenu;
 	private VueInscription ihmInscription;
-	private VuePlateau ihmPlateau;
+	private VueJeu ihmJeu;
         private VueNiveau ihmNiveau;
 	private ArrayList<Pile> sesPiles ;
 	private int niveauEau;
@@ -35,8 +35,8 @@ public class Controleur implements Observateur {
   
        
         
-        public void setIhmVuePlateau(VuePlateau ihmPlateau){
-            this.ihmPlateau = ihmPlateau;
+        public void setIhmVueJeu(VueJeu ihmJeu){
+            this.ihmJeu = ihmJeu;
         }
         
          public void setIhmVueInscription(VueInscription ihmInscription){
@@ -214,7 +214,7 @@ public class Controleur implements Observateur {
             // Actions possibles
             ArrayList<Utils.Commandes> tm = new ArrayList<Utils.Commandes>(); 
             int i=0;
-            ihmPlateau.updateActions(getActions());
+            ihmJeu.updateActions(getActions());
             
             if(!this.aQuiLeTour().getCartes().isEmpty()){                       
                 tm.add(Utils.Commandes.DONNER);
@@ -301,7 +301,7 @@ public class Controleur implements Observateur {
         // Effectue toutes les actions nécessaires apres qu'un joueur ai fini ses actions  
         public void finTour(){                                                                                                 
             // Piocher carte tresor                                               
-            ihmPlateau.getGrille().resetGrille();
+            ihmJeu.getGrille().resetGrille();
             if (this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==false) {
                ((Pilote) this.aQuiLeTour()).resetHelico();
             }
@@ -317,7 +317,7 @@ public class Controleur implements Observateur {
                 this.nvtour();
             }
             else{
-                ihmPlateau.afficherDefaite();
+                ihmJeu.afficherDefaite();
             }
         }
         
@@ -338,14 +338,14 @@ public class Controleur implements Observateur {
 
 
 
-                    ihmPlateau.getGrille().afficherTuilesDeplacer(tAccess);
-                    ihmPlateau.getGrille().updateDeplacement();
+                    ihmJeu.getGrille().afficherTuilesDeplacer(tAccess);
+                    ihmJeu.getGrille().updateDeplacement();
 
                     // Si un plongeur est sur une case coulée il ne peut pas finir le tour
                     if (this.aQuiLeTour().getTuile().getEtat() == "coulé") {   
-                        ihmPlateau.impossibleFinTour();
+                        ihmJeu.impossibleFinTour();
                     } else {
-                        ihmPlateau.possibleFinTour();
+                        ihmJeu.possibleFinTour();
                     }
                      
                     //if((this.aQuiLeTour()).getRole()=="pilote"){
@@ -370,7 +370,7 @@ public class Controleur implements Observateur {
 
                         tAccess = (((Pilote) this.aQuiLeTour()).deplacementHelico(this.getGrille()));
                     }
-                    ihmPlateau.getGrille().afficherTuilesDeplacer(tAccess);
+                    ihmJeu.getGrille().afficherTuilesDeplacer(tAccess);
                     
                     
                 }
@@ -389,7 +389,7 @@ public class Controleur implements Observateur {
                   
                 if(m.getCommande() == Utils.Commandes.ASSECHER){ 
                    //ihm.afficherTuilesAssecher(this.aQuiLeTour().TuilesAssechables(this.getGrille()));
-                   ihmPlateau.getGrille().afficherTuilesAssecher(tAssech);
+                   ihmJeu.getGrille().afficherTuilesAssecher(tAssech);
                     
                 }
                  
@@ -408,7 +408,7 @@ public class Controleur implements Observateur {
                     } else {
                         this.actionFinie();
                     }
-                    ihmPlateau.updateActions(this.getActions());
+                    ihmJeu.updateActions(this.getActions());
 
                     // Detecte si le joueur peut encore jouer
                     if(this.getActions()>0){                                   
@@ -421,7 +421,6 @@ public class Controleur implements Observateur {
                 
                 if(m.getCommande() == Utils.Commandes.COMMENCER_JEU){
                     ihmMenu.cacher();
-                    this.setIhmVuePlateau(new VuePlateau());
                      
                     this.commencerJeu();
 
@@ -433,15 +432,11 @@ public class Controleur implements Observateur {
                         listeJoueurs.add(this.lesJoueurs.get(i));
                     }
 
-                    ihmAventuriers = new ArrayList<>();
                     
-                    int x = 0;
-                    for(Aventurier av : listeJoueurs){
-                        VueAventurier va = new VueAventurier(x);
-                        this.ihmAventuriers.add(va);
-                        x++;
-                    }
 
+                    
+
+                    
                     // Toute la grille est inondée
                     for (Tuile tuile : laGrille.getTuiles()) {
                         tuile.inonderTuile();
@@ -451,15 +446,11 @@ public class Controleur implements Observateur {
 
 
                     this.lesJoueurs=listeJoueurs;
+                    this.setIhmVueJeu(lesJoueurs);
 
-                    this.ihmPlateau.getGrille().intitialiserGrille(this.laGrille.getTuiles());
-                    this.setIhmVueNiveau(new VueNiveau(2));
-                    this.ihmNiveau.afficher();
-                    this.ihmPlateau.afficher();
+                    this.ihmJeu.getGrille().intitialiserGrille(this.laGrille.getTuiles());
+                    this.ihmJeu.afficher();
                     
-                    for (int i = 0; i < lesJoueurs.size(); i++) {
-                        ihmAventuriers.get(i).afficher();
-                    }
                     this.nvtour();
 
                 }

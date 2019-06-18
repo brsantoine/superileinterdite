@@ -17,11 +17,11 @@ public class VueGrille extends JPanel {
 
     public VueGrille() {
 
+        this.setLayout(new GridBagLayout());       
         GridBagConstraints gc = new GridBagConstraints();
      
         gc.weightx = 0.15;
         gc.weighty = 0.15;        
-        this.setLayout(new GridBagLayout());        
         gc.insets = new Insets(0,1,1,0);
         gc.fill = GridBagConstraints.BOTH;           
         gc.gridy = 0;
@@ -188,6 +188,8 @@ public class VueGrille extends JPanel {
             grid.get(i).setEnabled(false);
         }
     }
+    
+
     
     
 }

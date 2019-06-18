@@ -7,19 +7,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import util.*;
 
-public class VueTuile extends JPanel implements Observe {
+public class VueTuile extends JButton implements Observe {
     
     private Observateur observateur;    
     private int idTuile;
     
     public VueTuile() {
-    
-        // Creation du bouton ajouté au panel VueTuile
-        JButton button = new JButton();
-        this.add(button);
         
         // LISTENER    
-        button.addActionListener(new ActionListener() {
+        this.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                     Message m = new Message(Utils.Commandes.CHOISIR_TUILE,0,0,null,idTuile);
@@ -28,8 +24,6 @@ public class VueTuile extends JPanel implements Observe {
         });   
     
     }
-    
-    
     
     public void setID(int id) {
         this.idTuile = id;

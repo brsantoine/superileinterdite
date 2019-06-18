@@ -5,31 +5,16 @@ import javax.swing.*;
 import model.*;
 import util.*;
  
-public class VueAventurier implements Observe {
+public class VueAventurier extends JPanel implements Observe {
     
     private Observateur observateur;
     private int idAventurier;
-    private JFrame aventurierWindow;
     private JPanel mainPanel;
     
     public VueAventurier(int id) {
-        this.setID(id);
-        
-        aventurierWindow = new JFrame(Integer.toString(idAventurier));
-                
-                
-        aventurierWindow.setSize(Parameters.LARGEUR_VUE_AVENTURIER, Parameters.HAUTEUR_VUE_AVENTURIER);
-        
-        aventurierWindow.setLocation(1500, Parameters.TOP_VUE_AVENTURIER+((Parameters.HAUTEUR_VUE_AVENTURIER + Parameters.ECART_VUE_AVENTURIER )*id));
-        aventurierWindow.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-        
-        aventurierWindow.setUndecorated(Parameters.UNDECORATED);
-        aventurierWindow.setResizable(Parameters.RESIZABLE);
-        
-        mainPanel = new JPanel();
-        aventurierWindow.add(mainPanel);
-        
-        mainPanel.add(new JLabel("queue"));
+        this.setID(id);                
+        setSize(Parameters.LARGEUR_VUE_AVENTURIER, Parameters.HAUTEUR_VUE_AVENTURIER);
+        this.add(new JLabel("test"));
         
     }
     
@@ -49,7 +34,7 @@ public class VueAventurier implements Observe {
     }
     
     public void afficher() {
-        this.aventurierWindow.setVisible(true);
+        this.setVisible(true);
     }
     @Override
     public void addObservateur(Observateur o) {
