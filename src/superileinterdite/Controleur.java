@@ -192,6 +192,9 @@ public class Controleur implements Observateur {
                     }            
                     PileInondation.ViderPile();
                     PileInondation.setSesCartes(temp);
+                    // Mettre dans la défausse
+                    PileTresor.RemoveCarte(PileTresor.getSesCartes().get(i));             
+                         
                     
                 } else if (a.getCartes().size() == 5) {
                     
