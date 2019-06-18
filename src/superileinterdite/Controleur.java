@@ -1,16 +1,9 @@
 package superileinterdite;
 
 
-import util.Observateur;
-import aventuriers.Pilote;
-import aventuriers.Messager;
-import aventuriers.Explorateur;
-import model.Aventurier;
-import aventuriers.Plongeur;
-import aventuriers.Ingenieur;
-import aventuriers.Navigateur;
 import java.util.*;
-import model.Tuile;
+import aventuriers.*;
+import model.*;
 import util.*;
 import view.*;
 
@@ -20,9 +13,10 @@ public class Controleur implements Observateur {
 	private Grille laGrille; 
 	private ArrayList<Aventurier> lesJoueurs;
 	private ArrayList<VueAventurier> ihmAventuriers;
+        private VueMenu ihmMenu;
 	private VueInscription ihmInscription;
 	private VuePlateau ihmPlateau;
-	private VueMenu ihmMenu;
+        private VueNiveau ihmNiveau;
 	private ArrayList<Pile> sesPiles ;
 	private int niveauEau;
         private int nbAction;
@@ -53,8 +47,8 @@ public class Controleur implements Observateur {
             this.ihmMenu = ihmMenu;
         }
         
-
-        public void commencerJeu() {                                            //instanciation de la grille de toutes les tuiles et les aventuriers
+        // Instanciation de la grille de toutes les tuiles et les aventuriers
+        public void commencerJeu() {                                            
             // Creation des aventuriers
             Aventurier plongeur = new Plongeur();
             Aventurier ingenieur = new Ingenieur();
@@ -111,19 +105,19 @@ public class Controleur implements Observateur {
         
         
         
-       
-	public void gagnerTresor(Tresors tresor) {                              //met l'etat du tresor en récupéré
-		// TODO - implement Controleur.gagnerTresor
+        // Met l'etat du tresor en récupéré
+	public void recupererTresor(Tresors tresor) {                              
 		tresor.setEtat(true);
 	}
 
-	public void montéeDesEaux() {                                           //augmente le niveau de l'eau
-		// TODO - implement Controleur.montéeDesEaux
-		this.niveauEau++;
-//                this.ihmPlateau.getVueNiveau().setNiveau(niveauEau);  troll
+        // Augmente le niveau de l'eau
+	public void montéeDesEaux() {                                           
+            this.niveauEau++;
+            this.ihmNiveau.setNiveau(niveauEau); 
 	}
         
-        public int nbCarteInonAPiocher(int i){                                  // defini le nombre de carte a piocher en fonction du niveau de l'eau
+        // Definit le nombre de carte à piocher en fonction du niveau de l'eau
+        public int nbCarteInonAPiocher(int i){                                  
             if(i<3){
                 return 2;
             }
@@ -138,23 +132,28 @@ public class Controleur implements Observateur {
             }
         }
         
-        public void remettreAJourAction(){                                      // remet le nombre d'action a 3 au debut d'un tour
+        // Remet le nombre d'action a 3 au debut d'un tour
+        public void remettreAJourAction(){                                      
             this.nbAction=3;
         }
         
-        public void actionFinie(){                                              // enleve une action
+        // Enleve une action
+        public void actionFinie(){                                              
             this.nbAction--;
         }
         
-        public int getActions(){                                                // revoie le nombre d'action restant
+        // Renvoie le nombre d'actions restantes
+        public int getActions(){                                                
             return nbAction;
         }
         
-        public int getTour(){                                                   // revoie le nombre de tour effectué
+        // Renvoie le nombre de tours effectués
+        public int getTour(){                                                   
             return this.tour;
         }
         
-        public Aventurier aQuiLeTour(){                                         // permet de savoir le joueur qui doit jouer
+        // Permet de savoir le joueur qui doit jouer
+        public Aventurier aQuiLeTour(){                                         
             int x=0;
             for(Aventurier a : this.lesJoueurs){
                 if(this.getTour()%this.nbJoueurs()==x){
@@ -165,52 +164,61 @@ public class Controleur implements Observateur {
             return this.lesJoueurs.get(x);
         }
         
-        public int nbJoueurs(){                                                 // renvoie le nombre de joueur dans la partie
+        // Renvoie le nombre de joueurs dans la partie
+        public int nbJoueurs(){                                                 
             return this.lesJoueurs.size();
         }
             
-        public void nvtour(){                                                   // effectue un nouveau tour 
+        // Effectue un nouveau tour
+        public void nvtour(){                                                    
             Message m = new Message(Utils.Commandes.NOUVEAU_TOUR, 0,0,null,0);
             this.tour++;
             this.traiterMessage(m);
         }
         
-        public Grille getGrille(){                                              // renvoie la grille contenant les tuiles 
+        // Renvoie la grille contenant les tuiles 
+        public Grille getGrille(){                                              
             return this.laGrille;
         }
         
-        public ArrayList<Tresors> getTresors(){                                 // revoie l'ensemble des tresors 
+        // Renvoie l'ensemble des tresors 
+        public ArrayList<Tresors> getTresors(){                                 
             return this.lesTresors;
         }
         
-        public int getNiveauEau(){                                              // revoie le niveau de l'eau 
+        // Renvoie le niveau de l'eau 
+        public int getNiveauEau(){                                              
             return this.niveauEau;
         }
         
-        public void setNiveauEau(int nveau){                                    //instancie le niveau de l'eau
-            this.niveauEau=nveau;
+        // Instancie le niveau de l'eau
+        public void setNiveauEau(int niveau){                                    
+            this.niveauEau = niveau;
         }
         
-        public ArrayList<Aventurier> getJoueurs(){                              // renvoie la liste de joueur jouant
+        // Renvoie la liste de joueurs jouant
+        public ArrayList<Aventurier> getJoueurs(){                              
             return this.lesJoueurs;
         }
         
-        public ArrayList<Pile> getPiles(){                                      // renvoie l'ensemble des piles du jeu
+        // Renvoie l'ensemble des piles du jeu
+        public ArrayList<Pile> getPiles(){                                      
             return this.sesPiles;
         }
        
-        
-        public void tourDeJeu(){                                                // renvoie toutes les actions possibles en fonction des multiples parametres du joueur(tuile,carte, role ect..)
-            ArrayList<Utils.Commandes> tm = new ArrayList<Utils.Commandes>(); //Actions possibles
+        // Renvoie toutes les actions possibles en fonction des multiples parametres du joueur(tuile,carte, role ect..)
+        public void tourDeJeu(){                       
+            // Actions possibles
+            ArrayList<Utils.Commandes> tm = new ArrayList<Utils.Commandes>(); 
             int i=0;
             ihmPlateau.updateActions(getActions());
             
-            if(!this.aQuiLeTour().getCartes().isEmpty()){                       // regarde si le joueur peut se deplacer
+            if(!this.aQuiLeTour().getCartes().isEmpty()){                       
                 tm.add(Utils.Commandes.DONNER);
             }
 
-
-            for(CarteMain c : this.aQuiLeTour().getCartes()){                   // regarde si le joueur peut gagner un trésor
+            // Regarde si le joueur peut gagner un trésor
+            for(CarteMain c : this.aQuiLeTour().getCartes()){                   
                 for(CarteMain a : this.aQuiLeTour().getCartes()){
                    if(a instanceof CarteTresors && c instanceof CarteTresors){
 
