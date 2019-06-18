@@ -13,7 +13,7 @@ public class Grille {
         
 
 	public ArrayList<Tuile> getTuiles() {
-		return sesTuiles;
+            return sesTuiles;
 	}
         
         public void addTuile(Tuile tuile) {

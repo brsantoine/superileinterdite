@@ -22,9 +22,12 @@ public class Parameters {
     public static final Integer SWING_BORDERS_HEIGHT = 4 ; // Taille des bordures de côté d'une fenêtre
     public static final Integer TOP_VUE_AVENTURIER = UNDECORATED ? 30 : 0 ; // Position des fenêtres aventuriers
     public static final Integer TOP_AUTRES_VUES = 265 - (UNDECORATED ? 0 : DECORATION_HEIGHT) ; // Position des fenêtres Niveau, Plateau et Message en NoPic
-    public static final Integer HAUTEUR_VUE_AVENTURIER = 200 ; // Hauteur des fenêtres Aventurier
+    public static final Integer HAUTEUR_VUE_AVENTURIER = 200 ; // Hauteur des fenêtres Aventuriers
     public static final Integer HAUTEUR_AUTRES_VUES = 491 + (UNDECORATED ? 0 : DECORATION_HEIGHT) ; // Hauteur des fenêtres Niveau, Plateau et Message
-
+    
+    public static final Integer LARGEUR_VUE_AVENTURIER = 500 + (UNDECORATED ? 0 : DECORATION_HEIGHT) ; // Largeur des fenêtres Aventuriers
+    public static final Integer ECART_VUE_AVENTURIER = 20; // Ecart entre chaque fenêtres Aventuriers
+    
     // ====================================================================================
     // Jeu
     public static final Integer NB_INONDATIONS_INITIALES = (SIMPLIFIED ? 6 : 6) ; // Nombre de tuiles inondées au démarrage du jeu

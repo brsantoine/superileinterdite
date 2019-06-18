@@ -3,23 +3,26 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/users/info/etu-s2/marquest/superileinterdite/src/model/Carte.java</file>
-            <file>file:/users/info/etu-s2/marquest/superileinterdite/src/superileinterdite/CarteActionSpeciale.java</file>
-            <file>file:/users/info/etu-s2/marquest/superileinterdite/src/aventuriers/Explorateur.java</file>
-            <file>file:/users/info/etu-s2/marquest/superileinterdite/src/view/VueNiveau.java</file>
-            <file>file:/users/info/etu-s2/marquest/superileinterdite/src/view/VueMenu.java</file>
-            <file>file:/users/info/etu-s2/marquest/superileinterdite/src/superileinterdite/CarteMain.java</file>
-            <file>file:/users/info/etu-s2/marquest/superileinterdite/src/superileinterdite/Controleur.java</file>
-            <file>file:/users/info/etu-s2/marquest/superileinterdite/src/util/Parameters.java</file>
-            <file>file:/users/info/etu-s2/marquest/superileinterdite/src/superileinterdite/Defausse.java</file>
-            <file>file:/users/info/etu-s2/marquest/superileinterdite/src/superileinterdite/Grille.java</file>
-            <file>file:/users/info/etu-s2/marquest/superileinterdite/src/superileinterdite/CarteTresors.java</file>
-            <file>file:/users/info/etu-s2/marquest/superileinterdite/src/superileinterdite/TestCarte.java</file>
-            <file>file:/users/info/etu-s2/marquest/superileinterdite/src/view/VueAventurier.java</file>
-            <file>file:/users/info/etu-s2/marquest/superileinterdite/src/superileinterdite/TuilePion.java</file>
-            <file>file:/users/info/etu-s2/marquest/superileinterdite/src/superileinterdite/CarteInondation.java</file>
-            <file>file:/users/info/etu-s2/marquest/superileinterdite/src/superileinterdite/Pile.java</file>
-            <file>file:/users/info/etu-s2/marquest/superileinterdite/src/util/Utils.java</file>
+
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/model/Aventurier.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/superileinterdite/Grille.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/view/VueMenu.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/view/VueTuile.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/model/ObjetIdentifie.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/view/VueNiveau.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/view/vueaventuriergarbage.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/view/VuePlateau.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/view/VueAventurier.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/superileinterdite/Superileinterdite.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/util/Utils.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/view/VueJeu.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/superileinterdite/Controleur.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/model/Tuile.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/util/Parameters.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/view/VueGrille.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/view/MessageBox.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/view/VueInscription.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/util/Message.java</file>
         </group>
     </open-files>
 </project-private>

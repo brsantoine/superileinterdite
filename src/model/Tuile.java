@@ -3,12 +3,13 @@ package model;
 import model.Aventurier;
 import java.util.*;
 
-public class Tuile extends ObjetIdentifie{
+public class Tuile  {
 
 	ArrayList<Aventurier> sesAventuriers = new ArrayList();
 	private String nom;
 	private int x;
 	private int y;
+        private int idTuile;
 	private String etat; // seche, coulé, inondé
         
         
@@ -28,6 +29,14 @@ public class Tuile extends ObjetIdentifie{
 
         public void setY(int y) {
             this.y = y;
+        }
+        
+        public void setID(int id) {
+            this.idTuile = id;
+        }   
+    
+        public int getID() {
+            return this.idTuile;
         }
         
 	public void removeAventurier(Aventurier av) {

@@ -17,10 +17,9 @@ import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
 import util.Parameters;
  
-public class VueNiveau {
+public class VueNiveau extends JPanel{
     
     private Integer niveau ;
-    private final JFrame window ;
     HashMap<Integer, JPanel> panelsGauches ;
     Integer cellWidth = 50 ;
     Integer cellHeight = (Parameters.HAUTEUR_AUTRES_VUES - 25 - (Parameters.UNDECORATED ? 0 : Parameters.DECORATION_HEIGHT)) / 10 ;
@@ -30,16 +29,11 @@ public class VueNiveau {
         this.niveau = niveauInitial;
         panelsGauches = new HashMap<>();
 
-        window = new JFrame();
-        window.setSize(cellWidth*2+Parameters.SWING_BORDERS_HEIGHT, Parameters.HAUTEUR_AUTRES_VUES);        
-        window.setLocation(30, Parameters.TOP_AUTRES_VUES);
-        window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-        
-        window.setUndecorated(Parameters.UNDECORATED);
-        window.setResizable(Parameters.RESIZABLE);
+        setSize(cellWidth*2+Parameters.SWING_BORDERS_HEIGHT, Parameters.HAUTEUR_AUTRES_VUES);        
+        setLocation(30, Parameters.TOP_AUTRES_VUES);
         
         this.mainPanel = new JPanel() ;
-        this.window.add(mainPanel);
+        this.add(mainPanel);
         this.mainPanel.setLayout(new BorderLayout());
         this.mainPanel.setBackground(Color.WHITE);
         this.mainPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, false));
@@ -120,7 +114,6 @@ public class VueNiveau {
             panelDroit.add(labelDroit, gbc);
         }
         panelsGauches.get(niveauInitial).setBackground(Color.YELLOW);
-        this.window.setVisible(true);
     }
 
     public void setNiveau(Integer niveau) {
@@ -175,21 +168,21 @@ public class VueNiveau {
         }
     }
     
-    public void afficherNiveau() {
-        this.window.setVisible(true);
+    public void afficher() {
+        this.setVisible(true);
     }
     
-    public static void main(String[] args) {   
-        VueNiveau vueNiveau = new VueNiveau(1);
-
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Pour passer au niveau 5, appuyer sur entrée");
-        String suite = scanner.nextLine();        
-        vueNiveau.setNiveau(5);
-
-        System.out.println("Pour passer au niveau 5, appuyer sur entrée");
-        suite = scanner.nextLine();
-        vueNiveau.setNiveau(10);
-    }    
+//    public static void main(String[] args) {   
+//        VueNiveau vueNiveau = new VueNiveau(1);
+//
+//        Scanner scanner = new Scanner(System.in);
+//
+//        System.out.println("Pour passer au niveau 5, appuyer sur entrée");
+//        String suite = scanner.nextLine();        
+//        vueNiveau.setNiveau(5);
+//
+//        System.out.println("Pour passer au niveau 5, appuyer sur entrée");
+//        suite = scanner.nextLine();
+//        vueNiveau.setNiveau(10);
+//    }    
 }
