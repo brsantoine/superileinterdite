@@ -34,15 +34,17 @@ public class VueJeu extends JFrame implements Observe{
         
         // -------- Setup window --------
 
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
+        this.setResizable(Parameters.RESIZABLE);
         this.setTitle("Ile Interdite");
-        this.setSize(1920,1080);   
-        
+        this.setSize(1600, 900);   
+
         // ---------------------------------------------------------------------
         // ---------------------------  GAME WINDOW  ---------------------------
         // ---------------------------------------------------------------------
         
-        this.setLayout(new BorderLayout());
+        this.setLayout(new BorderLayout(10,10));
         vueNiveau = new VueNiveau(2);
         vueGrille = new VueGrille();
         eastPanel = new JPanel();
@@ -62,7 +64,8 @@ public class VueJeu extends JFrame implements Observe{
         westPanel.add(vueNiveau, BorderLayout.CENTER);
         
 
-        // ------------ EASTPANEL ------------        
+        // ------------ EASTPANEL ------------
+        eastPanel.setSize(Parameters.LARGEUR_VUE_AVENTURIER, Parameters.HAUTEUR_VUE_AVENTURIER*4);
         vuesAventuriers = new ArrayList<>();
         int x = 0;
         for(Aventurier av : aventuriers){
@@ -156,6 +159,10 @@ public class VueJeu extends JFrame implements Observe{
     
     public VueGrille getGrille() {
         return vueGrille;
+    }
+
+    public VueNiveau getVueNiveau() {
+        return vueNiveau;
     }
     
     @Override

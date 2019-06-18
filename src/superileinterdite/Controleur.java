@@ -16,7 +16,6 @@ public class Controleur implements Observateur {
         private VueMenu ihmMenu;
 	private VueInscription ihmInscription;
 	private VueJeu ihmJeu;
-        private VueNiveau ihmNiveau;
 	private ArrayList<Pile> sesPiles ;
 	private int niveauEau;
         private int nbAction;
@@ -32,22 +31,18 @@ public class Controleur implements Observateur {
             sesPiles = new ArrayList();
         }
         
-  
-       
-        
         public void setIhmVueJeu(VueJeu ihmJeu){
             this.ihmJeu = ihmJeu;
+            this.ihmJeu.addObservateur(this);
         }
         
          public void setIhmVueInscription(VueInscription ihmInscription){
-           this.ihmInscription = ihmInscription;
+            this.ihmInscription = ihmInscription;
+            this.ihmInscription.addObservateur(this);
         }
          
         public void setIhmVueMenu(VueMenu ihmMenu){
             this.ihmMenu = ihmMenu;
-        }
-        public void setIhmVueNiveau(VueNiveau ihmNiveau){
-            this.ihmNiveau = ihmNiveau;
         }
         
         // Instanciation de la grille de toutes les tuiles et les aventuriers
@@ -100,6 +95,10 @@ public class Controleur implements Observateur {
             laGrille.addTuile(new TuileTresor("Le palais des marées",Calice));
             // Randomizer la grille du jeu
             laGrille.randomizeGrille();
+            for (int i = 0; i < laGrille.getTuiles().size(); i++) {
+                laGrille.getTuiles().get(i).setID(i);
+                
+            }
             this.remettreAJourAction();
             this.tour=1;
             this.niveauEau=1;
@@ -116,7 +115,7 @@ public class Controleur implements Observateur {
         // Augmente le niveau de l'eau
 	public void montéeDesEaux() {                                           
             this.niveauEau++;
-            this.ihmNiveau.setNiveau(niveauEau); 
+            this.ihmJeu.getVueNiveau().setNiveau(niveauEau); 
 	}
         
         // Definit le nombre de carte à piocher en fonction du niveau de l'eau
@@ -269,31 +268,31 @@ public class Controleur implements Observateur {
            
            
            
-           // Regarde si le joueur peut se deplacer en fonction de son rôle
-           if(this.aQuiLeTour().getRole()=="plongeur"){                         
-               tm.add(Utils.Commandes.SE_DEPLACER);
-           }
-           else if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==true){
-               tm.add(Utils.Commandes.SE_DEPLACER);
-           }
-           else if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==false && tAccess.size()>0){
-               tm.add(Utils.Commandes.SE_DEPLACER);
-           }
-           else if(tAccess.size()>0){
-               tm.add(Utils.Commandes.SE_DEPLACER);
-           }
+            // Regarde si le joueur peut se deplacer en fonction de son rôle
+            if(this.aQuiLeTour().getRole()=="plongeur"){                         
+                tm.add(Utils.Commandes.SE_DEPLACER);
+            }
+            else if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==true){
+                tm.add(Utils.Commandes.SE_DEPLACER);
+            }
+            else if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==false && tAccess.size()>0){
+                tm.add(Utils.Commandes.SE_DEPLACER);
+            }
+            else if(tAccess.size()>0){
+                tm.add(Utils.Commandes.SE_DEPLACER);
+            }
 
-           // Regarde si le navigateur peut se déplacer
-           if(this.aQuiLeTour().getRole()=="navigateur"){                       
+            // Regarde si le navigateur peut se déplacer
+            if(this.aQuiLeTour().getRole()=="navigateur"){                       
                for(Aventurier a : this.getJoueurs()){
                    if(!a.TuilesAccessibles(this.getGrille()).isEmpty()){
                    tm.add(Utils.Commandes.DEPLACER_AUTRE);
                    break;
                    }
-               }
-           }
+                }
+            }
 
-           tm.add(Utils.Commandes.FIN_TOUR);
+            tm.add(Utils.Commandes.FIN_TOUR);
         }
                   
         
@@ -371,8 +370,6 @@ public class Controleur implements Observateur {
                         tAccess = (((Pilote) this.aQuiLeTour()).deplacementHelico(this.getGrille()));
                     }
                     ihmJeu.getGrille().afficherTuilesDeplacer(tAccess);
-                    
-                    
                 }
                   
                 if(m.getCommande() == Utils.Commandes.DEPLACER_AUTRE){
@@ -446,7 +443,7 @@ public class Controleur implements Observateur {
 
 
                     this.lesJoueurs=listeJoueurs;
-                    this.setIhmVueJeu(lesJoueurs);
+                    this.setIhmVueJeu(new VueJeu(lesJoueurs));
 
                     this.ihmJeu.getGrille().intitialiserGrille(this.laGrille.getTuiles());
                     this.ihmJeu.afficher();

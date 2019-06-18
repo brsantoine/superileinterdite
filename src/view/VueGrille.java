@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import model.Aventurier;
 import model.Tuile;
@@ -78,6 +79,7 @@ public class VueGrille extends JPanel {
         
         for (int i = 0; i < grid.size(); i++) {
             grid.get(i).setID(i);
+            System.out.println(grid.get(i).getID());
         }
     }
 
