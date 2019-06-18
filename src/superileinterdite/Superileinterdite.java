@@ -18,7 +18,7 @@ public class Superileinterdite {
     public static void main(String[] args) {
         // TODO code application logic here
         Controleur controleur = new Controleur();
-        controleur.commencerJeu();
+        //controleur.commencerJeu();
         VueMenu ihm = new VueMenu();
         ihm.addObservateur(controleur);
         controleur.setIhmVueMenu(ihm);

@@ -3,6 +3,7 @@ package view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import util.*;
 
@@ -36,6 +37,11 @@ public class VueTuile extends JPanel implements Observe {
     
     public int getID() {
         return this.idTuile;
+    }
+    
+    public void setText(String nom){
+        JLabel nomLabel = new JLabel(nom);
+        this.add(nomLabel);
     }
         
     @Override

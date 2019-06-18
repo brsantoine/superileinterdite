@@ -138,13 +138,13 @@ public class VueGrille extends JPanel {
     
     public void updateDeplacement() {        
         // Remet toutes les bordures à la couleur par défaut
-//        for (int i = 0; i < grid.size() ; i++) {
-//            grid.get(i).setBorder(new LineBorder(new JButton().getBackground()));
-//        }
+  /*      for (int i = 0; i < grid.size() ; i++) {
+            grid.get(i).setBorder(new LineBorder(new JButton().getBackground()));
+        }
 //        
 //        // Met les labels sur toutes les cases de la grille
-//        for (int i = 0; i < grid.size() ; i++) {
-//            grid.get(i).setText(observateur.getGrille().getTuiles().get(i).getNom());
+        for (int i = 0; i < grid.size() ; i++) {
+            grid.get(i).setText(observateur.getGrille().getTuiles().get(i).getNom());*/
 //            
 //            // Met à jour les couleurs des bordures en fonction de la position des aventuriers
 //            for (Aventurier aventurier : observateur.getJoueurs()) {
@@ -167,7 +167,20 @@ public class VueGrille extends JPanel {
 //                    }                    
 //                }
 //            }    
-//        }   
+        }   
+    //}
+    
+    public void intitialiserGrille(ArrayList<Tuile> tuiles){
+        
+        for (int i = 0; i < grid.size() ; i++) {
+            grid.get(i).setBorder(new LineBorder(new JButton().getBackground()));
+        }
+//        
+//        // Met les labels sur toutes les cases de la grille
+        for (int i = 0; i < grid.size() ; i++) {
+            grid.get(i).setText(tuiles.get(i).getNom());
+        }
+        
     }
     
     // Désactive tous les boutons de la grille, et redonne la possibilité de cliquer sur asécher et se déplacer
