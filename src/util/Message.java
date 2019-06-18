@@ -10,7 +10,7 @@ public class Message implements Serializable {
     private final Utils.Commandes commande ;
     private final Integer idAventurier ;
     private final Integer idCarte ;
-    private final  Utils.Tresor tresor ;
+    private final Utils.Tresor tresor ;
     private final Integer idTuile ;
     
     public Message(Utils.Commandes commande, Integer idAventurier, Integer idCarte,  Utils.Tresor tresor, Integer idTuile) {

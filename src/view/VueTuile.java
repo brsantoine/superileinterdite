@@ -18,8 +18,8 @@ public class VueTuile extends JButton implements Observe {
         this.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                    Message m = new Message(Utils.Commandes.CHOISIR_TUILE,0,0,null,idTuile);
-                    notifierObservateur(m);
+                Message m = new Message(Utils.Commandes.CHOISIR_TUILE,0,0,null,idTuile);
+                notifierObservateur(m);
             }
         });   
     

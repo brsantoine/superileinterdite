@@ -20,7 +20,7 @@ public class Controleur implements Observateur {
 	private int niveauEau;
         private int nbAction;
         private int tour;
-        private boolean doubleAssechement = false;
+        private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false;
         private ArrayList<Tuile> tAssech, tAccess;
         
 
@@ -324,9 +324,8 @@ public class Controleur implements Observateur {
         @Override
 	public void traiterMessage(Message m) {
 
-		 if(m.getCommande() == Utils.Commandes.CHOISIR_TUILE){
-                     //this.nbAction = this.nbAction-this.aQuiLeTour().TuilesAccessibles(this.getGrille()).get(this.getGrille().getTuiles().get(m.getNumTuile()));
-                    this.actionFinie();
+		 if(m.getCommande() == Utils.Commandes.CHOISIR_TUILE && modeDeplacement){
+                     this.actionFinie();
 
                     // Enleve l'aventurier da la tuile ou il etait
                     this.aQuiLeTour().getTuile().removeAventurier(this.aQuiLeTour());   
@@ -337,8 +336,8 @@ public class Controleur implements Observateur {
 
 
 
-                    ihmJeu.getGrille().afficherTuilesDeplacer(tAccess);
-                    ihmJeu.getGrille().updateDeplacement();
+//                    ihmJeu.getGrille().afficherTuilesDeplacer(tAccess);
+                    ihmJeu.getGrille().updateDeplacement(lesJoueurs);
 
                     // Si un plongeur est sur une case coulée il ne peut pas finir le tour
                     if (this.aQuiLeTour().getTuile().getEtat() == "coulé") {   
@@ -361,6 +360,8 @@ public class Controleur implements Observateur {
                 }
                  
                 if(m.getCommande() == Utils.Commandes.SE_DEPLACER){
+                    modeAssechement = false;
+                    modeDeplacement = true;
                     if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==true) {
 
                         // On affiche déplacement normal
@@ -385,13 +386,15 @@ public class Controleur implements Observateur {
                 }  
                   
                 if(m.getCommande() == Utils.Commandes.ASSECHER){ 
+                    modeAssechement = true;
+                    modeDeplacement = false;
                    //ihm.afficherTuilesAssecher(this.aQuiLeTour().TuilesAssechables(this.getGrille()));
                    ihmJeu.getGrille().afficherTuilesAssecher(tAssech);
                     
                 }
                  
                  
-                if(m.getCommande() == Utils.Commandes.CHOISIR_TUILE){
+                if(m.getCommande() == Utils.Commandes.CHOISIR_TUILE && modeAssechement){
                     this.getGrille().getTuiles().get(m.getIdTuile()).assecherTuile(); 
 //                      ihm.afficherTuilesAssecher(tAssech);
 
@@ -446,6 +449,7 @@ public class Controleur implements Observateur {
                     this.setIhmVueJeu(new VueJeu(lesJoueurs));
 
                     this.ihmJeu.getGrille().intitialiserGrille(this.laGrille.getTuiles());
+                    this.ihmJeu.getGrille().updateDeplacement(lesJoueurs);
                     this.ihmJeu.afficher();
                     
                     this.nvtour();
