@@ -7,9 +7,10 @@ import util.*;
 public class VueAventurier implements Observe {
     
     private Observateur observateur;
+    private int idAventurier;
     
-    public VueAventurier() {
-    
+    public VueAventurier(int id) {
+        this.setID(id);
     }
     
     public void afficherCartes(ArrayList<Carte> ca) {
@@ -29,5 +30,13 @@ public class VueAventurier implements Observe {
         if (observateur != null) {
             observateur.traiterMessage(m);
         }
-    }  
+    }
+    
+    public void setID(int id) {
+        this.idAventurier = id;
+    }
+    
+    public int getID() {
+        return this.idAventurier;
+    }
 }

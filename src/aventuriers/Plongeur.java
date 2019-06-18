@@ -12,7 +12,7 @@ public class Plongeur extends Aventurier {
         super("plongeur");
     }
     
-    public HashMap<Tuile, Integer> TuilesAccessibles(Grille grille) {
+    public ArrayList<Tuile> TuilesAccessibles(Grille grille) {
         // TODO - implement Aventurier.deplacement
         int x = this.getTuile().getX();
         int y = this.getTuile().getY();
@@ -30,9 +30,9 @@ public class Plongeur extends Aventurier {
   
         
         //Ajout des tuiles sèches dans le vecteur final, avec un cout = 1
-        HashMap<Tuile, Integer> tuilesAccess = new HashMap<>();
+        ArrayList<Tuile>tuilesAccess = new ArrayList<>();
         for (Tuile tuile : tuilesAccess1) {
-            tuilesAccess.put(tuile, 1);
+            tuilesAccess.add(tuile);
         }
         
         
@@ -46,7 +46,7 @@ public class Plongeur extends Aventurier {
         
         //Ajout des tuiles inondées qui ont pour coût 0
         for (Tuile tuile : tuilesAccess2) {
-            tuilesAccess.put(tuile, 0);
+            tuilesAccess.add(tuile);
         }
         
         return tuilesAccess;

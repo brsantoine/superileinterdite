@@ -14,7 +14,7 @@ public class Explorateur extends Aventurier {
     
     //Fonction qui ne change pas beaucoup de l'aventurier de base, sauf la méthode tuileAccessible
     @Override
-    public HashMap<Tuile, Integer> TuilesAccessibles(Grille grille) {
+    public ArrayList<Tuile> TuilesAccessibles(Grille grille) {
 		// TODO - implement Aventurier.deplacement
 		int x = this.getTuile().getX();
                 int y = this.getTuile().getY();
@@ -26,12 +26,13 @@ public class Explorateur extends Aventurier {
                     }
                 }
                 
-                HashMap<Tuile, Integer> tuilesAccess = new HashMap<>();
+      /*        ArrayList<Tuile> tuilesAccess = new ArrayList<>();
                 for (Tuile tuile : tuilesAccess1) {
-                    tuilesAccess.putIfAbsent(tuile, 1);
-                }
+                    
+                    tuilesAccess.putIfAbsent(tuile);
+                }*/
 
-                return tuilesAccess;
+                return tuilesAccess1;
 	}
     
         //Fonction qui ne change pas beaucoup de l'aventurier de base, sauf la méthode tuileAssechable

@@ -86,7 +86,7 @@ public class VueMenu implements Observe {
             public void actionPerformed(ActionEvent e) {
 //               menuWindow.setVisible(false);
 //               gameWindow.setVisible(true);
-               Message m = new Message(Utils.Commandes.COMMENCER_JEU,0,0,null,listeNbJoueurs.getSelectedIndex()+2);
+               Message m = new Message(Utils.Commandes.COMMENCER_JEU,listeNbJoueurs.getSelectedIndex()+2,0,null,0);
                notifierObservateur(m);
 //               afficherJeu();
            } 

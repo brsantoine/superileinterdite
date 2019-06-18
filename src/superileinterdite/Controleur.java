@@ -44,9 +44,11 @@ public class Controleur implements Observateur {
         public void setIhmVuePlateau(VuePlateau ihmPlateau){
             this.ihmPlateau = ihmPlateau;
         }
-//         public void setIhmVueInscription(VueInscription ihmInscription){
-//            this.ihmInscription = ihmInscription;
-//        }
+        
+         public void setIhmVueInscription(VueInscription ihmInscription){
+           this.ihmInscription = ihmInscription;
+        }
+         
         public void setIhmVueMenu(VueMenu ihmMenu){
             this.ihmMenu = ihmMenu;
         }
@@ -399,13 +401,22 @@ public class Controleur implements Observateur {
                  
                  // a jeter
                  if(m.getCommande() == Utils.Commandes.COMMENCER_JEU){
-                     this.commencerJeu();                                       
-                     System.out.println(m.getIdTuile()); //nombre joueurs
+                     ihmMenu.cacher();
+                     this.setIhmVuePlateau(new VuePlateau());
+                     
+                     this.commencerJeu();
+                     
+                     System.out.println(m.getIdAventurier()); //nombre joueurs
+                     
                      ArrayList<Aventurier> a = new ArrayList<>();               //créer la liste de joueur en fonction du nombre de joueur choisi
-                     for(int i=0; i<m.getIdTuile();i++){
+                     for(int i=0; i<m.getIdAventurier();i++){
                          a.add(this.lesJoueurs.get(i));
                      }
                      
+                     for(Aventurier av : a){
+                         VueAventurier va = new VueAventurier(av.getId());
+                         this.ihmAventuriers.add(va);
+                     }
                      
                      //Toute la grille est inondée
                      for (Tuile tuile : laGrille.getTuiles()) {
@@ -416,7 +427,8 @@ public class Controleur implements Observateur {
                      
                      
                      this.lesJoueurs=a;
-                     ihmPlateau.getGrille().updateDeplacement();
+                     
+                     this.ihmPlateau.getGrille().intitialiserGrille(this.laGrille.getTuiles());
                      this.nvtour();
                    
                 }
