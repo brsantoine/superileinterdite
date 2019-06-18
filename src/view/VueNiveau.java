@@ -120,7 +120,6 @@ public class VueNiveau {
             panelDroit.add(labelDroit, gbc);
         }
         panelsGauches.get(niveauInitial).setBackground(Color.YELLOW);
-        this.window.setVisible(true);
     }
 
     public void setNiveau(Integer niveau) {
@@ -175,21 +174,21 @@ public class VueNiveau {
         }
     }
     
-    public void afficherNiveau() {
+    public void afficher() {
         this.window.setVisible(true);
     }
     
-    public static void main(String[] args) {   
-        VueNiveau vueNiveau = new VueNiveau(1);
-
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Pour passer au niveau 5, appuyer sur entrée");
-        String suite = scanner.nextLine();        
-        vueNiveau.setNiveau(5);
-
-        System.out.println("Pour passer au niveau 5, appuyer sur entrée");
-        suite = scanner.nextLine();
-        vueNiveau.setNiveau(10);
-    }    
+//    public static void main(String[] args) {   
+//        VueNiveau vueNiveau = new VueNiveau(1);
+//
+//        Scanner scanner = new Scanner(System.in);
+//
+//        System.out.println("Pour passer au niveau 5, appuyer sur entrée");
+//        String suite = scanner.nextLine();        
+//        vueNiveau.setNiveau(5);
+//
+//        System.out.println("Pour passer au niveau 5, appuyer sur entrée");
+//        suite = scanner.nextLine();
+//        vueNiveau.setNiveau(10);
+//    }    
 }

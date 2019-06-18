@@ -5,7 +5,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
@@ -88,7 +87,6 @@ public class VueGrille extends JPanel {
     
     // Affiche en vert toutes les tuiles accessibles par l'aventurier courant
     public void afficherTuilesDeplacer(ArrayList<Tuile> tuiles) {
-            // TODO - implement VueAventurier.afficherTuilesDeplacer
         for (VueTuile tuile : grid) {
             tuile.setBackground(new JButton().getBackground());
         }    
@@ -175,8 +173,8 @@ public class VueGrille extends JPanel {
         for (int i = 0; i < grid.size() ; i++) {
             grid.get(i).setBorder(new LineBorder(new JButton().getBackground()));
         }
-//        
-//        // Met les labels sur toutes les cases de la grille
+        
+        // Met les labels sur toutes les cases de la grille
         for (int i = 0; i < grid.size() ; i++) {
             grid.get(i).setText(tuiles.get(i).getNom());
         }
