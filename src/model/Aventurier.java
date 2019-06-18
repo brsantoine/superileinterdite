@@ -67,11 +67,11 @@ public abstract class Aventurier extends ObjetIdentifie{
 	 * @param ca
 	 */
         
-        public void addCarte(CarteTresors ca) {
+        public void addCarte(CarteMain ca) {
             sesCartes.add(ca);
         }
         
-	public void defausserCarte(CarteTresors ca) {
+	public void defausserCarte(CarteMain ca) {
             ca.changerProprio("defausse");
             sesCartes.remove(ca);
         }
