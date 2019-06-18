@@ -46,6 +46,9 @@ public class Controleur implements Observateur {
         public void setIhmVueMenu(VueMenu ihmMenu){
             this.ihmMenu = ihmMenu;
         }
+        public void setIhmVueNiveau(VueNiveau ihmNiveau){
+            this.ihmNiveau = ihmNiveau;
+        }
         
         // Instanciation de la grille de toutes les tuiles et les aventuriers
         public void commencerJeu() {                                            
@@ -430,9 +433,13 @@ public class Controleur implements Observateur {
                         listeJoueurs.add(this.lesJoueurs.get(i));
                     }
 
+                    ihmAventuriers = new ArrayList<>();
+                    
+                    int x = 0;
                     for(Aventurier av : listeJoueurs){
-                        VueAventurier va = new VueAventurier(av.getId());
+                        VueAventurier va = new VueAventurier(x);
                         this.ihmAventuriers.add(va);
+                        x++;
                     }
 
                     // Toute la grille est inondée
@@ -446,6 +453,13 @@ public class Controleur implements Observateur {
                     this.lesJoueurs=listeJoueurs;
 
                     this.ihmPlateau.getGrille().intitialiserGrille(this.laGrille.getTuiles());
+                    this.setIhmVueNiveau(new VueNiveau(2));
+                    this.ihmNiveau.afficher();
+                    this.ihmPlateau.afficher();
+                    
+                    for (int i = 0; i < lesJoueurs.size(); i++) {
+                        ihmAventuriers.get(i).afficher();
+                    }
                     this.nvtour();
 
                 }

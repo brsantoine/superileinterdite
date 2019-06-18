@@ -21,7 +21,12 @@ public class VuePlateau implements Observe {
         
         plateauWindow = new JFrame();
         plateauWindow.setLayout(new BorderLayout());
-        plateauWindow.add(grille); 
+        grille = new VueGrille();
+        plateauWindow.add(grille, BorderLayout.CENTER);
+        
+        
+        
+        
         
         
         // Nombre d'actions restantes et boutons assécher et se déplacer
