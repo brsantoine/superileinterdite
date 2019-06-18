@@ -222,6 +222,7 @@ public class Controleur implements Observateur {
         
         public void defausserTresor() {
             
+            
         }
                 
                 
