@@ -24,10 +24,9 @@ public class Utils {
         FIN_TOUR("Terminer son tour"),
         RECEVOIR("Recevoir la carte donnée par un autre joueur"), 
         CHOISIR_CARTE("Utiliser une carte trésor"),
-        CHOISIR_TUILE_DEPLACER("Sélectionner une tuile pour se deplacer"), 
+        CHOISIR_TUILE("Sélectionner une tuile"), 
         DEPLACER_AUTRE("Déplacer un autre joueur"),
         VOIR_DEFAUSSE("Un joueur souhaite voir la défausse de cartes Tirage"),
-        CHOISIR_TUILE_ASSECHER("Choisir tuile pour assecher"),
         CARTE_MAIN_PLEINE("Envoyé si le joueur pioche des cartes et que sa main est pleine");
 
         private final String libelle ;  
