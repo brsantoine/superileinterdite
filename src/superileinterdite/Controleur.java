@@ -172,10 +172,11 @@ public class Controleur implements Observateur {
         }
             
         // Effectue un nouveau tour
-        public void nvtour(){                                                    
-            Message m = new Message(Utils.Commandes.NOUVEAU_TOUR, 0,0,null,0);
+        public void nvtour(){
             this.tour++;
-            this.traiterMessage(m);
+            System.out.println(this.aQuiLeTour().getRole());
+            this.remettreAJourAction();
+            this.tourDeJeu();
         }
         
         // Renvoie la grille contenant les tuiles 
@@ -237,14 +238,11 @@ public class Controleur implements Observateur {
             }
 
             tAssech = new ArrayList<>();
+            
             tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
-            
-            
-            // Test on met toute la grille en assechable
-            tAssech = laGrille.getTuiles();                                     
+                                                
             if (tAssech.size() > 0) {
-                System.out.println(tAssech.size());
-            tm.add(Utils.Commandes.ASSECHER);  
+                tm.add(Utils.Commandes.ASSECHER);  
             }
 
             // Regarde si le joueur peut donner une carte tresor
@@ -483,15 +481,10 @@ public class Controleur implements Observateur {
                     
                 }
                  
-                 if(m.getCommande() == Utils.Commandes.FIN_TOUR){                            
-                     this.finTour();
-                 }
-                 
-                 if(m.getCommande() == Utils.Commandes.NOUVEAU_TOUR){                        
-                     System.out.println(this.aQuiLeTour().getRole());
-                     this.remettreAJourAction();
-                     this.tourDeJeu();
+                if(m.getCommande() == Utils.Commandes.FIN_TOUR){                            
+                    this.finTour();
                 }
+                
 	}
 
         

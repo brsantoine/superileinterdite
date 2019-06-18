@@ -69,7 +69,7 @@ public class VueJeu extends JFrame implements Observe{
         vuesAventuriers = new ArrayList<>();
         int x = 0;
         for(Aventurier av : aventuriers){
-            VueAventurier va = new VueAventurier(x);
+            VueAventurier va = new VueAventurier(x, av.getRole());
             this.vuesAventuriers.add(va);
             x++;
         }

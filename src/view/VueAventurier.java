@@ -11,10 +11,10 @@ public class VueAventurier extends JPanel implements Observe {
     private int idAventurier;
     private JPanel mainPanel;
     
-    public VueAventurier(int id) {
+    public VueAventurier(int id, String role) {
         this.setID(id);                
         setSize(Parameters.LARGEUR_VUE_AVENTURIER, Parameters.HAUTEUR_VUE_AVENTURIER);
-        this.add(new JLabel("test"));
+        this.add(new JLabel(role));
         
     }
     
