@@ -373,94 +373,99 @@ public class Controleur implements Observateur {
                    ihmPlateau.getGrille().afficherTuilesAssecher(tAssech);
                     
                 }
-                 if(m.getCommande() == Utils.Commandes.CHOISIR_TUILE){
-                     this.getGrille().getTuiles().get(m.getIdTuile()).assecherTuile(); 
-//                     ihm.afficherTuilesAssecher(tAssech);
+                 
+                 
+                if(m.getCommande() == Utils.Commandes.CHOISIR_TUILE){
+                    this.getGrille().getTuiles().get(m.getIdTuile()).assecherTuile(); 
+//                      ihm.afficherTuilesAssecher(tAssech);
 
-                     if(this.aQuiLeTour().getRole()=="ingenieur" && !doubleAssechement){            //gere le double assechement d'un ingenieur
-                         doubleAssechement=true;
-                         this.actionFinie();
-                     } 
-                     else if(this.aQuiLeTour().getRole()=="ingenieur" && doubleAssechement){
-                         doubleAssechement=false;
-                     } else {
-                         this.actionFinie();
-                     }
+                    // Gere le double assechement d'un ingenieur
+                    if(this.aQuiLeTour().getRole()=="ingenieur" && !doubleAssechement){            
+                        doubleAssechement=true;
+                        this.actionFinie();
+                    } 
+                    else if(this.aQuiLeTour().getRole()=="ingenieur" && doubleAssechement){
+                        doubleAssechement=false;
+                    } else {
+                        this.actionFinie();
+                    }
                     ihmPlateau.updateActions(this.getActions());
-                     
-                     if(this.getActions()>0){                                   // detecte si le joueur peut encore jouer
-                         this.tourDeJeu();
-                     } 
-                     else{
-                         this.finTour();
-                     }
+
+                    // Detecte si le joueur peut encore jouer
+                    if(this.getActions()>0){                                   
+                        this.tourDeJeu();
+                    } 
+                    else{
+                        this.finTour();
+                    }
                 }
-                 if(m.getCommande() == Utils.Commandes.DONNER){                           //pas commencé le code
+                
+                if(m.getCommande() == Utils.Commandes.COMMENCER_JEU){
+                    ihmMenu.cacher();
+                    this.setIhmVuePlateau(new VuePlateau());
+                     
+                    this.commencerJeu();
+
+                    System.out.println(m.getIdAventurier()); //nombre joueurs
+
+                    // Créer la liste de joueur en fonction du nombre de joueur choisi
+                    ArrayList<Aventurier> listeJoueurs = new ArrayList<>();               
+                    for(int i=0; i<m.getIdAventurier();i++){
+                        listeJoueurs.add(this.lesJoueurs.get(i));
+                    }
+
+                    for(Aventurier av : listeJoueurs){
+                        VueAventurier va = new VueAventurier(av.getId());
+                        this.ihmAventuriers.add(va);
+                    }
+
+                    // Toute la grille est inondée
+                    for (Tuile tuile : laGrille.getTuiles()) {
+                        tuile.inonderTuile();
+                    }
+                    // Tuile 10 coulé pour tester
+                    laGrille.getTuiles().get(10).inonderTuile();
+
+
+                    this.lesJoueurs=listeJoueurs;
+
+                    this.ihmPlateau.getGrille().intitialiserGrille(this.laGrille.getTuiles());
+                    this.nvtour();
+
+                }
+                // pas commencé le code
+                if(m.getCommande() == Utils.Commandes.DONNER){                       
+
+                    // detecte si le joueur peut encore jouer
+                   this.actionFinie();                                         
+                    if(this.getActions()>0){
+                        this.tourDeJeu();
+                    }
+                    else{
+                        this.finTour();
+                    }
+                }
+                // pas commencé le code
+                if(m.getCommande() == Utils.Commandes.RECUPERER_TRESOR){                       
+                    // this.gagnerTresor(tresor);
+                    this.actionFinie();
+                    
+                    // detecte si le joueur peut encore jouer
+                    if(this.getActions()>0){                                   
+                        this.tourDeJeu();
+                    }
+                    else{
+                        this.finTour();
+                    }
                     
                 }
                  
-                 // a jeter
-                 if(m.getCommande() == Utils.Commandes.COMMENCER_JEU){
-                     ihmMenu.cacher();
-                     this.setIhmVuePlateau(new VuePlateau());
-                     
-                     this.commencerJeu();
-                     
-                     System.out.println(m.getIdAventurier()); //nombre joueurs
-                     
-                     ArrayList<Aventurier> a = new ArrayList<>();               //créer la liste de joueur en fonction du nombre de joueur choisi
-                     for(int i=0; i<m.getIdAventurier();i++){
-                         a.add(this.lesJoueurs.get(i));
-                     }
-                     
-                     for(Aventurier av : a){
-                         VueAventurier va = new VueAventurier(av.getId());
-                         this.ihmAventuriers.add(va);
-                     }
-                     
-                     //Toute la grille est inondée
-                     for (Tuile tuile : laGrille.getTuiles()) {
-                         tuile.inonderTuile();
-                     }
-                     //tuile 10 coulé pour tester
-                     laGrille.getTuiles().get(10).inonderTuile();
-                     
-                     
-                     this.lesJoueurs=a;
-                     
-                     this.ihmPlateau.getGrille().intitialiserGrille(this.laGrille.getTuiles());
-                     this.nvtour();
-                   
-                }
-                 
-                 if(m.getCommande() == Utils.Commandes.DONNER){                       //pas commencé le code
-                     
-                    this.actionFinie();                                         // detecte si le joueur peut encore jouer
-                     if(this.getActions()>0){
-                         this.tourDeJeu();
-                     }
-                     else{
-                         this.finTour();
-                     }
-                }
-                 if(m.getCommande() == Utils.Commandes.RECUPERER_TRESOR){                       //pas commencé le code
-                   //  this.gagnerTresor(tresor);
-                     this.actionFinie();
-                     if(this.getActions()>0){                                   // detecte si le joueur peut encore jouer
-                         this.tourDeJeu();
-                     }
-                     else{
-                         this.finTour();
-                     }
-                    
-                }
-                 
-                 if(m.getCommande() == Utils.Commandes.FIN_TOUR){                            //fini le tour 
+                 if(m.getCommande() == Utils.Commandes.FIN_TOUR){                            
                      this.finTour();
                      
                  }
                  
-                 if(m.getCommande() == Utils.Commandes.NOUVEAU_TOUR){                        //effectue un nouveau tour
+                 if(m.getCommande() == Utils.Commandes.NOUVEAU_TOUR){                        
                      System.out.println(this.aQuiLeTour().getRole());
                      this.remettreAJourAction();
                      this.tourDeJeu();
@@ -472,28 +477,35 @@ public class Controleur implements Observateur {
         
         
         
-	public boolean victoirePossible() {                                        //regarde si les joueurs peuvent encore gagner
-		// TODO - implement Controleur.victoirePossible
+        // regarde si les joueurs peuvent encore gagner
+	public boolean victoirePossible() {      
+            
                 int x=0;
+                // regarde si un aventurier est mort
 		for(Aventurier a : this.getJoueurs()){
-                    if(a.getEtat()==false){                                     //regarde si un aventurier est mort
+                    if(a.getEtat()==false){                                     
                         return false;
                     }
                 }
+                
+                // regarde si les deux tuileTresors d'un tresor sont coulées 
                 for(Tresors t: this.getTresors()){
-                    for(TuileTresor tt : t.getSesTuiles()){                     //regarde si le deux tuilestresors d'un tresor                                                               
-                        if(tt.getEtat()=="coulé"){                              // sont coulé
+                    for(TuileTresor tt : t.getSesTuiles()){                                                                                
+                        if(tt.getEtat()=="coulé"){                              
                             x++;
                         }
                     }
-                    if(t.getEtat()==false && x==2){                             //return false si le tresor n'a pas été pris 
-                        return false;                                         //pas commencer le code  // et que ses deux tuiles tresors ont été coulées.
+                    
+                    // return false si le tresor n'a pas été pris  (pas commencer le code et que ses deux tuiles tresors ont été coulées).
+                    if(t.getEtat()==false && x==2){                             
+                        return false;                                         
                     }
                 }
-                if(this.getNiveauEau()==10){                                         //regarde si le niveau d'eau est egal a 10
+                // regarde si le niveau d'eau est egal a 10
+                if(this.getNiveauEau()==10){                                         
                     return false;
                 }
-                                                                                //manque si le heliport  est coulé ou non
+                // (manque si le heliport  est coulé ou non)
                 return true;
         }
 
