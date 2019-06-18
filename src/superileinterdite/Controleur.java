@@ -1,9 +1,9 @@
 package superileinterdite;
 
 
-import java.util.*;
-import aventuriers.*;
 import model.*;
+import aventuriers.*;
+import java.util.*;
 import util.*;
 import view.*;
 
@@ -13,15 +13,16 @@ public class Controleur implements Observateur {
 	private Grille laGrille; 
 	private ArrayList<Aventurier> lesJoueurs;
 	private ArrayList<VueAventurier> ihmAventuriers;
-        private VueMenu ihmMenu;
+  private VueMenu ihmMenu;
 	private VueInscription ihmInscription;
 	private VueJeu ihmJeu;
 	private ArrayList<Pile> sesPiles ;
 	private int niveauEau;
-        private int nbAction;
-        private int tour;
-        private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false;
-        private ArrayList<Tuile> tAssech, tAccess;
+  private int nbAction;
+  private int tour;
+  private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false;
+  private ArrayList<Tuile> tAssech, tAccess;
+  private Pile PileTresor,PileInondation,defausseTresor,defausseInondation;
         
 
         public Controleur() {
@@ -101,7 +102,55 @@ public class Controleur implements Observateur {
             }
             this.remettreAJourAction();
             this.tour=1;
-            this.niveauEau=1;
+            this.niveauEau=1;                                                                         
+            PileTresor = new Pile("Pile Trésor");
+            PileTresor.addPile(new CarteTresors("Calice",null,Calice));
+            PileTresor.addPile(new CarteTresors("Calice",null,Calice));
+            PileTresor.addPile(new CarteTresors("Calice",null,Calice));
+            PileTresor.addPile(new CarteTresors("Calice",null,Calice));
+            PileTresor.addPile(new CarteTresors("Calice",null,Calice));
+            //
+            PileTresor.addPile(new CarteTresors("Statue",null,Statue));
+            PileTresor.addPile(new CarteTresors("Statue",null,Statue));
+            PileTresor.addPile(new CarteTresors("Statue",null,Statue));
+            PileTresor.addPile(new CarteTresors("Statue",null,Statue));
+            PileTresor.addPile(new CarteTresors("Statue",null,Statue));
+            //
+            PileTresor.addPile(new CarteTresors("Cristal",null,Cristal));
+            PileTresor.addPile(new CarteTresors("Cristal",null,Cristal));
+            PileTresor.addPile(new CarteTresors("Cristal",null,Cristal));
+            PileTresor.addPile(new CarteTresors("Cristal",null,Cristal));
+            PileTresor.addPile(new CarteTresors("Cristal",null,Cristal));
+            //
+            PileTresor.addPile(new CarteTresors("Pierre",null,Pierre));
+            PileTresor.addPile(new CarteTresors("Pierre",null,Pierre));
+            PileTresor.addPile(new CarteTresors("Pierre",null,Pierre));
+            PileTresor.addPile(new CarteTresors("Pierre",null,Pierre));
+            PileTresor.addPile(new CarteTresors("Pierre",null,Pierre));
+            // Heli = Helicoptere
+            PileTresor.addPile(new CarteActionSpeciale("Heli",null));
+            PileTresor.addPile(new CarteActionSpeciale("Heli",null));
+            PileTresor.addPile(new CarteActionSpeciale("Heli",null));
+            // MDeaux = Montée des eaux
+            PileTresor.addPile(new CarteActionSpeciale("MDeaux",null));
+            PileTresor.addPile(new CarteActionSpeciale("MDeaux",null));
+            PileTresor.addPile(new CarteActionSpeciale("MDeaux",null));
+            // Sac = Sac de sables
+            PileTresor.addPile(new CarteActionSpeciale("Sac",null));
+            PileTresor.addPile(new CarteActionSpeciale("Sac",null));
+            //
+            PileTresor.randomizePile();
+
+            
+            PileInondation = new Pile("Pile Inondation");
+            for (Tuile tuile : laGrille.getTuiles()) {
+                PileInondation.addPile(new CarteInondation(tuile));
+            }
+            PileInondation.randomizePile();
+            
+            defausseTresor = new Pile("Defausse Tresor");
+            defausseInondation = new Pile("Defausse Inondation");
+       
         }
         
         
@@ -111,6 +160,73 @@ public class Controleur implements Observateur {
 	public void recupererTresor(Tresors tresor) {                              
 		tresor.setEtat(true);
 	}
+        
+	public void piocherTresorDebut() {     
+            for (Aventurier a : getJoueurs()) {
+                for (int i = 0; i <= 1; i++) {
+                    if ( ((CarteMain)PileTresor.getSesCartes().get(i)).getNom() == "MDeaux") {
+                        i--;
+                        PileTresor.randomizePile();
+                    } else {
+                        ((CarteMain)PileTresor.getSesCartes().get(i)).changerProprio(a.getRole());
+                        a.addCarte((CarteMain) PileTresor.getSesCartes().get(i));
+                        PileTresor.RemoveCarte(PileTresor.getSesCartes().get(i));             
+                    }
+                }
+            }
+            
+	}
+        
+	public void piocherTresor(Aventurier a) {  
+            
+            ArrayList montrerCartes = new ArrayList<Carte>();
+            
+            for (int i = 0; i <= 1; i++) {
+                if ( ((CarteMain)PileTresor.getSesCartes().get(i)).getNom() == "MDeaux") {
+                    this.montéeDesEaux();
+                    defausseInondation.randomizePile();
+                    ArrayList temp = new ArrayList<Carte>();
+                    temp = defausseInondation.getSesCartes();
+                    for (Carte c : PileInondation.getSesCartes()) {
+                        temp.add(c);                      
+                    }            
+                    PileInondation.ViderPile();
+                    PileInondation.setSesCartes(temp);
+                    
+                } else if (a.getCartes().size() == 5) {
+                    
+                    if (i == 0) {
+                        montrerCartes.add(PileTresor.getSesCartes().get(i));   
+                        montrerCartes.add(PileTresor.getSesCartes().get(i+1));   
+                    } else {
+                        montrerCartes.add(PileTresor.getSesCartes().get(i));   
+                    }                  
+                    break;
+                    
+                } else if(PileTresor.getSesCartes().isEmpty()) {
+                    defausseTresor.randomizePile();
+                    PileTresor.setSesCartes(defausseTresor.getSesCartes());
+                    defausseTresor.ViderPile();
+                    i--;
+                } else {
+                    ((CarteMain)PileTresor.getSesCartes().get(i)).changerProprio(a.getRole());
+                    a.addCarte((CarteMain) PileTresor.getSesCartes().get(i));
+                    PileTresor.RemoveCarte(PileTresor.getSesCartes().get(i));             
+                }         
+            }
+            
+            if (montrerCartes.size() > 0) {
+                // Envoyer l arraylist a l ihm
+            }
+            
+	}
+        
+        public void defausserTresor() {
+            
+            
+        }
+                
+                
 
         // Augmente le niveau de l'eau
 	public void montéeDesEaux() {                                           
@@ -208,6 +324,17 @@ public class Controleur implements Observateur {
         public ArrayList<Pile> getPiles(){                                      
             return this.sesPiles;
         }
+
+        public Pile getPileTresor() {
+            return PileTresor;
+        }
+
+        public Pile getPileInondation() {
+            return PileInondation;
+        }
+
+        
+        
        
         // Renvoie toutes les actions possibles en fonction des multiples parametres du joueur(tuile,carte, role ect..)
         public void tourDeJeu(){                       
@@ -295,9 +422,11 @@ public class Controleur implements Observateur {
                   
         
         
+
         // Effectue toutes les actions nécessaires apres qu'un joueur ai fini ses actions  
         public void finTour(){                                                                                                 
-            // Actualiser l'ihm                                              
+            // Actualiser l'ihm   
+            this.piocherTresor(aQuiLeTour());
             ihmJeu.finTour();
             
             if (this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==false) {
@@ -321,8 +450,10 @@ public class Controleur implements Observateur {
       
         @Override
 	public void traiterMessage(Message m) {
+            switch (m.getCommande()) {
+                case CHOISIR_TUILE:
+		                if(modeDeplacement){
 
-		 if(m.getCommande() == Utils.Commandes.CHOISIR_TUILE && modeDeplacement){
                      this.actionFinie();
 
                     // Enleve l'aventurier da la tuile ou il etait
@@ -354,11 +485,36 @@ public class Controleur implements Observateur {
                      else{
                          this.finTour();
                      }
-                }
-                 
-                if(m.getCommande() == Utils.Commandes.SE_DEPLACER){
+                      
+                    } else if (modeAssechement) {
+                      this.getGrille().getTuiles().get(m.getIdTuile()).assecherTuile(); 
+//                     ihm.afficherTuilesAssecher(tAssech);
+
+                     if(this.aQuiLeTour().getRole()=="ingenieur" && !doubleAssechement){            //gere le double assechement d'un ingenieur
+                         doubleAssechement=true;
+                         this.actionFinie();
+                     } 
+                     else if(this.aQuiLeTour().getRole()=="ingenieur" && doubleAssechement){
+                         doubleAssechement=false;
+                     } else {
+                         this.actionFinie();
+                     }
+                    ihmPlateau.updateActions(this.getActions());
+                     
+                     if(this.getActions()>0){                                   // detecte si le joueur peut encore jouer
+                         this.tourDeJeu();
+                     } 
+                     else{
+                         this.finTour();
+                     }
+                      
+                    break;
+  
+                case SE_DEPLACER:
+
                     modeAssechement = false;
                     modeDeplacement = true;
+
                     if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==true) {
 
                         // On affiche déplacement normal
@@ -367,10 +523,12 @@ public class Controleur implements Observateur {
 
                         tAccess = (((Pilote) this.aQuiLeTour()).deplacementHelico(this.getGrille()));
                     }
+
                     ihmJeu.getGrille().afficherTuilesDeplacer(tAccess);
-                }
+                      
+                break;
                   
-                if(m.getCommande() == Utils.Commandes.DEPLACER_AUTRE){
+                case DEPLACER_AUTRE:
                      
                     this.actionFinie(); 
                     // Détecte si le joueur peut encore jouer
@@ -380,45 +538,17 @@ public class Controleur implements Observateur {
                     else{
                         this.finTour();
                     }
-                }  
+                break;  
                   
-                if(m.getCommande() == Utils.Commandes.ASSECHER){ 
+                case ASSECHER: 
                     modeAssechement = true;
                     modeDeplacement = false;
                     //ihm.afficherTuilesAssecher(this.aQuiLeTour().TuilesAssechables(this.getGrille()));
                     ihmJeu.getGrille().afficherTuilesAssecher(tAssech);
                     
-                }
-                 
-                 
-                if(m.getCommande() == Utils.Commandes.CHOISIR_TUILE && modeAssechement){
-                    this.getGrille().getTuiles().get(m.getIdTuile()).assecherTuile(); 
+                break;
 
-                    tAssech = this.aQuiLeTour().TuilesAssechables(laGrille);
-                    ihmJeu.getGrille().afficherTuilesAssecher(tAssech);
-
-                    // Gere le double assechement d'un ingenieur
-                    if(this.aQuiLeTour().getRole()=="ingenieur" && !doubleAssechement){            
-                        doubleAssechement=true;
-                        this.actionFinie();
-                    } 
-                    else if(this.aQuiLeTour().getRole()=="ingenieur" && doubleAssechement){
-                        doubleAssechement=false;
-                    } else {
-                        this.actionFinie();
-                    }
-                    ihmJeu.updateActions(this.getActions());
-
-                    // Detecte si le joueur peut encore jouer
-                    if(this.getActions()>0){                                   
-                        this.tourDeJeu();
-                    } 
-                    else{
-                        this.finTour();
-                    }
-                }
-                
-                if(m.getCommande() == Utils.Commandes.COMMENCER_JEU){
+                      case COMMENCER_JEU:
                     ihmMenu.cacher();
                      
                     this.commencerJeu();
@@ -453,9 +583,9 @@ public class Controleur implements Observateur {
                     
                     this.nvtour();
 
-                }
+                break;
                 // Pas commencé le code
-                if(m.getCommande() == Utils.Commandes.DONNER){                       
+                      case DONNER:                       
 
                     // Detecte si le joueur peut encore jouer
                    this.actionFinie();                                         
@@ -465,9 +595,9 @@ public class Controleur implements Observateur {
                     else{
                         this.finTour();
                     }
-                }
+                break;
                 // Pas commencé le code
-                if(m.getCommande() == Utils.Commandes.RECUPERER_TRESOR){                       
+                      case RECUPERER_TRESOR:                       
                     // this.gagnerTresor(tresor);
                     this.actionFinie();
                     
@@ -479,12 +609,25 @@ public class Controleur implements Observateur {
                         this.finTour();
                     }
                     
-                }
+                break;
                  
-                if(m.getCommande() == Utils.Commandes.FIN_TOUR){                            
+                      case FIN_TOUR:                            
                     this.finTour();
-                }
-                
+                break;
+    
+    
+                  case CARTE_MAIN_PLEINE:
+                  // idAvent les cartes en haut
+                  // idCarte les cartes en qu il a
+                  aQuiLeTour().defausserCarte(aQuiLeTour().getCartes().get(m.getIdCarte()));
+                  aQuiLeTour().addCarte((CarteMain) PileTresor.getSesCartes().get(m.getIdAventurier()));
+                  ((CarteMain)PileTresor.getSesCartes().get(m.getIdAventurier())).changerProprio(aQuiLeTour().getRole());
+                  defausseTresor.addPile(PileTresor.getSesCartes().get(m.getIdAventurier()));
+                  PileTresor.RemoveCarte(PileTresor.getSesCartes().get(m.getIdAventurier()));   
+
+
+              break;
+
 	}
 
         

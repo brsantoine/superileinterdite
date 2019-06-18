@@ -25,7 +25,8 @@ public class Utils {
         CHOISIR_CARTE("Utiliser une carte trésor"),
         CHOISIR_TUILE("Sélectionner une tuile"), 
         DEPLACER_AUTRE("Déplacer un autre joueur"),
-        VOIR_DEFAUSSE("Un joueur souhaite voir la défausse de cartes Tirage");
+        VOIR_DEFAUSSE("Un joueur souhaite voir la défausse de cartes Tirage"),
+        CARTE_MAIN_PLEINE("Envoyé si le joueur pioche des cartes et que sa main est pleine");
 
         private final String libelle ;  
 
@@ -197,4 +198,5 @@ public class Utils {
     public static void afficherInformation(String message) {
         JOptionPane.showMessageDialog(null, message, "Information", JOptionPane.OK_OPTION);
     }
+      
 }

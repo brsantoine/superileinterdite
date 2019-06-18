@@ -7,10 +7,16 @@ public class CarteInondation extends Carte {
     
     Tuile tuile;
     
-    public CarteInondation(String nom, String proprio, Tuile tuile) {
-        super(nom, proprio);
+    public CarteInondation(Tuile tuile) {
+        super(tuile.getNom());
         this.tuile = tuile;
     }
+
+    public Tuile getTuile() {
+        return tuile;
+    }
+    
+    
     
     
 }

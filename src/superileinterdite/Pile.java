@@ -6,13 +6,13 @@ import java.util.*;
 
 public class Pile {
 
-	private ArrayList<Carte> sesCartes = new ArrayList();
+	private ArrayList<Carte> sesCartes;
 	//private Defausse saDefausse;
 	private String nom;
         
-        public Pile(String nom, ArrayList<Carte> cartes) {
+        public Pile(String nom) {
             this.nom = nom;
-            sesCartes = new ArrayList<Carte>(cartes);
+            sesCartes = new ArrayList<Carte>();
         }
 
 	/**
@@ -33,22 +33,36 @@ public class Pile {
             return sesCartes.get(randomInt);
 	}
 
-	public boolean pileVide() {
-		// TODO - implement Pile.pileVide
-		if (sesCartes.isEmpty()) {
-                    return true;
-                } else {
-                    return false;
-                }
+
+	public void addPile(Carte carte) {
+            // TODO - implement Pile.remplirPile
+            sesCartes.add(carte);
+	}
+	public void randomizePile() {
+            // TODO - implement Pile.remplirPile
+            Collections.shuffle(sesCartes);
 	}
 
-	/**
-	 * 
-	 * @param cartes
-	 */
-	public void remplirPile(ArrayList<Carte> cartes) {
-		// TODO - implement Pile.remplirPile
-		sesCartes = cartes;
-	}
+        public ArrayList<Carte> getSesCartes() {
+            return sesCartes;
+        }
+
+        public String getNom() {
+            return nom;
+        }
+        
+        public void RemoveCarte(Carte carte) {
+            sesCartes.remove(carte);
+        }
+        
+        public void ViderPile() {
+            getSesCartes().removeAll(getSesCartes());
+        }
+
+        public void setSesCartes(ArrayList<Carte> sesCartes) {
+            this.sesCartes = sesCartes;
+        }
+         
+        
 
 }

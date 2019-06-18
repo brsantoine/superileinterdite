@@ -7,12 +7,26 @@ package superileinterdite;
 
 import model.Carte;
 
-/**
- *
- * @author bresoan
- */
+
+
+
 public abstract class CarteMain extends Carte{
+    
+    private String proprio;
+    
     public CarteMain(String nom, String proprio) { 
-        super(nom, proprio); 
+        super(nom); 
+        changerProprio(proprio);
     }
+    
+    public void changerProprio(String proprio) {
+        this.proprio = proprio;
+    }
+
+    public String getProprio() {
+        return proprio;
+    }
+    
+    
+
 }
