@@ -15,7 +15,6 @@ public class Utils {
     
     public static enum Commandes {
         COMMENCER_JEU("Commencer le jeu"),
-        NOUVEAU_TOUR("Commencer un nouveau"),
         VALIDER_JOUEURS("Valider l'inscription des joueurs"),
         SE_DEPLACER("Déplacer son pion"),
         ASSECHER("Assécher une tuile"),

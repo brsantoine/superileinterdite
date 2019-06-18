@@ -1,16 +1,21 @@
 package view;
 
 import java.util.*;
-import model.Carte;
+import javax.swing.*;
+import model.*;
 import util.*;
  
-public class VueAventurier implements Observe {
+public class VueAventurier extends JPanel implements Observe {
     
     private Observateur observateur;
     private int idAventurier;
+    private JPanel mainPanel;
     
-    public VueAventurier(int id) {
-        this.setID(id);
+    public VueAventurier(int id, String role) {
+        this.setID(id);                
+        setSize(Parameters.LARGEUR_VUE_AVENTURIER, Parameters.HAUTEUR_VUE_AVENTURIER);
+        this.add(new JLabel(role));
+        
     }
     
     public void afficherCartes(ArrayList<Carte> ca) {
@@ -19,7 +24,18 @@ public class VueAventurier implements Observe {
 
         }
     }
-
+    
+    public void setID(int id) {
+        this.idAventurier = id;
+    }
+    
+    public int getID() {
+        return this.idAventurier;
+    }
+    
+    public void afficher() {
+        this.setVisible(true);
+    }
     @Override
     public void addObservateur(Observateur o) {
         this.observateur = o;
@@ -32,11 +48,5 @@ public class VueAventurier implements Observe {
         }
     }
     
-    public void setID(int id) {
-        this.idAventurier = id;
-    }
-    
-    public int getID() {
-        return this.idAventurier;
-    }
+   
 }

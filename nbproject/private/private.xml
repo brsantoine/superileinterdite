@@ -2,6 +2,26 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/model/Aventurier.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/superileinterdite/Grille.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/view/VueMenu.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/view/VueTuile.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/model/ObjetIdentifie.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/view/VueNiveau.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/view/vueaventuriergarbage.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/view/VuePlateau.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/view/VueAventurier.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/superileinterdite/Superileinterdite.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/util/Utils.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/view/VueJeu.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/superileinterdite/Controleur.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/model/Tuile.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/util/Parameters.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/view/VueGrille.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/view/MessageBox.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/view/VueInscription.java</file>
+            <file>file:/users/info/etu-s2/bresoan/Projet/ileinterdite/src/util/Message.java</file>
+        </group>
     </open-files>
 </project-private>
