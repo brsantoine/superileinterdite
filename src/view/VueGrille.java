@@ -3,6 +3,7 @@ package view;
 import java.awt.*;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import util.*;
 import model.*;
  
@@ -75,6 +76,7 @@ public class VueGrille extends JPanel implements Observe{
         for (int i = 0; i < grid.size(); i++) {
             grid.get(i).setID(i);
             System.out.println(grid.get(i).getID());
+            grid.get(i).addObservateur(this.observateur);
         }
     }
 
@@ -184,11 +186,16 @@ public class VueGrille extends JPanel implements Observe{
             grid.get(i).setBackground(new JButton().getBackground());
             grid.get(i).setEnabled(false);
         }
+        
     }
     
     @Override
     public void addObservateur(Observateur o) {
         this.observateur = o;
+        for (int i = 0; i < grid.size(); i++) {
+            grid.get(i).addObservateur(o);
+        }
+
     }
     
     @Override

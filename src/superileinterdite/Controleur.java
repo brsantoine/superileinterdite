@@ -299,23 +299,23 @@ public class Controleur implements Observateur {
         
         // Effectue toutes les actions nécessaires apres qu'un joueur ai fini ses actions  
         public void finTour(){                                                                                                 
-            // Piocher carte tresor                                               
-            ihmJeu.getGrille().resetGrille();
+            // Actualiser l'ihm                                              
+            ihmJeu.finTour();
+            
             if (this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==false) {
                ((Pilote) this.aQuiLeTour()).resetHelico();
             }
                    
-            int i=0;
-            while(i<this.nbCarteInonAPiocher(this.getNiveauEau())){
+            int i = 0;
+            while (i < this.nbCarteInonAPiocher(this.getNiveauEau())) {
 //              this.aQuiLeTour().piocherCarteInon().getTuile().inonderTuile();
                 i++;
             }
 //            ihm.changerpov();
             // Detecte si la victoire est encore possible
-            if(this.victoirePossible()==true){                                  
+            if (this.victoirePossible()==true) {                                  
                 this.nvtour();
-            }
-            else{
+            } else {
                 ihmJeu.afficherDefaite();
             }
         }
@@ -334,10 +334,9 @@ public class Controleur implements Observateur {
                     // Met un aventurier sur la nouvelle tuile
                     this.getGrille().getTuiles().get(m.getIdTuile()).addAventurier(this.aQuiLeTour());
 
-
-
-//                    ihmJeu.getGrille().afficherTuilesDeplacer(tAccess);
                     ihmJeu.getGrille().updateDeplacement(lesJoueurs);
+                    tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
+                    ihmJeu.getGrille().afficherTuilesDeplacer(tAccess);
 
                     // Si un plongeur est sur une case coulée il ne peut pas finir le tour
                     if (this.aQuiLeTour().getTuile().getEtat() == "coulé") {   
@@ -388,15 +387,17 @@ public class Controleur implements Observateur {
                 if(m.getCommande() == Utils.Commandes.ASSECHER){ 
                     modeAssechement = true;
                     modeDeplacement = false;
-                   //ihm.afficherTuilesAssecher(this.aQuiLeTour().TuilesAssechables(this.getGrille()));
-                   ihmJeu.getGrille().afficherTuilesAssecher(tAssech);
+                    //ihm.afficherTuilesAssecher(this.aQuiLeTour().TuilesAssechables(this.getGrille()));
+                    ihmJeu.getGrille().afficherTuilesAssecher(tAssech);
                     
                 }
                  
                  
                 if(m.getCommande() == Utils.Commandes.CHOISIR_TUILE && modeAssechement){
                     this.getGrille().getTuiles().get(m.getIdTuile()).assecherTuile(); 
-//                      ihm.afficherTuilesAssecher(tAssech);
+
+                    tAssech = this.aQuiLeTour().TuilesAssechables(laGrille);
+                    ihmJeu.getGrille().afficherTuilesAssecher(tAssech);
 
                     // Gere le double assechement d'un ingenieur
                     if(this.aQuiLeTour().getRole()=="ingenieur" && !doubleAssechement){            
@@ -484,7 +485,6 @@ public class Controleur implements Observateur {
                  
                  if(m.getCommande() == Utils.Commandes.FIN_TOUR){                            
                      this.finTour();
-                     
                  }
                  
                  if(m.getCommande() == Utils.Commandes.NOUVEAU_TOUR){                        

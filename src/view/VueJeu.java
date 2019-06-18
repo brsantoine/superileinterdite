@@ -156,6 +156,11 @@ public class VueJeu extends JFrame implements Observe{
         throw new UnsupportedOperationException();
     }
 
+    public void finTour() {
+        this.getGrille().resetGrille();
+        seDeplacerButton.setEnabled(true);
+        assecherButton.setEnabled(true);
+    }
     
     public VueGrille getGrille() {
         return vueGrille;
@@ -168,6 +173,7 @@ public class VueJeu extends JFrame implements Observe{
     @Override
     public void addObservateur(Observateur o) {
         this.observateur = o;
+        vueGrille.addObservateur(o);
     }
     
     @Override
