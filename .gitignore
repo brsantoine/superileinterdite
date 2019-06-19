@@ -9,7 +9,8 @@
 
 ### Above combination will ignore all files without extension ###
 
-*.xml
+private.xml 
+private.properties
 
 # Ignore files with extension `.class` & `.sm`
 *.class
