@@ -79,7 +79,7 @@ public class MessageBox {
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setMinimumSize(new Dimension(180, 280));
         
-        html.setText("<html><h1 style=\"text-align:center; color:blue;\">Bienvenue dans<br>l'Île Interdite</h1></html>");
+        //html.setText("<html><h1 style=\"text-align:center; color:blue;\">Bienvenue dans<br>l'Île Interdite</h1></html>");
         mainPanel.add(scrollPane, BorderLayout.CENTER) ;
         
         window.setVisible(true);

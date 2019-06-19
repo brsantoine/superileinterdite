@@ -5,6 +5,7 @@ package superileinterdite;
 
 import model.*;
 import aventuriers.*;
+import java.awt.Color;
 import java.util.*;
 import util.*;
 import view.*;
@@ -25,6 +26,7 @@ public class Controleur implements Observateur {
         private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false;
         private ArrayList<Tuile> tAssech, tAccess;
         private Pile PileTresor,PileInondation,defausseTresor,defausseInondation;
+        private MessageBox test;
         
 
         public Controleur() {
@@ -51,6 +53,7 @@ public class Controleur implements Observateur {
         // Instanciation de la grille de toutes les tuiles et les aventuriers
         public void commencerJeu() {                                            
             // Creation des aventuriers
+            test = new MessageBox();
             Aventurier plongeur = new Plongeur();
             Aventurier ingenieur = new Ingenieur();
             Aventurier messager = new Messager();
@@ -328,6 +331,7 @@ public class Controleur implements Observateur {
             this.tour++;
             System.out.println(this.aQuiLeTour().getRole());
             this.remettreAJourAction();
+            test.displayMessage("C'est à " + aQuiLeTour().getRole() + " de jouer.", Color.black, true, false);
             this.tourDeJeu();
         }
         
@@ -399,12 +403,12 @@ public class Controleur implements Observateur {
                    i=0;
                 }
             }
-
+            
             tAssech = new ArrayList<>();
             
             tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
-                                                
-            if (tAssech.size() > 0) {
+                             System.out.println(tAssech.size());                   
+            if (tAssech.size()>1) {
                 tm.add(Utils.Commandes.ASSECHER);  
             }
 
@@ -457,7 +461,12 @@ public class Controleur implements Observateur {
 
             tm.add(Utils.Commandes.FIN_TOUR);
             //envoyer a l'ihm les actions possibles
-            
+            test.displayMessage("Voici vos actions possibles", Color.black, false, false);
+            String actions = new String();
+            for(Utils.Commandes u : tm){
+                actions = actions + "<li>" + u.toString() + "</li>";
+            }
+            test.displayMessage("<ul>" + actions + "</ul>", Color.black, false, false);
         }
         
                   

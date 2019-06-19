@@ -128,7 +128,8 @@ public abstract class Aventurier extends ObjetIdentifie{
             //Si la tuile est adjacente et inondé, renvoie vrai, faux sinon
             if (etat.equals("inondé")) {
                 return ((x2 == x && (y2 == y || y2 == y-1 || y2 == y+1)) ||
-                        (y2 == y && (x2 == x-1 || x2 == x+1)));
+                        (y2 == y && (x2 == x-1 || x2 == x+1))            );        
+//                        ||                        (y2 == y && x2 == x));
             } else {
                 return false;
             }
