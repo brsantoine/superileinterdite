@@ -1,10 +1,10 @@
 package view;
  
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import java.awt.*;
+import java.awt.event.*;
+import javax.imageio.*;
+import javax.swing.*;
+
 import util.*;
 
 public class VueTuile extends JButton implements Observe {
@@ -12,7 +12,7 @@ public class VueTuile extends JButton implements Observe {
     private Observateur observateur;    
     private int idTuile;
     
-    public VueTuile() {
+    public VueTuile() {   
         
         // LISTENER    
         this.addActionListener(new ActionListener() {
@@ -21,8 +21,7 @@ public class VueTuile extends JButton implements Observe {
                 Message m = new Message(Utils.Commandes.CHOISIR_TUILE,0,0,null,idTuile);
                 notifierObservateur(m);
             }
-        });   
-    
+        });       
     }
     
     public void setID(int id) {
@@ -36,6 +35,10 @@ public class VueTuile extends JButton implements Observe {
     public void setText(String nom){
         JLabel nomLabel = new JLabel(nom);
         this.add(nomLabel);
+    }
+    
+    public void setImage(String nomTuile) {
+        this.setIcon(new ImageIcon(new ImageIcon(Parameters.TUILES + nomTuile + ".png").getImage().getScaledInstance(150,150, Image.SCALE_SMOOTH)));
     }
         
     @Override

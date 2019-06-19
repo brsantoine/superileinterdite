@@ -63,6 +63,7 @@ public class VueMenu implements Observe {
                 panelNbJoueurs.add(new JPanel());
                 panelNbJoueurs.add(labelNbJoueurs);
                 panelNbJoueurs.add(listeNbJoueurs);
+                listeNbJoueurs.setSelectedIndex(2); 
                 panelNbJoueurs.add(new JPanel());
 
                 panelBoutons.add(panelNbJoueurs);
