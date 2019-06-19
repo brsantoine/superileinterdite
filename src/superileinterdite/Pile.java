@@ -14,26 +14,10 @@ public class Pile {
             this.nom = nom;
             sesCartes = new ArrayList<Carte>();
         }
-
-	/**
-	 * 
-	 * @param a
-	 */
-        
-//        public void assignerPile(Defausse defausse) {
-//            saDefausse = defausse;
-//        }
         
         /* Soit on utilise le return Carte, et dans ce cas c'est le controleur qui donne la carte à l'aventurier, soit on utilise l'aventurier qui est en paramètre et dans ce cas cette méthode va directement à aventurier
         */
         
-	public Carte piocherCarte(Aventurier a) {
-            Random generate = new Random();
-            int randomInt = generate.nextInt(sesCartes.size());
-            return sesCartes.get(randomInt);
-	}
-
-
 	public void addPile(Carte carte) {
             // TODO - implement Pile.remplirPile
             sesCartes.add(carte);
@@ -60,7 +44,9 @@ public class Pile {
         }
 
         public void setSesCartes(ArrayList<Carte> sesCartes) {
-            this.sesCartes = sesCartes;
+            for (Carte c : sesCartes) {
+                this.sesCartes.add(c);          
+            }
         }
          
         

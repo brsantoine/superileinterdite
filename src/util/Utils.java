@@ -26,8 +26,9 @@ public class Utils {
         CHOISIR_TUILE("Sélectionner une tuile"), 
         DEPLACER_AUTRE("Déplacer un autre joueur"),
         VOIR_DEFAUSSE("Un joueur souhaite voir la défausse de cartes Tirage"),
-        CARTE_MAIN_PLEINE("Envoyé si le joueur pioche des cartes et que sa main est pleine");
-
+        CARTE_MAIN_PLEINE("Envoyé si le joueur pioche des cartes et que sa main est pleine"),
+        DEFAUSSER_CARTE("Defausse une carte");
+        
         private final String libelle ;  
 
         Commandes(String libelle) {

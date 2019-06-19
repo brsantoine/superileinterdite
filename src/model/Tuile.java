@@ -52,7 +52,7 @@ public class Tuile  {
 	    // Inonde la tuile, si l'etat est déjà inondé la tuile devient coulé
             if (this.etat.equalsIgnoreCase("inondé")) {
                 this.etat = "coulé";
-            } else {
+            } else if(this.etat.equalsIgnoreCase("seche")){
                 this.etat = "inondé";
             }        
 	}
