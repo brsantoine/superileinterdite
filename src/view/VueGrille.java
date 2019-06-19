@@ -171,11 +171,15 @@ public class VueGrille extends JPanel implements Observe{
         
         for (int i = 0; i < grid.size() ; i++) {
             grid.get(i).setBorder(new LineBorder(new JButton().getBackground()));
-        }
-        
-        // Met les labels sur toutes les cases de la grille
+        }        
+        // Met les images sur toutes les tuiles de la grille
         for (int i = 0; i < grid.size() ; i++) {
-            grid.get(i).setText(tuiles.get(i).getNom());
+            String nom = new String(tuiles.get(i).getNom());
+            nom = nom.replaceAll("\\s", "");
+            if (tuiles.get(i).getEtat() == "inondé") {
+                nom = nom + "_Inonde";
+            }
+            grid.get(i).setImage(nom);
         }
         
     }

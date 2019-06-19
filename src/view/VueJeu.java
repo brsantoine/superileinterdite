@@ -27,7 +27,7 @@ public class VueJeu extends JFrame implements Observe{
     private VueGrille vueGrille;
     private ArrayList<VueAventurier> vuesAventuriers;
     private JPanel southPanel, westPanel, eastPanel;  
-    private JButton seDeplacerButton, assecherButton, endTurnButton, actionsRemainingButton;
+    private JButton seDeplacerButton, assecherButton, endTurnButton, actionsRemainingButton, helicoButton;
 
     
     public VueJeu(ArrayList<Aventurier> aventuriers) {
@@ -84,6 +84,7 @@ public class VueJeu extends JFrame implements Observe{
         
         // Nombre d'actions restantes et boutons assécher et se déplacer
         seDeplacerButton = new JButton("Se déplacer");
+        helicoButton = new JButton("Hélicoptère");
         assecherButton = new JButton("Assécher");  
         endTurnButton = new JButton("Fin tour");        
         actionsRemainingButton = new JButton("3 actions restantes");
@@ -91,11 +92,14 @@ public class VueJeu extends JFrame implements Observe{
         southPanel.add(actionsRemainingButton);
         southPanel.add(seDeplacerButton);
         southPanel.add(assecherButton);
+        southPanel.add(endTurnButton);
+        southPanel.add(helicoButton);
+        
         
         
         
         // LISTENER 
-        // -------- modeDeplacement / Assechement (changer le mode d'actions) --------
+        // -------- seDeplacerButton et assecherButton (changer le mode d'actions) --------
         seDeplacerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -115,6 +119,9 @@ public class VueJeu extends JFrame implements Observe{
                 notifierObservateur(m);
             }
         });
+        
+        // -------- helicoButton (hélicoptère) --------
+
         // -------- bouton fin tour --------
         endTurnButton.addActionListener(new ActionListener() {
             @Override
@@ -133,8 +140,13 @@ public class VueJeu extends JFrame implements Observe{
     // Empêche d'assécher et de finir le tour (pour le plongeur lorsqu'il est sur une case coulée)
     public void impossibleFinTour() {
         endTurnButton.setEnabled(false);
+    }
+    
+    public void possibleAssecher() {
+        assecherButton.setEnabled(true);
+    }
+    public void impossibleAssecher() {
         assecherButton.setEnabled(false);
-        seDeplacerButton.setEnabled(true);
     }
     
     // Change le label du nombre d'actions restantes
