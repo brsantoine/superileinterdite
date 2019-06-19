@@ -9,8 +9,14 @@
 
 ### Above combination will ignore all files without extension ###
 
-private.xml 
-private.properties
+# NetBeans specific #
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
 
 # Ignore files with extension `.class` & `.sm`
 *.class
