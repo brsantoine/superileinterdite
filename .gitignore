@@ -23,6 +23,8 @@ nbproject/private/private.xml
 nbproject/private/private.properties
 private/private.properties
 private/private.xml
+build.xml
+*.xml
 
 # Ignore files with extension `.class` & `.sm`
 *.class
