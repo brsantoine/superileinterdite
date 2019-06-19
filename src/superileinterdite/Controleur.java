@@ -15,16 +15,16 @@ public class Controleur implements Observateur {
 	private Grille laGrille; 
 	private ArrayList<Aventurier> lesJoueurs;
 	private ArrayList<VueAventurier> ihmAventuriers;
-  private VueMenu ihmMenu;
+        private VueMenu ihmMenu;
 	private VueInscription ihmInscription;
 	private VueJeu ihmJeu;
 	private ArrayList<Pile> sesPiles ;
 	private int niveauEau;
-  private int nbAction;
-  private int tour;
-  private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false;
-  private ArrayList<Tuile> tAssech, tAccess;
-  private Pile PileTresor,PileInondation,defausseTresor,defausseInondation;
+        private int nbAction;
+        private int tour;
+        private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false;
+        private ArrayList<Tuile> tAssech, tAccess;
+        private Pile PileTresor,PileInondation,defausseTresor,defausseInondation;
         
 
         public Controleur() {
@@ -192,6 +192,13 @@ public class Controleur implements Observateur {
               
                 } else if (((CarteMain)PileTresor.getSesCartes().get(0)).getNom() == "MDeaux") {
 
+                    if (i == 0 && ((CarteMain)PileTresor.getSesCartes().get(1)).getNom() == "MDeaux") {
+                         i++;
+                        this.montéeDesEaux();
+                        // Mettre dans la défausse
+                        defausseTresor.addPile(PileTresor.getSesCartes().get(1));
+                        PileTresor.RemoveCarte(PileTresor.getSesCartes().get(1));   
+                    }
                     this.montéeDesEaux();
                     defausseInondation.randomizePile();
                     ArrayList<Carte> temp = new ArrayList<Carte>();
@@ -203,9 +210,7 @@ public class Controleur implements Observateur {
 
                     PileInondation.setSesCartes(temp);
                     defausseInondation.ViderPile();
-                    
-                    
-                    
+            
                     // Mettre dans la défausse
                     defausseTresor.addPile(PileTresor.getSesCartes().get(0));
                     PileTresor.RemoveCarte(PileTresor.getSesCartes().get(0));             
@@ -233,10 +238,6 @@ public class Controleur implements Observateur {
             
 	}
         
-        public void defausserTresor() {
-            
-            
-        }
         
         public void piocherInondation(){
             for (int i = 0; i < nbCarteInonAPiocher(); i++) {
@@ -590,7 +591,17 @@ public class Controleur implements Observateur {
                 break;
                   
                 case DEPLACER_AUTRE:
-                     
+                    
+                    for (Aventurier a : lesJoueurs) {
+                        if (a.getId() == m.getIdAventurier()) {
+                           tAccess = ((Navigateur)aQuiLeTour()).deplacerAutreJoueur(a,laGrille);
+                        }  
+                    }
+                    
+                    ihmJeu.getGrille().afficherTuilesDeplacer(tAccess);
+                    
+                    // Voir deplacement apres
+                    
                     this.actionFinie(); 
                     // Détecte si le joueur peut encore jouer
                     if(this.getActions()>0){                                    
@@ -693,6 +704,42 @@ public class Controleur implements Observateur {
                     defausseTresor.addPile(this.aQuiLeTour().getCartes().get(m.getIdCarte()));
                     this.aQuiLeTour().getCartes().remove(m.getIdCarte());
                     //mettre a jour ses cartes
+                break;
+                
+                
+                case ACTION_SPECIALE:
+                    tAssech.removeAll(tAssech);
+                    tAccess.removeAll(tAccess);
+                    for (Aventurier a : lesJoueurs) {
+                        if (a.getId() == m.getIdAventurier()) {
+                            if (a.getCartes().get(m.getIdCarte()).getNom() == "Sac") {
+                                for (Tuile t : getGrille().getTuiles()) {
+                                    if (t.getEtat() == "inondé") {
+                                        tAssech.add(t);
+                                    }
+                                }
+                                modeAssechement = true;
+                                modeDeplacement = false;
+                                ihmJeu.getGrille().afficherTuilesAssecher(tAssech);
+                            } else {
+                                ArrayList<Tuile> temp = new ArrayList<Tuile>();
+                                for(Tuile t : this.laGrille.getTuiles()){
+                                    if(!t.getSesAventuriers().isEmpty()) {
+                                        temp.add(t);
+                                    }
+                                }
+                                for (Tuile t : laGrille.getTuiles()) {
+                                    tAccess.add(t);
+                                }
+                                modeAssechement = false;
+                                modeDeplacement = true;
+                                //fonction 0 deplacement helico
+                                
+                            }
+                        }  
+                    }
+                    
+                    
                 break;
 
             }
