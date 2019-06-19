@@ -178,49 +178,49 @@ public class Controleur implements Observateur {
     }
 
     public void piocherTresor(Aventurier a) {  
-//            
-//            ArrayList montrerCartes = new ArrayList<Carte>();
-//            
-//            for (int i = 0; i <= 1; i++) {
-//                if ( ((CarteMain)PileTresor.getSesCartes().get(i)).getNom() == "MDeaux") {
-//                    this.montéeDesEaux();
-//                    defausseInondation.randomizePile();
-//                    ArrayList temp = new ArrayList<Carte>();
-//                    temp = defausseInondation.getSesCartes();
-//                    for (Carte c : PileInondation.getSesCartes()) {
-//                        temp.add(c);                      
-//                    }            
-//                    PileInondation.ViderPile();
-//                    PileInondation.setSesCartes(temp);
-//                    // Mettre dans la défausse
-//                    PileTresor.RemoveCarte(PileTresor.getSesCartes().get(i));             
-//                         
-//                    
-//                } else if (a.getCartes().size() == 5) {
-//                    
-//                    if (i == 0) {
-//                        montrerCartes.add(PileTresor.getSesCartes().get(i));   
-//                        montrerCartes.add(PileTresor.getSesCartes().get(i+1));   
-//                    } else {
-//                        montrerCartes.add(PileTresor.getSesCartes().get(i));   
-//                    }                  
-//                    break;
-//                    
-//                } else if(PileTresor.getSesCartes().isEmpty()) {
-//                    defausseTresor.randomizePile();
-//                    PileTresor.setSesCartes(defausseTresor.getSesCartes());
-//                    defausseTresor.ViderPile();
-//                    i--;
-//                } else {
-//                    ((CarteMain)PileTresor.getSesCartes().get(i)).changerProprio(a.getRole());
-//                    a.addCarte((CarteMain) PileTresor.getSesCartes().get(i));
-//                    PileTresor.RemoveCarte(PileTresor.getSesCartes().get(i));             
-//                }         
-//            }
-//            
-//            if (montrerCartes.size() > 0) {
-//                // Envoyer l arraylist a l ihm
-//            }
+            
+            ArrayList montrerCartes = new ArrayList<Carte>();
+            
+            for (int i = 0; i <= 1; i++) {
+                if ( ((CarteMain)PileTresor.getSesCartes().get(i)).getNom() == "MDeaux") {
+                    this.montéeDesEaux();
+                    defausseInondation.randomizePile();
+                    ArrayList temp = new ArrayList<Carte>();
+                    temp = defausseInondation.getSesCartes();
+                    for (Carte c : PileInondation.getSesCartes()) {
+                        temp.add(c);                      
+                    }            
+                    PileInondation.ViderPile();
+                    PileInondation.setSesCartes(temp);
+                    // Mettre dans la défausse
+                    PileTresor.RemoveCarte(PileTresor.getSesCartes().get(i));             
+                         
+                    
+                } else if (a.getCartes().size() == 5) {
+                    
+                    if (i == 0) {
+                        montrerCartes.add(PileTresor.getSesCartes().get(i));   
+                        montrerCartes.add(PileTresor.getSesCartes().get(i+1));   
+                    } else {
+                        montrerCartes.add(PileTresor.getSesCartes().get(i));   
+                    }                  
+                    break;
+                    
+                } else if(PileTresor.getSesCartes().isEmpty()) {
+                    defausseTresor.randomizePile();
+                    PileTresor.setSesCartes(defausseTresor.getSesCartes());
+                    defausseTresor.ViderPile();
+                    i--;
+                } else {
+                    ((CarteMain)PileTresor.getSesCartes().get(i)).changerProprio(a.getRole());
+                    a.addCarte((CarteMain) PileTresor.getSesCartes().get(i));
+                    PileTresor.RemoveCarte(PileTresor.getSesCartes().get(i));             
+                }         
+            }
+            
+            if (montrerCartes.size() > 0) {
+                // Envoyer l arraylist a l ihm
+            }
 
     }
 
