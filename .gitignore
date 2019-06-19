@@ -25,6 +25,7 @@ private/private.properties
 private/private.xml
 build.xml
 *.xml
+.directory
 
 # Ignore files with extension `.class` & `.sm`
 *.class
