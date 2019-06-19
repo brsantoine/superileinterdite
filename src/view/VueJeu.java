@@ -38,7 +38,7 @@ public class VueJeu extends JFrame implements Observe{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
         this.setResizable(Parameters.RESIZABLE);
         this.setTitle("Ile Interdite");
-        this.setSize(1600, 900);   
+        this.setSize((int) screenSize.getWidth() -100, (int) screenSize.getHeight() - 100);  
 
         // ---------------------------------------------------------------------
         // ---------------------------  GAME WINDOW  ---------------------------
