@@ -17,6 +17,7 @@ dist/
 nbdist/
 nbactions.xml
 nb-configuration.xml
+private.properties
 
 # Ignore files with extension `.class` & `.sm`
 *.class
