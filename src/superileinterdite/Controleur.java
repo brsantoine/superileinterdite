@@ -618,11 +618,12 @@ public class Controleur implements Observateur {
                         listeJoueurs.add(this.lesJoueurs.get(i));
                     }
 
+                    this.lesJoueurs=listeJoueurs;
+                    this.setIhmVueJeu(new VueJeu(lesJoueurs, m.getNoms()));
+
                     piocherInondationDebut();
                     piocherTresorDebut();
-                    this.lesJoueurs=listeJoueurs;
-                    this.setIhmVueJeu(new VueJeu(lesJoueurs));
-
+                    
                     this.ihmJeu.getGrille().intitialiserGrille(this.laGrille.getTuiles());
                     this.ihmJeu.getGrille().updateDeplacement(lesJoueurs);
                     this.ihmJeu.afficher();

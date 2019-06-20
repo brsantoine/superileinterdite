@@ -24,7 +24,7 @@ public class VueAventurier extends JPanel implements Observe {
         namePanel = new JPanel();
 
         String cap = role.substring(0, 1).toUpperCase() + role.substring(1);
-        JLabel nameLabel = new JLabel(cap + " (nom user)");
+        JLabel nameLabel = new JLabel(cap);
         nameLabel.setFont(nameLabel.getFont ().deriveFont (20.0f));
 
         namePanel.add(nameLabel);

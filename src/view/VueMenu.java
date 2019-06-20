@@ -122,6 +122,15 @@ public class VueMenu implements Observe {
             couleurJoueur3.setVisible(false);
             couleurJoueur4.setVisible(false);
             
+            for (JTextField nom : nomsJoueurs) {
+                nom.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    if (nom.getText().length() >= 17 ) // limit to 3 charactersdddddddd
+                        e.consume();
+                    }
+                });
+            }
             
             joueur1.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {

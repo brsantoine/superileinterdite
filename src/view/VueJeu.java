@@ -30,7 +30,7 @@ public class VueJeu extends JFrame implements Observe{
     private JButton seDeplacerButton, assecherButton, endTurnButton, actionsRemainingButton, helicoButton;
 
     
-    public VueJeu(ArrayList<Aventurier> aventuriers) {
+    public VueJeu(ArrayList<Aventurier> aventuriers, ArrayList<JTextField> noms) {
         
         // -------- Setup window --------
 
@@ -75,13 +75,12 @@ public class VueJeu extends JFrame implements Observe{
         vuesAventuriers = new ArrayList<>();
         int x = 0;
         for(Aventurier av : aventuriers){
-            VueAventurier va = new VueAventurier(x, av.getRole());
+            VueAventurier va = new VueAventurier(x, av.getRole() + " (" + noms.get(x).getText() + ")");
             this.vuesAventuriers.add(va);
             x++;
         }
         
         for (VueAventurier aventurier : vuesAventuriers) {
-            
             eastPanel.add(aventurier);
         }
         
