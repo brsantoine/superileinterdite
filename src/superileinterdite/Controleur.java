@@ -108,7 +108,7 @@ public class Controleur implements Observateur {
                 
             }
             this.remettreAJourAction();
-            this.tour=1;
+            this.tour=-1;
             this.niveauEau=1;                                                                         
             PileTresor = new Pile("Pile Trésor");
             PileTresor.addPile(new CarteTresors("Calice",null,Calice));
@@ -303,12 +303,12 @@ public class Controleur implements Observateur {
         }
             
         public void enleverRecup(Tresors t){
-            for(CarteMain c : this.aQuiLeTour().getCartes()){
-                if(c instanceof CarteTresors){
-                    if(((CarteTresors) c).getTresor()==t){
-                        c.changerProprio(null);
-                        this.defausseTresor.addPile(c);
-                        this.aQuiLeTour().defausserCarte(c);
+            for (int i = 0; i < this.aQuiLeTour().getCartes().size(); i++) {             
+                if(this.aQuiLeTour().getCartes().get(i) instanceof CarteTresors){
+                    if(((CarteTresors) this.aQuiLeTour().getCartes().get(i)).getTresor() == t){
+                        this.aQuiLeTour().getCartes().get(i).changerProprio(null);
+                        this.defausseTresor.addPile(this.aQuiLeTour().getCartes().get(i));
+                        this.aQuiLeTour().defausserCarte(this.aQuiLeTour().getCartes().get(i));
                     }
                 }
             }
@@ -379,14 +379,16 @@ public class Controleur implements Observateur {
         public void nvtour(){
             this.tour++;
             System.out.println(this.aQuiLeTour().getRole());
-            this.remettreAJourAction();
-            if(this.aQuiLeTour().getRole()!="pilote") {
-                //this.ihmJeu.activerHelico(this.aQuiLeTour().GetId());
+            this.remettreAJourAction();            
+            
+            if(this.aQuiLeTour().getRole().equals("pilote")) {
+                this.ihmJeu.activerHelico();
             } else {
-                //.ihmJeu.desactiverHelico();
+                this.ihmJeu.desactiverHelico();
             }
             
-              test.displayMessage("<h2>C'est à " + aQuiLeTour().getRole() + " de jouer.</h2>", Color.black, true, false);
+            
+            test.displayMessage("<h2>C'est à " + aQuiLeTour().getRole() + " de jouer.</h2>", Color.black, true, false);
             
             switch(this.aQuiLeTour().getRole()){
                 case "explorateur":
@@ -531,7 +533,7 @@ public class Controleur implements Observateur {
            
 
            tAccess = new ArrayList<>();
-           tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
+//           tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
            
            
            
@@ -661,9 +663,9 @@ public class Controleur implements Observateur {
                         ihmJeu.possibleAssecher();
                     }
 
-                   //if((this.aQuiLeTour()).getRole()=="pilote"){
-                   //    this.actionFinie(); // pas encore fini ca fait -1 dans tout les cas
-                   //}
+                   if((this.aQuiLeTour()).getRole()=="pilote" && (((Pilote) this.aQuiLeTour()).getHelico())){
+                       ((Pilote)this.aQuiLeTour()).desactiverHelico();
+                   }
 
                    // Détecte si le joueur peut encore jouer
                    if(this.getActions()>0){
@@ -728,14 +730,21 @@ public class Controleur implements Observateur {
 
                     modeAssechement = false;
                     modeDeplacement = true;
+                                        
+                    this.tAccess = this.aQuiLeTour().TuilesAccessibles(this.laGrille);
 
-                    if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==true) {
-
-                        // On affiche déplacement normal
-
-                        // On affiche le déplacement hélicoptère
-
-                        tAccess = (((Pilote) this.aQuiLeTour()).deplacementHelico(this.getGrille()));
+                    if(this.aQuiLeTour().getRole().equals("pilote")){
+                        //on affiche le deplacement hélicoptère
+//                        if (((Pilote) this.aQuiLeTour()).getHelico()) {
+//                            ihmJeu.activerHelico();
+//                        }
+                        if (m.getHelico()) {
+                            this.tAccess = (((Pilote) this.aQuiLeTour()).deplacementHelico(this.getGrille()));
+                            ihmJeu.desactiverHelico();
+                        } else {
+                            ihmJeu.activerHelico();
+                        }
+                        
                     }
 
                     ihmJeu.getGrille().afficherTuilesDeplacer(tAccess);
@@ -776,6 +785,10 @@ public class Controleur implements Observateur {
                     modeAssechement = true;
                     modeDeplacement = false;
                     //ihm.afficherTuilesAssecher(this.aQuiLeTour().TuilesAssechables(this.getGrille()));
+                    if(this.aQuiLeTour().getRole().equals("pilote") && ((Pilote) this.aQuiLeTour()).getHelico()){
+                            ihmJeu.activerHelico();
+                    }
+                    
                     ihmJeu.getGrille().afficherTuilesAssecher(tAssech);
                     
                 break;
@@ -905,13 +918,11 @@ public class Controleur implements Observateur {
                     
                 break;
                 
-                case HELICO:
-                    modeAssechement = false;
-                    modeDeplacement = true;
-                    if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==true)
-                      //on affiche le deplacement hélicoptère
-                    tAccess = (((Pilote) this.aQuiLeTour()).deplacementHelico(this.getGrille()));
-                break;
+//                case HELICO:
+//                    modeAssechement = false;
+//                    modeDeplacement = true;
+
+//                break;
                 
                 case FIN_TOUR:                            
                     this.finTour();

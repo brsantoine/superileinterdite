@@ -7,7 +7,7 @@ import model.Tuile;
 
 public class Pilote extends Aventurier {
     
-    private boolean helico=true; //Permet de vérifier si il a déjà utilisé son hélicoptère pendant le tour
+    private boolean helico = true; //Permet de vérifier si il a déjà utilisé son hélicoptère pendant le tour
             
     public Pilote () {
         super("pilote");
@@ -26,12 +26,15 @@ public class Pilote extends Aventurier {
                     tuilesAccess.add(tuile);
                 }
             }
-            helico = false;
             return tuilesAccess;
 	}
     
     public void resetHelico() {
         helico = true;
+    }
+    
+    public void desactiverHelico() {
+        helico = false;
     }
     
     public boolean getHelico(){

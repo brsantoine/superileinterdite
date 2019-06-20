@@ -12,8 +12,7 @@ public class VueAventurier extends JPanel implements Observe {
     
     private Observateur observateur;
     private int idAventurier;
-    private JPanel cardsPanel;
-    private JButton helicoButton;
+    private JPanel cardsPanel, namePanel;
     
     public VueAventurier(int id, String role) {
         this.setID(id);                
@@ -22,12 +21,14 @@ public class VueAventurier extends JPanel implements Observe {
         
         this.setLayout(new BorderLayout());
         cardsPanel = new JPanel();
+        namePanel = new JPanel();
 
         String cap = role.substring(0, 1).toUpperCase() + role.substring(1);
-        JLabel yeetLabel = new JLabel(cap + " (nom user)");
-        yeetLabel.setFont(yeetLabel.getFont ().deriveFont (20.0f));
+        JLabel nameLabel = new JLabel(cap + " (nom user)");
+        nameLabel.setFont(nameLabel.getFont ().deriveFont (20.0f));
 
-        this.add(yeetLabel, BorderLayout.NORTH);
+        namePanel.add(nameLabel);
+        this.add(namePanel, BorderLayout.NORTH);
         this.add(cardsPanel, BorderLayout.CENTER);
         
         cardsPanel.setLayout(new GridLayout(1,5));
@@ -35,17 +36,6 @@ public class VueAventurier extends JPanel implements Observe {
             cardsPanel.add(new JButton("testtest"));        
         }
         
-        if (role == "Pilote") {
-            helicoButton = new JButton();
-            helicoButton.setText("Helico");
-            helicoButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    desactiverHelico();
-                    Message m = new Message(Utils.Commandes.HELICO, 0, 0, null, 0);
-                    notifierObservateur(m);
-                }
-            });
-        }
     }
     
     public void afficherCartes(ArrayList<Carte> ca) {
@@ -67,13 +57,6 @@ public class VueAventurier extends JPanel implements Observe {
         this.setVisible(true);
     }
     
-    public void activerHelico() {
-        helicoButton.setEnabled(true);
-    }
-    
-    public void desactiverHelico() {
-        helicoButton.setEnabled(false);
-    }
     @Override
     public void addObservateur(Observateur o) {
         this.observateur = o;

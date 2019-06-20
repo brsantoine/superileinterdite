@@ -174,7 +174,7 @@ public class VueMenu implements Observe {
                         joueur4.setText("");
                         playButton.setEnabled(false);
                         
-                    } else if (!joueur2.getText().equals("")){
+                    } else if (!joueur2.getText().equals("") && (!joueur1.getText().equals(""))){
                         playButton.setEnabled(true);
                         joueur3.setVisible(true);
                         couleurJoueur3.setVisible(true);

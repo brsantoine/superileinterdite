@@ -15,6 +15,7 @@ public class Message implements Serializable {
     private final Utils.Tresor tresor ;
     private final Integer idTuile ;
     private ArrayList<JTextField> noms;
+    private boolean helico = false;
     
     public Message(Utils.Commandes commande, Integer idAventurier, Integer idCarte,  Utils.Tresor tresor, Integer idTuile) {
         this.commande = commande ;
@@ -74,8 +75,20 @@ public class Message implements Serializable {
         return idTuile;
     }
 
+    public ArrayList<JTextField> getNoms() {
+        return noms;
+    }
+    
     public void setNoms(ArrayList<JTextField> noms) {
         this.noms = noms;
+    }   
+
+    public boolean getHelico() {
+        return helico;
+    }
+    
+    public void setHelico(boolean helico) {
+        this.helico = helico;
     }   
     
     @Override

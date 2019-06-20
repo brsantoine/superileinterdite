@@ -81,6 +81,7 @@ public class VueJeu extends JFrame implements Observe{
         }
         
         for (VueAventurier aventurier : vuesAventuriers) {
+            
             eastPanel.add(aventurier);
         }
         
@@ -101,9 +102,6 @@ public class VueJeu extends JFrame implements Observe{
         southPanel.add(endTurnButton);
         southPanel.add(helicoButton);
         
-        
-        
-        
         // LISTENER 
         // -------- seDeplacerButton et assecherButton (changer le mode d'actions) --------
         seDeplacerButton.addActionListener(new ActionListener() {
@@ -112,6 +110,18 @@ public class VueJeu extends JFrame implements Observe{
                 seDeplacerButton.setEnabled(false);
                 assecherButton.setEnabled(true);
                 Message m = new Message(Utils.Commandes.SE_DEPLACER, 0, 0, null, 0);
+                notifierObservateur(m);
+            }
+        });        
+        
+        helicoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                helicoButton.setEnabled(false);
+                seDeplacerButton.setEnabled(true);
+                assecherButton.setEnabled(true);
+                Message m = new Message(Utils.Commandes.SE_DEPLACER, 0, 0, null, 0);
+                m.setHelico(true);
                 notifierObservateur(m);
             }
         });        
@@ -126,8 +136,6 @@ public class VueJeu extends JFrame implements Observe{
             }
         });
         
-        // -------- helicoButton (hélicoptère) --------
-
         // -------- bouton fin tour --------
         endTurnButton.addActionListener(new ActionListener() {
             @Override
@@ -160,6 +168,10 @@ public class VueJeu extends JFrame implements Observe{
         actionsRemainingButton.setText(actions + " actions restantes");
     }
 
+    public ArrayList<VueAventurier> getVuesAventuriers() {
+        return vuesAventuriers;
+    }
+    
     public void afficher() {
         this.setVisible(true);
         for (VueAventurier va : vuesAventuriers) {
@@ -174,12 +186,12 @@ public class VueJeu extends JFrame implements Observe{
         throw new UnsupportedOperationException();
     }
     
-    public void activerHelico(int id) {
-        for (VueAventurier vA : vuesAventuriers) {
-            if (vA.getID() == id) {
-                vA.activerHelico();
-            }
-        }
+    public void activerHelico() {
+        helicoButton.setEnabled(true);
+    }
+    
+    public void desactiverHelico() {
+        helicoButton.setEnabled(false);
     }
 
     public void finTour() {
@@ -200,6 +212,9 @@ public class VueJeu extends JFrame implements Observe{
     public void addObservateur(Observateur o) {
         this.observateur = o;
         vueGrille.addObservateur(o);
+        for (VueAventurier vA : vuesAventuriers) {
+            vA.addObservateur(o);
+        }
     }
     
     @Override
