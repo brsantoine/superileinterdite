@@ -170,7 +170,7 @@ public class VueGrille extends JPanel implements Observe{
         }   
     }
     
-    public void intitialiserGrille(ArrayList<Tuile> tuiles) throws IOException{
+    public void intitialiserGrille(ArrayList<Tuile> tuiles) {
         
         for (int i = 0; i < grid.size() ; i++) {
             grid.get(i).setBorder(new LineBorder(new JButton().getBackground()));
@@ -181,12 +181,10 @@ public class VueGrille extends JPanel implements Observe{
             String nom = new String(tuiles.get(i).getNom());
             nom = nom.replaceAll("\\s", "");
             
-            
             grid.get(i).setSechePanel(nom);            
             nom = nom + "_Inonde";
             grid.get(i).setInondePanel(nom);
-//            grid.get(i).setPionPanel(nom);
-            
+            grid.get(i).setPionPanel();
             
         }
         

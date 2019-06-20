@@ -173,6 +173,14 @@ public class VueJeu extends JFrame implements Observe{
     public void afficherDefaite() {
         throw new UnsupportedOperationException();
     }
+    
+    public void activerHelico(int id) {
+        for (VueAventurier vA : vuesAventuriers) {
+            if (vA.getID() == id) {
+                vA.activerHelico();
+            }
+        }
+    }
 
     public void finTour() {
         this.getGrille().resetGrille();
