@@ -28,7 +28,8 @@ public class Utils {
         VOIR_DEFAUSSE("Un joueur souhaite voir la défausse de cartes Tirage"),
         CARTE_MAIN_PLEINE("Envoyé si le joueur pioche des cartes et que sa main est pleine"),
         DEFAUSSER_CARTE("Defausse une carte"),
-        ACTION_SPECIALE("Quand l'utilisateur clique sur une carte AS");
+        ACTION_SPECIALE("Quand l'utilisateur clique sur une carte AS"),
+        HELICO("deplacement du pilote avec l'hélicoptere");
         
         private final String libelle ;  
 
