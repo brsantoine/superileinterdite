@@ -1,6 +1,8 @@
 package util;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import javax.swing.JTextField;
 
 /**
  *
@@ -12,6 +14,7 @@ public class Message implements Serializable {
     private final Integer idCarte ;
     private final Utils.Tresor tresor ;
     private final Integer idTuile ;
+    private ArrayList<JTextField> noms;
     
     public Message(Utils.Commandes commande, Integer idAventurier, Integer idCarte,  Utils.Tresor tresor, Integer idTuile) {
         this.commande = commande ;
@@ -20,7 +23,7 @@ public class Message implements Serializable {
         this.tresor = tresor ;
         this.idTuile = idTuile ;
     }
-
+   
     /**
      * @return the commande
      */
@@ -70,6 +73,10 @@ public class Message implements Serializable {
     public Integer getIdTuile() {
         return idTuile;
     }
+
+    public void setNoms(ArrayList<JTextField> noms) {
+        this.noms = noms;
+    }   
     
     @Override
     public String toString() {

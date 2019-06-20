@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -19,7 +20,7 @@ public class VueGrille extends JPanel implements Observe{
      
         gc.weightx = 0.15;
         gc.weighty = 0.15;        
-        gc.insets = new Insets(0,1,1,0);
+        gc.insets = new Insets(0,0,0,0);
         gc.fill = GridBagConstraints.BOTH;           
         gc.gridy = 0;
         
@@ -87,20 +88,20 @@ public class VueGrille extends JPanel implements Observe{
     // Affiche en vert toutes les tuiles accessibles par l'aventurier courant
     public void afficherTuilesDeplacer(ArrayList<Tuile> tuiles) {
         for (VueTuile tuile : grid) {
-            tuile.setBackground(new JButton().getBackground());
+            tuile.setBorder(new LineBorder(new JButton().getBackground()));
         }    
             
         for (Tuile tuile : tuiles) {
             for (VueTuile vTuile : grid) {
-                vTuile.setEnabled(false);
+//                vTuile.setEnabled(false);
                 if (vTuile.getID() == tuile.getID()) {
-                    vTuile.setBackground(Color.GREEN);
+                    vTuile.setBorder(new LineBorder(Color.GREEN, 6));
                 }
             }
         }
         
         for (VueTuile vTuile : grid) {
-            if (vTuile.getBackground() == Color.GREEN) {
+            if (((LineBorder) vTuile.getBorder()).getLineColor() == Color.GREEN) {
                 vTuile.setEnabled(true);
             }
         }
@@ -108,26 +109,27 @@ public class VueGrille extends JPanel implements Observe{
     
     // Affiche en bleu toutes les tuiles asséchables par l'aventurier courant
     public void afficherTuilesAssecher(ArrayList<Tuile> tuiles) {
-            // TODO - implement VueAventurier.afficherTuilesAssecher
+        
         for (VueTuile tuile : grid) {
-            tuile.setBackground(new JButton().getBackground());
+            tuile.setBorder(new LineBorder(new JButton().getBackground()));
         }    
             
         for (Tuile tuile : tuiles) {
             for (VueTuile vTuile : grid) {
-                vTuile.setEnabled(false);
+//                vTuile.setEnabled(false);
                 if (vTuile.getID() == tuile.getID()){
                     if (tuile.getEtat().equals("inondé")) {
-                        vTuile.setBackground(Color.BLUE); 
+                        vTuile.setBorder(new LineBorder(Color.BLUE, 6)); 
                    } else {
-                        vTuile.setBackground(new JButton().getBackground());
+                        vTuile.setBorder(new LineBorder(new JButton().getBackground()));
                     }
                 }
             }
         }
         
         for (VueTuile vTuile : grid) {
-            if (vTuile.getBackground() == Color.BLUE) {
+
+            if (((LineBorder) vTuile.getBorder()).getLineColor() == Color.BLUE) {
                 vTuile.setEnabled(true);
             }
         }
@@ -137,7 +139,7 @@ public class VueGrille extends JPanel implements Observe{
         // Remet toutes les bordures à la couleur par défaut
         for (int i = 0; i < grid.size() ; i++) {
             grid.get(i).setBorder(new LineBorder(new JButton().getBackground()));
-            grid.get(i).setBackground(new JButton().getBackground());
+//            grid.get(i).setBackground(new JButton().getBackground());
         }
         
         // Met les labels sur toutes les cases de la grille
@@ -147,9 +149,10 @@ public class VueGrille extends JPanel implements Observe{
             for (Aventurier aventurier : aventuriers) {
                 if (aventurier.getTuile().getID() == grid.get(i).getID()) {
                     
-                    grid.get(i).setBorderPainted(true);  
+//                    grid.get(i).setBorderPainted(true);  
                     
                     if (aventurier.getRole().equals("plongeur")) {
+                        
                         grid.get(i).setBorder(new LineBorder(Color.BLACK, 5));
                     } else if (aventurier.getRole().equals("pilote")) {
                         grid.get(i).setBorder(new LineBorder(Color.BLUE, 5));
@@ -167,19 +170,22 @@ public class VueGrille extends JPanel implements Observe{
         }   
     }
     
-    public void intitialiserGrille(ArrayList<Tuile> tuiles){
+    public void intitialiserGrille(ArrayList<Tuile> tuiles) {
         
         for (int i = 0; i < grid.size() ; i++) {
             grid.get(i).setBorder(new LineBorder(new JButton().getBackground()));
         }        
+        
         // Met les images sur toutes les tuiles de la grille
         for (int i = 0; i < grid.size() ; i++) {
             String nom = new String(tuiles.get(i).getNom());
             nom = nom.replaceAll("\\s", "");
-            if (tuiles.get(i).getEtat() == "inondé") {
-                nom = nom + "_Inonde";
-            }
-            grid.get(i).setImage(nom);
+            
+            grid.get(i).setSechePanel(nom);            
+            nom = nom + "_Inonde";
+            grid.get(i).setInondePanel(nom);
+            grid.get(i).setPionPanel();
+            
         }
         
     }
@@ -187,8 +193,8 @@ public class VueGrille extends JPanel implements Observe{
     // Désactive tous les boutons de la grille, et redonne la possibilité de cliquer sur asécher et se déplacer
     public void resetGrille() {
         for (int i = 0; i < grid.size() ; i++) {
-            grid.get(i).setBackground(new JButton().getBackground());
-            grid.get(i).setEnabled(false);
+            grid.get(i).setBorder(new LineBorder(new JButton().getBackground()));
+//            grid.get(i).setEnabled(false);
         }
         
     }

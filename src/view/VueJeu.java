@@ -26,7 +26,7 @@ public class VueJeu extends JFrame implements Observe{
     private VueNiveau vueNiveau;
     private VueGrille vueGrille;
     private ArrayList<VueAventurier> vuesAventuriers;
-    private JPanel southPanel, westPanel, eastPanel;  
+    private JPanel southPanel, westPanel, eastPanel, centerPanel;  
     private JButton seDeplacerButton, assecherButton, endTurnButton, actionsRemainingButton, helicoButton;
 
     
@@ -38,7 +38,7 @@ public class VueJeu extends JFrame implements Observe{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
         this.setResizable(Parameters.RESIZABLE);
         this.setTitle("Ile Interdite");
-        this.setSize(1600, 900);   
+        this.setSize((int) screenSize.getWidth() -100, (int) screenSize.getHeight() - 100);  
 
         // ---------------------------------------------------------------------
         // ---------------------------  GAME WINDOW  ---------------------------
@@ -46,7 +46,9 @@ public class VueJeu extends JFrame implements Observe{
         
         this.setLayout(new BorderLayout(10,10));
         vueNiveau = new VueNiveau(2);
+        
         vueGrille = new VueGrille();
+        centerPanel = new JPanel();
         eastPanel = new JPanel();
         westPanel = new JPanel();
         southPanel = new JPanel();
@@ -56,16 +58,20 @@ public class VueJeu extends JFrame implements Observe{
         this.add(westPanel, BorderLayout.WEST);
         this.add(southPanel, BorderLayout.SOUTH);
          
-        
         // ------------ WESTPANEL ------------
         
         westPanel.setLayout(new BorderLayout());
 //        westPanel.add(new JPanel(), BorderLayout.NORTH);
         westPanel.add(vueNiveau, BorderLayout.CENTER);
+//        westPanel.setPreferredSize(new Dimension(300,300));
         
 
         // ------------ EASTPANEL ------------
-        eastPanel.setSize(Parameters.LARGEUR_VUE_AVENTURIER, Parameters.HAUTEUR_VUE_AVENTURIER*4);
+
+//        eastPanel.setPreferredSize(new Dimension(300, 300));
+
+        eastPanel.setLayout(new GridLayout(4,1,0,30));
+//        eastPanel.setSize(Parameters.LARGEUR_VUE_AVENTURIER, Parameters.HAUTEUR_VUE_AVENTURIER*4);
         vuesAventuriers = new ArrayList<>();
         int x = 0;
         for(Aventurier av : aventuriers){
@@ -74,13 +80,13 @@ public class VueJeu extends JFrame implements Observe{
             x++;
         }
         
-        eastPanel.setLayout(new GridLayout(4,1));
-        
         for (VueAventurier aventurier : vuesAventuriers) {
             eastPanel.add(aventurier);
         }
         
         // ------------ SOUTHPANEL ------------
+//        southPanel.setPreferredSize(new Dimension((int) screenSize.getWidth(), 150));
+
         
         // Nombre d'actions restantes et boutons assécher et se déplacer
         seDeplacerButton = new JButton("Se déplacer");
@@ -166,6 +172,14 @@ public class VueJeu extends JFrame implements Observe{
     
     public void afficherDefaite() {
         throw new UnsupportedOperationException();
+    }
+    
+    public void activerHelico(int id) {
+        for (VueAventurier vA : vuesAventuriers) {
+            if (vA.getID() == id) {
+                vA.activerHelico();
+            }
+        }
     }
 
     public void finTour() {
