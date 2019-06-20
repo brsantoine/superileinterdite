@@ -77,4 +77,10 @@ public class Tuile  {
             this.sesAventuriers.add(aventurier);
         }
 
+        public ArrayList<Aventurier> getSesAventuriers() {
+            return sesAventuriers;
+        }
+        
+        
+
 }

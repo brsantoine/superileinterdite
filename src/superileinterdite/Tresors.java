@@ -29,4 +29,14 @@ public class Tresors {
             sesTuiles.add(tuileT);
         }
 
+        public String getNom() {
+            return nom;
+        }
+
+        public boolean isEtat() {
+            return etat;
+        }
+        
+            
+
 }

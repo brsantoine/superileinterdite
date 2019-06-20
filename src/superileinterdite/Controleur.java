@@ -5,6 +5,7 @@ package superileinterdite;
 
 import model.*;
 import aventuriers.*;
+import java.awt.Color;
 import java.util.*;
 import util.*;
 import view.*;
@@ -15,16 +16,17 @@ public class Controleur implements Observateur {
 	private Grille laGrille; 
 	private ArrayList<Aventurier> lesJoueurs;
 	private ArrayList<VueAventurier> ihmAventuriers;
-  private VueMenu ihmMenu;
+        private VueMenu ihmMenu;
 	private VueInscription ihmInscription;
 	private VueJeu ihmJeu;
 	private ArrayList<Pile> sesPiles ;
 	private int niveauEau;
-  private int nbAction;
-  private int tour;
-  private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false;
-  private ArrayList<Tuile> tAssech, tAccess;
-  private Pile PileTresor,PileInondation,defausseTresor,defausseInondation;
+        private int nbAction;
+        private int tour;
+        private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false;
+        private ArrayList<Tuile> tAssech, tAccess;
+        private Pile PileTresor,PileInondation,defausseTresor,defausseInondation;
+        private MessageBox test;
         
 
         public Controleur() {
@@ -49,8 +51,11 @@ public class Controleur implements Observateur {
         }
         
         // Instanciation de la grille de toutes les tuiles et les aventuriers
-        public void commencerJeu() {                                            
+        public void commencerJeu() {    
             // Creation des aventuriers
+            test = new MessageBox();
+            test.displayMessage("<h1 style=\"text-align:center;\">Bienvenue dans<br>l'Île Interdite</h1>", Color.black, false, false);
+            test.displayMessage("", Color.black, true, false);
             Aventurier plongeur = new Plongeur();
             Aventurier ingenieur = new Ingenieur();
             Aventurier messager = new Messager();
@@ -84,9 +89,9 @@ public class Controleur implements Observateur {
             laGrille.addTuile(new TuilePion("La Porte De Cuivre",explorateur));
             // Creation des trésors
             Tresors Pierre = new Tresors("La Pierre sacrée");
-            Tresors Statue = new Tresors("La Pierre sacrée");            
-            Tresors Cristal = new Tresors("La Pierre sacrée");            
-            Tresors Calice = new Tresors("La Pierre sacrée");   
+            Tresors Statue = new Tresors("La Statue du zéphyr");            
+            Tresors Cristal = new Tresors("Le Cristal ardent");            
+            Tresors Calice = new Tresors("Le Calice de l’onde");   
             // Creation des tuilesTresors
             laGrille.addTuile(new TuileTresor("La Caverne Du Brasier",Cristal));
             laGrille.addTuile(new TuileTresor("La Caverne Des Ombres",Cristal));
@@ -152,7 +157,6 @@ public class Controleur implements Observateur {
             
             defausseTresor = new Pile("Defausse Tresor");
             defausseInondation = new Pile("Defausse Inondation");
-       
         }
         
         
@@ -161,6 +165,27 @@ public class Controleur implements Observateur {
         // Met l'etat du tresor en récupéré
 	public void recupererTresor(Tresors tresor) {                              
 		tresor.setEtat(true);
+                switch (tresor.getNom()) {
+                    case "La Statue du zéphyr":
+                        test.setZephyrVisible();
+                        break;
+                    
+                    case "La Pierre sacrée":
+                        test.setPierreVisible();
+
+                        break;
+                    
+                    case "Le Cristal ardent":
+                        test.setCristalVisible();
+  
+                        break;
+                    
+                    case "Le Calice de l’onde":
+                        test.setCaliceVisible();
+
+                        break;
+                        
+                }                   
 	}
         
 	public void piocherTresorDebut() {     
@@ -192,6 +217,13 @@ public class Controleur implements Observateur {
               
                 } else if (((CarteMain)PileTresor.getSesCartes().get(0)).getNom() == "MDeaux") {
 
+                    if (i == 0 && ((CarteMain)PileTresor.getSesCartes().get(1)).getNom() == "MDeaux") {
+                         i++;
+                        this.montéeDesEaux();
+                        // Mettre dans la défausse
+                        defausseTresor.addPile(PileTresor.getSesCartes().get(1));
+                        PileTresor.RemoveCarte(PileTresor.getSesCartes().get(1));   
+                    }
                     this.montéeDesEaux();
                     defausseInondation.randomizePile();
                     ArrayList<Carte> temp = new ArrayList<Carte>();
@@ -203,9 +235,7 @@ public class Controleur implements Observateur {
 
                     PileInondation.setSesCartes(temp);
                     defausseInondation.ViderPile();
-                    
-                    
-                    
+            
                     // Mettre dans la défausse
                     defausseTresor.addPile(PileTresor.getSesCartes().get(0));
                     PileTresor.RemoveCarte(PileTresor.getSesCartes().get(0));             
@@ -233,32 +263,55 @@ public class Controleur implements Observateur {
             
 	}
         
-        public void defausserTresor() {
-            
-            
-        }
         
         public void piocherInondation(){
             for (int i = 0; i < nbCarteInonAPiocher(); i++) {
                 if (!PileInondation.getSesCartes().isEmpty()) {
                     defausseInondation.addPile(PileInondation.getSesCartes().get(0));
                     ((CarteInondation)PileInondation.getSesCartes().get(0)).getTuile().inonderTuile();     
+                    test.displayMessage("La tuile "+PileInondation.getSesCartes().get(0).getNom()+ " est "+((CarteInondation)PileInondation.getSesCartes().get(0)).getTuile().getEtat(), Color.blue, false, true);
                     PileInondation.RemoveCarte(PileInondation.getSesCartes().get(0));    
-                    System.out.println("pioché");
                }         
             }
-            //mettre a jours l'affichage des tuilles
+            //mettre à jour l'affichage des tuilles
         }
         
         public void piocherInondationDebut(){
             for (int i = 0; i <= 5; i++) {
 //                if (!PileInondation.getSesCartes().isEmpty()) {
                     defausseInondation.addPile(PileInondation.getSesCartes().get(0));
-                    ((CarteInondation)PileInondation.getSesCartes().get(0)).getTuile().inonderTuile();     
+                    ((CarteInondation)PileInondation.getSesCartes().get(0)).getTuile().inonderTuile();
+                    test.displayMessage("La tuile "+PileInondation.getSesCartes().get(0).getNom()+ " est "+((CarteInondation)PileInondation.getSesCartes().get(0)).getTuile().getEtat(), Color.blue, false, true);
                     PileInondation.RemoveCarte(PileInondation.getSesCartes().get(0));                 
 //                }         
             }
-            //mettre a jours l'affichage des tuilles
+            //mettre à jour l'affichage des tuilles
+        }
+        
+        
+        public void donnerCarte(int joueurdonneur, int joueurreceveur, int cartedonne){
+            for(Aventurier a : this.lesJoueurs){
+                for(Aventurier v : this.lesJoueurs){
+                    if(a.getId()==joueurdonneur && v.getId()==joueurreceveur){
+                        v.addCarte(a.getCartes().get(cartedonne));
+                        a.getCartes().get(cartedonne).changerProprio(v.getRole());
+                        a.defausserCarte(a.getCartes().get(cartedonne));
+                        
+                    }      
+                }
+            }
+        }
+            
+        public void enleverRecup(Tresors t){
+            for(CarteMain c : this.aQuiLeTour().getCartes()){
+                if(c instanceof CarteTresors){
+                    if(((CarteTresors) c).getTresor()==t){
+                        c.changerProprio(null);
+                        this.defausseTresor.addPile(c);
+                        this.aQuiLeTour().defausserCarte(c);
+                    }
+                }
+            }
         }
                 
                 
@@ -327,6 +380,39 @@ public class Controleur implements Observateur {
             this.tour++;
             System.out.println(this.aQuiLeTour().getRole());
             this.remettreAJourAction();
+            if(this.aQuiLeTour().getRole()!="pilote") {
+                //this.ihmJeu.activerHelico(this.aQuiLeTour().GetId());
+            } else {
+                //.ihmJeu.desactiverHelico();
+            }
+            
+              test.displayMessage("<h2>C'est à " + aQuiLeTour().getRole() + " de jouer.</h2>", Color.black, true, false);
+            
+            switch(this.aQuiLeTour().getRole()){
+                case "explorateur":
+                    test.displayMessage("<h3>Action spéciale :</h3> se déplacer et assecher en diagonale.<br><br>", Color.black, false, false);
+                    break;
+                
+                case "messager":
+                    test.displayMessage("<h3>Action spéciale :</h3> peut donner une carte depuis n'importe quelle case.<br><br>", Color.black, false, false);
+                    break;
+                    
+                case "ingenieur":
+                    test.displayMessage("<h3>Action spéciale :</h3> peut assecher deux case pour une action.<br><br>", Color.black, false, false);
+                    break;
+                    
+                case "pilote":
+                    test.displayMessage("<h3>Action spéciale :</h3> peut se déplacer où il veut sur la carte une fois.<br><br>", Color.black, false, false);
+                    break;
+                    
+                case "plongeur":
+                    test.displayMessage("<h3>Action spéciale :</h3> peut se deplacer sur une case inondé ou coulé sans dépenser d'action.<br><br>", Color.black, false, false);
+                    break;
+                    
+                case "navigateur":
+                    test.displayMessage("<h3>Action spéciale :</h3> peut déplacer jusqu'à deux cases n'importe quel joueur pour une action.<br><br>", Color.black, false, false);
+                    break;
+            }
             this.tourDeJeu();
         }
         
@@ -367,6 +453,25 @@ public class Controleur implements Observateur {
         public Pile getPileInondation() {
             return PileInondation;
         }
+        
+        public boolean cestgagne(){
+            int i=0;
+            boolean b=false;
+            for(Aventurier a : this.lesJoueurs){
+                if(a.getTuile().getNom()=="Heliport"){
+                    i++;
+                }
+                for(CarteMain c : a.getCartes()){
+                    if(c.getNom()=="Heli"){
+                    b=true;
+                    }
+                }
+            }
+            if(i==lesJoueurs.size() && b==true){
+                return true;
+            }
+            return false;
+        }
 
         
         
@@ -398,12 +503,12 @@ public class Controleur implements Observateur {
                    i=0;
                 }
             }
-
+            
             tAssech = new ArrayList<>();
             
             tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
-                                                
-            if (tAssech.size() > 0) {
+                             System.out.println(tAssech.size());                   
+            if (tAssech.size()>1) {
                 tm.add(Utils.Commandes.ASSECHER);  
             }
 
@@ -456,7 +561,12 @@ public class Controleur implements Observateur {
 
             tm.add(Utils.Commandes.FIN_TOUR);
             //envoyer a l'ihm les actions possibles
-            
+            test.displayMessage("Voici vos actions possibles", Color.black, false, false);
+            String actions = new String();
+            for(Utils.Commandes u : tm){
+                actions = actions + "<li>" + u.toString() + "</li>";
+            }
+            test.displayMessage("<ul>" + actions + "</ul>", Color.black, false, false);
         }
         
                   
@@ -473,10 +583,16 @@ public class Controleur implements Observateur {
             }
             piocherInondation();
             // Detecte si la victoire est encore possible
+            if(cestgagne()){
+                //ihmJeu.afficherVictoire();
+            }
             if (this.victoirePossible()==true) {                                  
                 this.nvtour();
             } else {
                 ihmJeu.afficherDefaite();
+               test.displayMessage("<h1 style=\"text-align:center;\">Vous avez <br>Perdu</h1>", Color.red, true, true);
+               test.displayMessage("", Color.black, true, false);
+
             }
             ihmJeu.finTour();
         }
@@ -485,6 +601,35 @@ public class Controleur implements Observateur {
         @Override
 	public void traiterMessage(Message m) {
             switch (m.getCommande()) {
+                
+                case COMMENCER_JEU:
+                    
+                    ihmMenu.cacher();
+                     
+                    this.commencerJeu();
+
+                    System.out.println(m.getIdAventurier()); //nombre joueurs
+
+                    // Créer la liste de joueur en fonction du nombre de joueur choisi
+                    ArrayList<Aventurier> listeJoueurs = new ArrayList<>();               
+                    for(int i=0; i<m.getIdAventurier();i++){
+                        listeJoueurs.add(this.lesJoueurs.get(i));
+                    }
+
+                    piocherInondationDebut();
+                    piocherTresorDebut();
+                    this.lesJoueurs=listeJoueurs;
+                    this.setIhmVueJeu(new VueJeu(lesJoueurs));
+
+                    this.ihmJeu.getGrille().intitialiserGrille(this.laGrille.getTuiles());
+                    this.ihmJeu.getGrille().updateDeplacement(lesJoueurs);
+                    this.ihmJeu.afficher();
+                    
+                    this.nvtour();
+
+                break;
+                
+                
                 case CHOISIR_TUILE:
                 if(modeDeplacement){
                     // Enleve l'aventurier da la tuile ou il etait
@@ -537,11 +682,24 @@ public class Controleur implements Observateur {
 
                         // Gere le double assechement d'un ingenieur
                         if(this.aQuiLeTour().getRole()=="ingenieur" && !doubleAssechement){            
-                            doubleAssechement=true;
-                            this.actionFinie();
+                            if(this.getActions()==1){
+                                //appeler fonction qui desactive tous les boutons sauf celui de assechement et fintour
+                                doubleAssechement=true;
+                            }
+                            else{
+                                this.actionFinie();
+                                doubleAssechement=true;
+                            }
                         } 
                         else if(this.aQuiLeTour().getRole()=="ingenieur" && doubleAssechement){
+                            if(doubleAssechement=false && this.getActions()==1){
+                                this.actionFinie();
+                                doubleAssechement=false;
+                            }
+                            else{
                             doubleAssechement=false;
+ 
+                            }
                         } else {
                             this.actionFinie();
                         }
@@ -590,7 +748,17 @@ public class Controleur implements Observateur {
                 break;
                   
                 case DEPLACER_AUTRE:
-                     
+                    
+                    for (Aventurier a : lesJoueurs) {
+                        if (a.getId() == m.getIdAventurier()) {
+                           tAccess = ((Navigateur)aQuiLeTour()).deplacerAutreJoueur(a,laGrille);
+                        }  
+                    }
+                    
+                    ihmJeu.getGrille().afficherTuilesDeplacer(tAccess);
+                    
+                    // Voir deplacement apres
+                    
                     this.actionFinie(); 
                     // Détecte si le joueur peut encore jouer
                     if(this.getActions()>0){                                    
@@ -612,37 +780,12 @@ public class Controleur implements Observateur {
                     
                 break;
 
-                case COMMENCER_JEU:
-                    
-                    ihmMenu.cacher();
-                     
-                    this.commencerJeu();
-
-                    System.out.println(m.getIdAventurier()); //nombre joueurs
-
-                    // Créer la liste de joueur en fonction du nombre de joueur choisi
-                    ArrayList<Aventurier> listeJoueurs = new ArrayList<>();               
-                    for(int i=0; i<m.getIdAventurier();i++){
-                        listeJoueurs.add(this.lesJoueurs.get(i));
-                    }
-
-                    piocherInondationDebut();
-                    piocherTresorDebut();
-                    this.lesJoueurs=listeJoueurs;
-                    this.setIhmVueJeu(new VueJeu(lesJoueurs));
-
-                    this.ihmJeu.getGrille().intitialiserGrille(this.laGrille.getTuiles());
-                    this.ihmJeu.getGrille().updateDeplacement(lesJoueurs);
-                    this.ihmJeu.afficher();
-                    
-                    this.nvtour();
-
-                break;
-                // Pas commencé le code
                 
                 case DONNER:                       
 
                     // Detecte si le joueur peut encore jouer
+                    //on nous donne deux id aventurier le donneur id tuille le receveur id carte la carte donnée
+                    this.donnerCarte(m.getIdAventurier(), m.getIdTuile(), m.getIdCarte());
                     this.actionFinie();                                         
                     if(this.getActions()>0){
                         this.tourDeJeu();
@@ -653,12 +796,48 @@ public class Controleur implements Observateur {
                 break;
                 
                 
-                // Pas commencé le code
                 case RECUPERER_TRESOR:   
-                    
-                    // this.gagnerTresor(tresor);
-                    this.actionFinie();
-                    
+                    switch(m.getTresor()){
+                        case CALICE:
+                            for(Tresors t : this.lesTresors){
+                               if(t.getNom()=="Le Calice de l’onde"){
+                                   this.recupererTresor(t);
+                                   this.enleverRecup(t);
+                               }
+                            }
+                            this.actionFinie();
+                        break;
+                        
+                        case PIERRE:
+                            for(Tresors t : this.lesTresors){
+                               if(t.getNom()=="La Pierre sacrée"){
+                                   this.recupererTresor(t);
+                                   this.enleverRecup(t);
+                               }
+                            }
+                            this.actionFinie();
+                        break;
+                        
+                        case ZEPHYR:
+                            for(Tresors t : this.lesTresors){
+                               if(t.getNom()=="La Statue du zéphyr"){
+                                   this.recupererTresor(t);
+                                   this.enleverRecup(t);
+                               }
+                            }
+                            this.actionFinie();
+                        break;
+                        
+                        case CRISTAL:
+                            for(Tresors t : this.lesTresors){
+                               if(t.getNom()=="Le Cristal ardent"){
+                                   this.recupererTresor(t);
+                                   this.enleverRecup(t);
+                               }
+                            }
+                            this.actionFinie();
+                        break;
+                    }
                     // Detecte si le joueur peut encore jouer
                     if(this.getActions()>0){                                   
                         this.tourDeJeu();
@@ -669,11 +848,6 @@ public class Controleur implements Observateur {
                     
                 break;
                  
-                
-                case FIN_TOUR:                            
-                    this.finTour();
-                break;
-    
     
                 case CARTE_MAIN_PLEINE:
                     // idAvent les cartes en haut
@@ -693,6 +867,54 @@ public class Controleur implements Observateur {
                     defausseTresor.addPile(this.aQuiLeTour().getCartes().get(m.getIdCarte()));
                     this.aQuiLeTour().getCartes().remove(m.getIdCarte());
                     //mettre a jour ses cartes
+                break;
+                
+                
+                case ACTION_SPECIALE:
+                    tAssech.removeAll(tAssech);
+                    tAccess.removeAll(tAccess);
+                    for (Aventurier a : lesJoueurs) {
+                        if (a.getId() == m.getIdAventurier()) {
+                            if (a.getCartes().get(m.getIdCarte()).getNom() == "Sac") {
+                                for (Tuile t : getGrille().getTuiles()) {
+                                    if (t.getEtat() == "inondé") {
+                                        tAssech.add(t);
+                                    }
+                                }
+                                modeAssechement = true;
+                                modeDeplacement = false;
+                                ihmJeu.getGrille().afficherTuilesAssecher(tAssech);
+                            } else {
+                                ArrayList<Tuile> temp = new ArrayList<Tuile>();
+                                for(Tuile t : this.laGrille.getTuiles()){
+                                    if(!t.getSesAventuriers().isEmpty()) {
+                                        temp.add(t);
+                                    }
+                                }
+                                for (Tuile t : laGrille.getTuiles()) {
+                                    tAccess.add(t);
+                                }
+                                modeAssechement = false;
+                                modeDeplacement = true;
+                                //fonction 0 deplacement helico
+                                
+                            }
+                        }  
+                    }
+                    
+                    
+                break;
+                
+                case HELICO:
+                    modeAssechement = false;
+                    modeDeplacement = true;
+                    if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==true)
+                      //on affiche le deplacement hélicoptère
+                    tAccess = (((Pilote) this.aQuiLeTour()).deplacementHelico(this.getGrille()));
+                break;
+                
+                case FIN_TOUR:                            
+                    this.finTour();
                 break;
 
             }
