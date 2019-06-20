@@ -187,6 +187,7 @@ public class VueGrille extends JPanel implements Observe{
             grid.get(i).setInondePanel(nom);
 //            grid.get(i).setPionPanel(nom);
             
+            
         }
         
     }

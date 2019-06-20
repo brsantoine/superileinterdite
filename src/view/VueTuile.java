@@ -17,26 +17,30 @@ public class VueTuile extends JPanel implements Observe {
     private Observateur observateur;    
     private int idTuile;
     private JPanel inondePanel, sechePanel, pionPanel;
-//    private JLayeredPane layeredPane;
+    private ArrayList<JLabel> pionsImages;
+    private JLayeredPane layeredPane;
     
     public VueTuile() {   
         
-        this.inondePanel = new JPanel();        
-        this.sechePanel = new JPanel();        
-        this.pionPanel = new JPanel();   
-//        this.layeredPane = new JLayeredPane();
-        this.setMaximumSize(new Dimension(300, 300));
-//        layeredPane.setBounds(0, 0, 100, 100);
-        this.add(sechePanel);
-//        panelBlue.setBackground(Color.BLUE);
-//        panelBlue.setBounds(0, 0, 600, 400);
-//        panelBlue.setOpaque(true);
-//        panelGreen.setBackground(Color.GREEN);
-//        panelGreen.setBounds(200, 100, 100, 100);
-//        panelGreen.setOpaque(true);
-//        lpane.add(panelBlue, new Integer(0), 0);
-//        lpane.add(panelGreen, new Integer(1), 0);
-//        this.pack();
+        this.setLayout(new BorderLayout());
+        pionsImages = new ArrayList<>();
+        
+        this.inondePanel = new JPanel();
+        this.sechePanel = new JPanel();
+        this.pionPanel = new JPanel();
+        
+        this.layeredPane = new JLayeredPane();
+        sechePanel.setBounds(0, 0, 100, 100);
+        inondePanel.setBounds(0, 0, 100, 100);
+        pionPanel.setBounds(0,0,100,100);
+        layeredPane.add(sechePanel, JLayeredPane.DEFAULT_LAYER);
+        layeredPane.add(inondePanel, JLayeredPane.DEFAULT_LAYER);
+//        layeredPane.add(pionPanel, JLayeredPane.PALETTE_LAYER );
+        
+        this.add(layeredPane);
+        this.setVisible(true);
+        
+
         
         // LISTENER    
         this.addMouseListener(new MouseListener() {
@@ -85,9 +89,37 @@ public class VueTuile extends JPanel implements Observe {
         sechePanel.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.TUILES + nomTuile + ".png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH))));
     }
 
-    public void setPionPanel(JPanel pionPanel) {
+    public void setPionPanel() {    
         
-//        pionPanel.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.TUILES + nomTuile + ".png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH))));
+        pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"Vert.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH))));
+//        pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"Bleu.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH))));
+//        pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"Violet.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH))));
+//        pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"Jaune.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH))));
+//        pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"Rouge.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH))));
+//        pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"Noir.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH))));
+//        pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"Bronze.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH))));
+//        pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"Gris.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH))));
+        pionPanel.add(pionsImages.get(0));
+    }
+    
+    public void afficherInonde() {
+        inondePanel.setVisible(true);
+        sechePanel.setVisible(false);
+    }
+    
+    public void afficherSeche() {
+        sechePanel.setVisible(true);
+        inondePanel.setVisible(false);
+    }
+    
+    public void afficherPion(String color) {
+        
+        pionPanel.setVisible(true);
+    }
+    
+    public void cacherPion() {
+        pionPanel.setVisible(false);
+        
     }
     
     @Override

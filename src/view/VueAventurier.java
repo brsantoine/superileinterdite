@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 import model.*;
@@ -9,13 +10,27 @@ public class VueAventurier extends JPanel implements Observe {
     
     private Observateur observateur;
     private int idAventurier;
-    private JPanel mainPanel;
+    private JPanel cardsPanel;
     
     public VueAventurier(int id, String role) {
         this.setID(id);                
-        setSize(Parameters.LARGEUR_VUE_AVENTURIER, Parameters.HAUTEUR_VUE_AVENTURIER);
-        this.add(new JLabel(role));
+//        this.setSize(new Dimension(Parameters.LARGEUR_VUE_AVENTURIER, Parameters.HAUTEUR_VUE_AVENTURIER));
+//        this.add(new JLabel(role));
         
+        this.setLayout(new BorderLayout());
+        cardsPanel = new JPanel();
+
+        String cap = role.substring(0, 1).toUpperCase() + role.substring(1);
+        JLabel yeetLabel = new JLabel(cap + " (nom user)");
+        yeetLabel.setFont(yeetLabel.getFont ().deriveFont (20.0f));
+
+        this.add(yeetLabel, BorderLayout.NORTH);
+        this.add(cardsPanel, BorderLayout.CENTER);
+        
+        cardsPanel.setLayout(new GridLayout(1,5));
+        for (int i = 0; i < 5; i++) {            
+            cardsPanel.add(new JButton("testtest"));        
+        }
     }
     
     public void afficherCartes(ArrayList<Carte> ca) {

@@ -49,7 +49,7 @@ public class Parameters {
     // Chemins vers les images
 //    public static final String ROOT = System.getProperty("user.dir") ;
     public static final String IMAGES = "images/";
-    public static final String PIONS = "images/pions/";
+    public static final String PIONS = "images/pions/pion";
     public static final String TRESORS = "images/tresors/";
     public static final String TUILES = "images/tuiles/";
     public static final String CARTES = "images/cartes/";
