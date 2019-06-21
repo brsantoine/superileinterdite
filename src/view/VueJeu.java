@@ -10,6 +10,7 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import model.*;
+import superileinterdite.*;
 import util.*;
 
 /**
@@ -27,7 +28,7 @@ public class VueJeu extends JFrame implements Observe{
     private VueGrille vueGrille;
     private ArrayList<VueAventurier> vuesAventuriers;
     private JPanel southPanel, westPanel, eastPanel, centerPanel;  
-    private JButton seDeplacerButton, assecherButton, endTurnButton, actionsRemainingButton, helicoButton;
+    private JButton seDeplacerButton, assecherButton, endTurnButton, actionsRemainingButton, helicoButton, giveButton, defausserButton;
 
     
     public VueJeu(ArrayList<Aventurier> aventuriers, ArrayList<JTextField> noms) {
@@ -68,14 +69,13 @@ public class VueJeu extends JFrame implements Observe{
 
         // ------------ EASTPANEL ------------
 
-//        eastPanel.setPreferredSize(new Dimension(300, 300));
-
+        eastPanel.setPreferredSize(new Dimension(500, 900));
         eastPanel.setLayout(new GridLayout(4,1,0,30));
 //        eastPanel.setSize(Parameters.LARGEUR_VUE_AVENTURIER, Parameters.HAUTEUR_VUE_AVENTURIER*4);
         vuesAventuriers = new ArrayList<>();
         int x = 0;
         for(Aventurier av : aventuriers){
-            VueAventurier va = new VueAventurier(x, av.getRole() + " (" + noms.get(x).getText() + ")");
+            VueAventurier va = new VueAventurier(av.getId(), av.getRole() + " (" + noms.get(x).getText() + ")");
             this.vuesAventuriers.add(va);
             x++;
         }
@@ -94,12 +94,16 @@ public class VueJeu extends JFrame implements Observe{
         assecherButton = new JButton("Assécher");  
         endTurnButton = new JButton("Fin tour");        
         actionsRemainingButton = new JButton("3 actions restantes");
+        giveButton = new JButton("Donner carte");
+        defausserButton = new JButton("Défausser une carte");
 
         southPanel.add(actionsRemainingButton);
         southPanel.add(seDeplacerButton);
         southPanel.add(assecherButton);
         southPanel.add(endTurnButton);
         southPanel.add(helicoButton);
+        southPanel.add(giveButton);
+        southPanel.add(defausserButton);
         
         // LISTENER 
         // -------- seDeplacerButton et assecherButton (changer le mode d'actions) --------
@@ -135,7 +139,32 @@ public class VueJeu extends JFrame implements Observe{
             }
         });
         
-        // -------- bouton fin tour --------
+        // -------- giveButton --------
+        
+        giveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                giveButton.setEnabled(false);
+                defausserButton.setEnabled(true);
+                Message m = new Message(Utils.Commandes.DONNER, 0, 0, null, 0);
+                notifierObservateur(m);
+            }
+        });
+        
+        // -------- defausserButton --------
+        defausserButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                defausserButton.setEnabled(false);
+                giveButton.setEnabled(true);
+                Message m = new Message(Utils.Commandes.DEFAUSSER_CARTE, 0, 0, null, 0);
+                notifierObservateur(m);
+            }
+        });
+        
+        
+        
+        // -------- endTurnButton --------
         endTurnButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -165,6 +194,20 @@ public class VueJeu extends JFrame implements Observe{
     // Change le label du nombre d'actions restantes
     public void updateActions(int actions) {
         actionsRemainingButton.setText(actions + " actions restantes");
+    }
+    
+    public void updateCards(int id, ArrayList<CarteMain> cartes) {
+        for (VueAventurier vA : vuesAventuriers) {
+            if (vA.getID() == id) {
+                vA.afficherCartes(cartes);
+            }
+        }
+    }
+    
+    public void updateCardsBorder() {
+        for (VueAventurier vA : vuesAventuriers) {
+            vA.afficherCardsBorder();
+        }   
     }
 
     public ArrayList<VueAventurier> getVuesAventuriers() {
