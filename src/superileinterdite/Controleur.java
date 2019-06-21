@@ -294,15 +294,15 @@ public class Controleur implements Observateur {
         }
         
         
-        public void donnerCarte(int joueurdonneur, int joueurreceveur, int cartedonne){
-            for(Aventurier a : this.lesJoueurs){
+        public void donnerCarte( int joueurreceveur, int cartedonne){
+
                 for(Aventurier v : this.lesJoueurs){
-                    if(a.getId()==joueurdonneur && v.getId()==joueurreceveur){
-                        v.addCarte(a.getCartes().get(cartedonne));
-                        a.getCartes().get(cartedonne).changerProprio(v.getRole());
-                        a.defausserCarte(a.getCartes().get(cartedonne));
+                    if(v.getId()==joueurreceveur){
+                        v.addCarte(aQuiLeTour().getCartes().get(cartedonne));
+                        aQuiLeTour().getCartes().get(cartedonne).changerProprio(v.getRole());
+                        aQuiLeTour().defausserCarte(aQuiLeTour().getCartes().get(cartedonne));
                         
-                    }      
+                          
                 }
             }
         }
@@ -730,7 +730,8 @@ public class Controleur implements Observateur {
                 break;
   
                 case SE_DEPLACER:
-
+                    ihmJeu.cacherCardsBorder();
+                    modeDefausser = false;
                     modeAssechement = false;
                     modeDeplacement = true;
                                         
@@ -760,7 +761,9 @@ public class Controleur implements Observateur {
                 break;
                   
                 case DEPLACER_AUTRE:
-                    
+                    ihmJeu.cacherCardsBorder();
+                    modeDefausser = false;
+
                     for (Aventurier a : lesJoueurs) {
                         if (a.getId() == m.getIdAventurier()) {
                            tAccess = ((Navigateur)aQuiLeTour()).deplacerAutreJoueur(a,laGrille);
@@ -784,35 +787,19 @@ public class Controleur implements Observateur {
  
                 
                 case ASSECHER: 
-                    
+                    ihmJeu.cacherCardsBorder();
+                    modeDefausser = false;
                     modeAssechement = true;
                     modeDeplacement = false;
                     //ihm.afficherTuilesAssecher(this.aQuiLeTour().TuilesAssechables(this.getGrille()));
                     if(this.aQuiLeTour().getRole().equals("pilote") && ((Pilote) this.aQuiLeTour()).getHelico()){
-                            ihmJeu.activerHelico();
+                        ihmJeu.activerHelico();
                     }
                     
                     ihmJeu.getGrille().afficherTuilesAssecher(tAssech);
                     
                 break;
 
-                
-                case DONNER:                       
-
-                    // Detecte si le joueur peut encore jouer
-                    //on nous donne deux id aventurier le donneur id tuille le receveur id carte la carte donnée
-                    this.donnerCarte(m.getIdAventurier(), m.getIdTuile(), m.getIdCarte());
-                    this.actionFinie();                                         
-                    if(this.getActions()>0){
-                        this.tourDeJeu();
-                    }
-                    else{
-                        this.finTour();
-                    }
-                    
-                break;
-                
-                
                 case RECUPERER_TRESOR:   
                     switch(m.getTresor()){
                         case CALICE:
@@ -877,37 +864,90 @@ public class Controleur implements Observateur {
 
                 break;
                 
-                
                 case DEFAUSSER_CARTE:
+                    
+                    if(this.aQuiLeTour().getRole().equals("pilote") && ((Pilote) this.aQuiLeTour()).getHelico()){
+                        ihmJeu.activerHelico();
+                    }
                     
                     modeDefausser = true;
                     modeDonner = false;    
-                    System.out.println("dab");
                     ihmJeu.updateCardsBorder();
                    
                     //mettre des border autour des cartes que l'on peut defausser
                     
                 break;
                 
+                case DONNER:                       
+
+                    if(this.aQuiLeTour().getRole().equals("pilote") && ((Pilote) this.aQuiLeTour()).getHelico()){
+                        ihmJeu.activerHelico();
+                    }
+                    
+                    modeDefausser = false;
+                    modeDonner = true;
+                    ihmJeu.updateCardsBorder(this.aQuiLeTour().getId());
+
+                break;
+                
                 case CHOISIR_CARTE:
                     
-                    System.out.println("dabBBB2");
                     if (modeDefausser) {
                         for (Aventurier a : this.lesJoueurs) {
                             if(a.getId() == m.getIdAventurier() ) {
-                              System.out.println(m.getIdCarte());
-                              a.getCartes().get(m.getIdCarte()).changerProprio(null);                    
-                              defausseTresor.addPile(a.getCartes().get(m.getIdCarte()));                    
-                              a.defausserCarte(a.getCartes().get(m.getIdCarte()));
-                              ihmJeu.updateCards(a.getId(), a.getCartes());
-                                System.out.println("yeet");
+                                System.out.println(m.getIdCarte());
+                                a.getCartes().get(m.getIdCarte()).changerProprio(null);                    
+                                defausseTresor.addPile(a.getCartes().get(m.getIdCarte()));                    
+                                a.defausserCarte(a.getCartes().get(m.getIdCarte()));
+                                
+                                ihmJeu.updateCards(a.getId(), a.getCartes());
+                                ihmJeu.defausseLastCard(a.getId());
+                                ihmJeu.cacherCardsBorder();
+                                modeDefausser = false;
                             }
                         }
                         
                     } else if (modeDonner) {
-                        modeDonner = false;                    
+                        modeDonner = false; 
+                        
+                        ihmJeu.cacherCardsBorder(m.getIdCarte());
+                        
+                        // Detecte si le joueur peut encore jouer
+                        //on nous donne deux id aventurier le receveur id carte la carte donnée
+                        
+                        this.donnerCarte(m.getIdAventurier(), m.getIdCarte());
+                        this.actionFinie();                                         
+                        if(this.getActions()>0){
+                            this.tourDeJeu();
+                        }
+                        else{
+                            this.finTour();
+                        }
+                        
                     
                     }
+                    
+                break;
+                
+                
+                case CHOISIR_JOUEUR:
+                    
+                    
+                    ArrayList<Aventurier> tempAv = new ArrayList<Aventurier>();
+                    for(Aventurier a : this.getJoueurs()){                               
+                            if(a!=this.aQuiLeTour()){  
+                                    if(a.getCartes().size()<5  && this.aQuiLeTour().getTuile()==a.getTuile()){
+                                        tempAv.add(a);
+                                        break;
+                                    }
+                                    else if(a.getCartes().size()<5  && this.aQuiLeTour().getRole()=="messager"){
+                                        tempAv.add(a);
+                                        break;
+                                    }
+                           }
+                    }       
+                       
+                    ihmJeu.choisirJoueur(tempAv,m.getIdCarte());
                     
                 break;
                 
@@ -944,16 +984,10 @@ public class Controleur implements Observateur {
                         }  
                     }
                     
-                    
                 break;
-                
-//                case HELICO:
-//                    modeAssechement = false;
-//                    modeDeplacement = true;
-
-//                break;
-                
-                case FIN_TOUR:                            
+                                
+                case FIN_TOUR:     
+                    modeDefausser = false;
                     this.finTour();
                 break;
 

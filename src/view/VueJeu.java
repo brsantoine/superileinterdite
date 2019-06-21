@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import model.*;
 import superileinterdite.*;
 import util.*;
@@ -69,7 +70,7 @@ public class VueJeu extends JFrame implements Observe{
 
         // ------------ EASTPANEL ------------
 
-        eastPanel.setPreferredSize(new Dimension(500, 900));
+        eastPanel.setPreferredSize(new Dimension(600, 1000));
         eastPanel.setLayout(new GridLayout(4,1,0,30));
 //        eastPanel.setSize(Parameters.LARGEUR_VUE_AVENTURIER, Parameters.HAUTEUR_VUE_AVENTURIER*4);
         vuesAventuriers = new ArrayList<>();
@@ -112,6 +113,7 @@ public class VueJeu extends JFrame implements Observe{
             public void actionPerformed(ActionEvent e) {
                 seDeplacerButton.setEnabled(false);
                 assecherButton.setEnabled(true);
+                cacherCardsBorder();
                 Message m = new Message(Utils.Commandes.SE_DEPLACER, 0, 0, null, 0);
                 notifierObservateur(m);
             }
@@ -123,6 +125,7 @@ public class VueJeu extends JFrame implements Observe{
                 helicoButton.setEnabled(false);
                 seDeplacerButton.setEnabled(true);
                 assecherButton.setEnabled(true);
+                cacherCardsBorder();
                 Message m = new Message(Utils.Commandes.SE_DEPLACER, 0, 0, null, 0);
                 m.setHelico(true);
                 notifierObservateur(m);
@@ -134,6 +137,7 @@ public class VueJeu extends JFrame implements Observe{
             public void actionPerformed(ActionEvent e) {
                 assecherButton.setEnabled(false);
                 seDeplacerButton.setEnabled(true);
+                cacherCardsBorder();
                 Message m = new Message(Utils.Commandes.ASSECHER, 0, 0, null, 0);
                 notifierObservateur(m);
             }
@@ -144,8 +148,12 @@ public class VueJeu extends JFrame implements Observe{
         giveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                assecherButton.setEnabled(true);
+                seDeplacerButton.setEnabled(true);
                 giveButton.setEnabled(false);
+                
                 defausserButton.setEnabled(true);
+                vueGrille.resetGrille();
                 Message m = new Message(Utils.Commandes.DONNER, 0, 0, null, 0);
                 notifierObservateur(m);
             }
@@ -156,7 +164,11 @@ public class VueJeu extends JFrame implements Observe{
             @Override
             public void actionPerformed(ActionEvent e) {
                 defausserButton.setEnabled(false);
+                assecherButton.setEnabled(true);
+                seDeplacerButton.setEnabled(true);
+                defausserButton.setEnabled(false);
                 giveButton.setEnabled(true);
+                vueGrille.resetGrille();
                 Message m = new Message(Utils.Commandes.DEFAUSSER_CARTE, 0, 0, null, 0);
                 notifierObservateur(m);
             }
@@ -168,6 +180,7 @@ public class VueJeu extends JFrame implements Observe{
         endTurnButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                cacherCardsBorder();
                 Message m = new Message(Utils.Commandes.FIN_TOUR, 0, 0, null, 0);
                 notifierObservateur(m);
             }
@@ -204,14 +217,64 @@ public class VueJeu extends JFrame implements Observe{
         }
     }
     
+    public void defausseLastCard(int id) {
+        for (VueAventurier vA : vuesAventuriers) {
+            if (vA.getID() == id) {
+                vA.defausseLastCard();
+                System.out.println("yeah");
+            }
+        }
+    }
+    
     public void updateCardsBorder() {
         for (VueAventurier vA : vuesAventuriers) {
             vA.afficherCardsBorder();
         }   
     }
+    
+    public void updateCardsBorder(int id) {
+        for (VueAventurier vA : vuesAventuriers) {
+            if (id == vA.getID()) {
+                vA.afficherCardsBorder();
+            }
+        }   
+    }
 
     public ArrayList<VueAventurier> getVuesAventuriers() {
         return vuesAventuriers;
+    }
+    
+    public void cacherCardsBorder() {
+        for (VueAventurier vA : vuesAventuriers) {
+            vA.cacherCardsBorder();
+        }
+        defausserButton.setEnabled(true);
+        giveButton.setEnabled(true);
+        
+    }
+    
+    public void cacherCardsBorder(int numCarte) {
+        for (VueAventurier vA : vuesAventuriers) {
+            vA.cacherCardsBorder(numCarte);
+        }
+        defausserButton.setEnabled(true);
+        giveButton.setEnabled(true);
+        
+    }
+    
+    public void choisirJoueur(ArrayList<Aventurier> aL,int numCarte) {
+        System.out.println("fortnite");
+        for (Aventurier aventurier : aL) {
+            for (VueAventurier vA : vuesAventuriers) {
+                if (aventurier.getId() == vA.getID()) {
+                    vA.setBorder(new LineBorder(Color.RED, 5));
+                }
+            }
+        }
+
+        defausserButton.setEnabled(true);
+        giveButton.setEnabled(true);
+        
     }
     
     public void afficher() {

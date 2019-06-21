@@ -5,9 +5,11 @@
  */
 package view;
 
+import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import model.*;
 import util.*;
 
 /**
@@ -17,16 +19,22 @@ import util.*;
 public class VueCarte extends JPanel implements Observe{
     
     private Observateur observateur;
+    private int idAventurier;
+    private int numCarte;
+    private JLabel img;
+    private boolean hasImage = false;
     
-    
-    public VueCarte() {
-        this.addMouseListener(new MouseListener() {
-
-            @Override
-            public void mouseClicked(MouseEvent arg0) { 
+    public VueCarte(int idAventurier, int numCarte) {
         
-                if (((LineBorder) getBorder()).getLineColor() == Color.RED) {              
-                    Message m = new Message(Utils.Commandes.CHOISIR_CARTE,idAventurier,4,null,0);
+        img = new JLabel();
+        this.numCarte = numCarte;
+        this.idAventurier = idAventurier;
+        
+        this.addMouseListener(new MouseListener() {            
+            @Override
+            public void mouseClicked(MouseEvent arg0) {                  
+                if (((LineBorder) getBorder()).getLineColor() == Color.RED) {
+                    Message m = new Message(Utils.Commandes.CHOISIR_CARTE,idAventurier,numCarte,null,0);
                     notifierObservateur(m);
                 }
             }
@@ -39,14 +47,44 @@ public class VueCarte extends JPanel implements Observe{
             @Override
             public void mouseExited(MouseEvent arg0) {}
             
-            
         });   
     }
+    
+    
+    public void addCardImage(Carte carte) {
+        hasImage = true;
+        img.setIcon((new ImageIcon(new ImageIcon(Parameters.CARTES + carte.getNom() + ".png").getImage().getScaledInstance(80,110, Image.SCALE_SMOOTH))));
+        this.add(img);
+    }
+    
+    public void removeCardImage() {
+        hasImage = false;
+        img.setIcon(null);
+    }
+    
+//    public void setSelectedCard() {
+//        this.setBorder(new LineBorder(Color.BLUE, 5));
+//    }
+    
+    public void addCardBorder() {
+        this.setBorder(new LineBorder(Color.RED, 5)); 
+    }
+    
+    public void removeCardBorder() {        
+        this.setBorder(new LineBorder(new JButton().getBackground()));
+    }
 
+    public boolean getHasImage() {
+        return hasImage;
+    }
+
+    public int getNumCarte() {
+        return numCarte;
+    }
+    
     @Override
     public void addObservateur(Observateur o) {
         this.observateur = o;
-
     }
     
     @Override

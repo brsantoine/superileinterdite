@@ -24,12 +24,14 @@ public class Utils {
         RECEVOIR("Recevoir la carte donnée par un autre joueur"), 
         CHOISIR_CARTE("Utiliser une carte trésor"),
         CHOISIR_TUILE("Sélectionner une tuile"), 
+        CHOISIR_JOUEUR("Choisir un joueur à qui donner une carte"),
         DEPLACER_AUTRE("Déplacer un autre joueur"),
         VOIR_DEFAUSSE("Un joueur souhaite voir la défausse de cartes Tirage"),
         CARTE_MAIN_PLEINE("Envoyé si le joueur pioche des cartes et que sa main est pleine"),
         DEFAUSSER_CARTE("Defausse une carte"),
         ACTION_SPECIALE("Quand l'utilisateur clique sur une carte AS"),
         HELICO("deplacement du pilote avec l'hélicoptere");
+        
         
         private final String libelle ;  
 

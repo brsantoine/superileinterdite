@@ -16,7 +16,7 @@ public class VueAventurier extends JPanel implements Observe {
     
     private Observateur observateur;
     private int idAventurier;
-    private JPanel cardsPanel, namePanel, card0Panel, card1Panel, card2Panel, card3Panel, card4Panel;
+    private JPanel cardsPanel, namePanel;
     private ArrayList<VueCarte> cardsList;
     
     
@@ -25,11 +25,14 @@ public class VueAventurier extends JPanel implements Observe {
 //        this.setSize(new Dimension(Parameters.LARGEUR_VUE_AVENTURIER, Parameters.HAUTEUR_VUE_AVENTURIER));
 //        this.add(new JLabel(role));
         
+
         this.setLayout(new BorderLayout());
+        
         cardsPanel = new JPanel();
         namePanel = new JPanel();
         cardsList = new ArrayList<>();
 
+        // Rajouter une majuscule au role, et changer la taille de la police
         String cap = role.substring(0, 1).toUpperCase() + role.substring(1);
         JLabel nameLabel = new JLabel(cap);
         nameLabel.setFont(nameLabel.getFont ().deriveFont (20.0f));
@@ -37,70 +40,92 @@ public class VueAventurier extends JPanel implements Observe {
         namePanel.add(nameLabel);
         this.add(namePanel, BorderLayout.NORTH);
         this.add(cardsPanel, BorderLayout.CENTER);
+
+        for (int i = 0; i < 5; i++) {
+            VueCarte vueC = new VueCarte(id, i);
+            cardsList.add(vueC);
+        }     
         
-        card0Panel = new JPanel();
-        card1Panel = new JPanel();
-        card2Panel = new JPanel();
-        card3Panel = new JPanel();
-        card4Panel = new JPanel();
+        for (VueCarte vueCarte : cardsList) {
+            cardsPanel.add(vueCarte);            
+        }
         
-        cardsPanel.add(card0Panel);
-        cardsPanel.add(card1Panel);
-        cardsPanel.add(card2Panel);
-        cardsPanel.add(card3Panel);
-        cardsPanel.add(card4Panel);
+        this.setBorder(new LineBorder(new JButton().getBackground()));
         
-        cardsList.add(card0Panel);
-        cardsList.add(card1Panel);
-        cardsList.add(card2Panel);
-        cardsList.add(card3Panel);
-        cardsList.add(card4Panel);
         
-//        this.addMouseListener(new MouseListener() {
-//
-//            @Override
-//            public void mouseClicked(MouseEvent arg0) { 
-//                System.out.println("gay nigger");
-//            }
-//            @Override
-//            public void mousePressed(MouseEvent arg0) {}
-//            @Override
-//            public void mouseReleased(MouseEvent arg0) {}
-//            @Override
-//            public void mouseEntered(MouseEvent arg0) {}
-//            @Override
-//            public void mouseExited(MouseEvent arg0) {}
-//            
-//        });    
+        this.addMouseListener(new MouseListener() {
+
+            @Override
+            public void mouseClicked(MouseEvent arg0) { 
+                if (((LineBorder) getBorder()).getLineColor() == Color.RED) {
+                    Message m = new Message(Utils.Commandes.CHOISIR_JOUEUR,idAventurier,0,null,0);
+                    notifierObservateur(m);
+                }         
+            }
+            @Override
+            public void mousePressed(MouseEvent arg0) {}
+            @Override
+            public void mouseReleased(MouseEvent arg0) {}
+            @Override
+            public void mouseEntered(MouseEvent arg0) {}
+            @Override
+            public void mouseExited(MouseEvent arg0) {}
+            
+        });    
         
     }   
-    
     public void afficherCartes(ArrayList<CarteMain> cartes) {
         // Enleve toutes les cartes affichées
-        for (JPanel jPanel : cardsList) {
-            jPanel.removeAll();
+        for (VueCarte vC : cardsList) {
+            vC.removeCardImage();
         }
         
         // Affiche les nouvelles cartes de l'aventurier
         int x = 0;
-        System.out.println("fortnite");
         for (Carte carte : cartes) {    
-            System.out.println(carte);            
-            cardsList.get(x).add(new JLabel(new ImageIcon(new ImageIcon(Parameters.CARTES + carte.getNom() + ".png").getImage().getScaledInstance(90,125, Image.SCALE_SMOOTH))));
+            System.out.println(carte);    
+            cardsList.get(x).addCardImage(carte);
             x++;
         }
-        
+    }
+    
+    public void defausseLastCard() {
+        cardsList.get(cardsList.size()-1).removeCardImage();
     }
     
     public void setID(int id) {
         this.idAventurier = id;
     }
     
+    // Ajoute une bordure rouge aux cartes choisissables (si elles ont une image)
     public void afficherCardsBorder() {
-        for (JPanel jPanel : cardsList) {
-            jPanel.setBorder(new LineBorder(Color.RED, 5)); 
-
+        for (VueCarte vC : cardsList) {
+            if (vC.getHasImage()) {
+                vC.addCardBorder();
+            }
         }
+    }
+    
+    // Ajoute une bordure rouge aux cartes choisissables (si elles ont une image)
+    public void cacherCardsBorder() {
+        for (VueCarte vC : cardsList) {
+            vC.removeCardBorder();
+        }
+    }
+    
+    public void cacherCardsBorder(int numCarte) {
+        for (VueCarte vC : cardsList) {
+            System.out.println(vC.getNumCarte());
+            if (vC.getNumCarte() != numCarte) {
+                vC.removeCardBorder();
+            } else {
+//                vC.setSelectedCard();
+            }
+        }
+        Message m = new Message(Utils.Commandes.CHOISIR_JOUEUR,0,numCarte,null,0);
+        notifierObservateur(m);
+
+        
 
     }
     
@@ -115,6 +140,9 @@ public class VueAventurier extends JPanel implements Observe {
     @Override
     public void addObservateur(Observateur o) {
         this.observateur = o;
+        for (VueCarte vC : cardsList) {
+            vC.addObservateur(o);            
+        }
     }
     
     @Override
