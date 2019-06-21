@@ -317,8 +317,8 @@ public class VueMenu implements Observe {
                 }                                
                 Message m = new Message(Utils.Commandes.COMMENCER_JEU,nbJoueurs,0,null,0);                
                 m.setNoms(nomsJoueurs);
+                m.setCouleurs(couleursJoueurs);
                 notifierObservateur(m);
-              
            } 
         });
         
