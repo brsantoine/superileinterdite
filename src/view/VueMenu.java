@@ -31,7 +31,7 @@ public class VueMenu implements Observe {
         
         menuWindow = new JFrame();
         menuWindow.setTitle("Ile Interdite");
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         menuWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
         menuWindow.setResizable(Parameters.RESIZABLE);
         
