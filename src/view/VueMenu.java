@@ -16,12 +16,10 @@ public class VueMenu implements Observe {
     
     private JFrame menuWindow;
     Integer[] nbJoueurs = new Integer[]{2, 3, 4};
-    String[] couleurs = new String[]{"Vert","Violet","Jaune","Noir","Gris","Bronze","Bleu","Rouge"};
-    private JTextField joueur1, joueur2, joueur3, joueur4;
+    String[] couleurs = new String[]{"(Aucune)", "Vert","Violet","Jaune","Noir","Gris","Bronze","Bleu","Rouge"};
     private JButton playButton, randomButton, random2Button, quitButton;
     private final ArrayList<JTextField> nomsJoueurs;
     private JPanel panelBoutons, playersPanel;
-    private JComboBox listeNbJoueurs, couleurJoueur1, couleurJoueur2, couleurJoueur3, couleurJoueur4;
     private final ArrayList<JComboBox> couleursJoueurs;
     private Observateur observateur;    
 
@@ -33,7 +31,7 @@ public class VueMenu implements Observe {
         
         menuWindow = new JFrame();
         menuWindow.setTitle("Ile Interdite");
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         menuWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
         menuWindow.setResizable(Parameters.RESIZABLE);
         
@@ -62,162 +60,248 @@ public class VueMenu implements Observe {
         random2Button = new JButton("???");
         quitButton = new JButton("Quitter");
         
-            panelBoutons.add(playButton);
-            panelBoutons.add(playersPanel);
+        panelBoutons.add(playButton);
+        panelBoutons.add(playersPanel);
 
-            playersPanel.setLayout(new GridLayout(4,3,10,10));
-            
-            // ------- PLAYERSPANEL --------
-            
-            nomsJoueurs = new ArrayList<>();
-            couleursJoueurs = new ArrayList<>();
-            
-            joueur1 = new JTextField();
-            joueur2 = new JTextField();
-            joueur3 = new JTextField();
-            joueur4 = new JTextField();  
-            
-            couleurJoueur1 = new JComboBox(couleurs);       
-            couleurJoueur2 = new JComboBox(couleurs);       
-            couleurJoueur3 = new JComboBox(couleurs);       
-            couleurJoueur4 = new JComboBox(couleurs);       
-            
-            nomsJoueurs.add(joueur1);
-            nomsJoueurs.add(joueur2);
-            nomsJoueurs.add(joueur3);
-            nomsJoueurs.add(joueur4);
-            
-            couleursJoueurs.add(couleurJoueur1);
-            couleursJoueurs.add(couleurJoueur2);
-            couleursJoueurs.add(couleurJoueur3);
-            couleursJoueurs.add(couleurJoueur4);
+        playersPanel.setLayout(new GridLayout(4,3,10,10));
 
-            playersPanel.add(new JLabel("Joueur 1: "));
-            playersPanel.add(joueur1);
-            playersPanel.add(couleurJoueur1);
-            
-            playersPanel.add(new JLabel("Joueur 2: "));
-            playersPanel.add(joueur2);
-            playersPanel.add(couleurJoueur2);
+        // ------- PLAYERSPANEL --------
 
-            playersPanel.add(new JLabel("Joueur 3: "));
-            playersPanel.add(joueur3);
-            playersPanel.add(couleurJoueur3);
+        nomsJoueurs = new ArrayList<>();
+        couleursJoueurs = new ArrayList<>();
 
-            playersPanel.add(new JLabel("Joueur 4: "));
-            playersPanel.add(joueur4);
-            playersPanel.add(couleurJoueur4);
+        for (int i = 0; i < 4; i++) {
+            nomsJoueurs.add(new JTextField());
+        }
+        
+        for (int i = 0; i < 4; i++) {
+            couleursJoueurs.add(new JComboBox(couleurs));
+        }
 
+        for (int i = 0; i < 4; i++) {
+            playersPanel.add(new JLabel("Joueur " + (i+1) + ": "));
+            playersPanel.add(nomsJoueurs.get(i));
+            playersPanel.add(couleursJoueurs.get(i));
+        }
+        
+        panelBoutons.add(randomButton);
+        panelBoutons.add(random2Button);
+        panelBoutons.add(quitButton);
 
-            panelBoutons.add(randomButton);
-            panelBoutons.add(random2Button);
-            panelBoutons.add(quitButton);
-            
-            JPanel panelVide = new JPanel();
-            panelBoutons.add(panelVide);
-            
-            playButton.setEnabled(false);
-            joueur3.setVisible(false);
-            joueur4.setVisible(false);
-            couleurJoueur3.setVisible(false);
-            couleurJoueur4.setVisible(false);
-            
-            for (JTextField nom : nomsJoueurs) {
-                nom.addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                    if (nom.getText().length() >= 17 ) // limit to 3 charactersdddddddd
-                        e.consume();
-                    }
-                });
+        JPanel panelVide = new JPanel();
+        panelBoutons.add(panelVide);
+
+        playButton.setEnabled(false);
+        
+        nomsJoueurs.get(2).setVisible(false);
+        nomsJoueurs.get(3).setVisible(false);
+        couleursJoueurs.get(2).setVisible(false);
+        couleursJoueurs.get(3).setVisible(false);
+
+        for (JTextField nom : nomsJoueurs) {
+            nom.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (nom.getText().length() >= 17 ) // limit to 17 characters
+                    e.consume();
+                }
+            });
+        }
+        
+        nomsJoueurs.get(0).getDocument().addDocumentListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+              changed();
             }
-            
-            joueur1.getDocument().addDocumentListener(new DocumentListener() {
-                public void changedUpdate(DocumentEvent e) {
-                  changed();
+            public void removeUpdate(DocumentEvent e) {
+              changed();
+            }
+            public void insertUpdate(DocumentEvent e) {
+              changed();
+            }
+
+            public void changed() {
+                if ((!couleursJoueurs.get(0).isEnabled()) && couleursJoueurs.get(0).getSelectedItem().equals("(Aucune)")) {
+                    couleursJoueurs.get(0).setEnabled(true);
                 }
-                public void removeUpdate(DocumentEvent e) {
-                  changed();
+                if (nomsJoueurs.get(0).getText().equals("")){
+                    if (!couleursJoueurs.get(0).getSelectedItem().equals("(Aucune)")) {
+                        couleursJoueurs.get(1).addItem(couleursJoueurs.get(0).getSelectedItem());
+                        couleursJoueurs.get(2).addItem(couleursJoueurs.get(0).getSelectedItem());
+                        couleursJoueurs.get(3).addItem(couleursJoueurs.get(0).getSelectedItem());
+                    }
+                    couleursJoueurs.get(0).setSelectedIndex(0);
+                    couleursJoueurs.get(2).setVisible(false);
+                    couleursJoueurs.get(3).setVisible(false);
+                    nomsJoueurs.get(2).setVisible(false);
+                    nomsJoueurs.get(3).setVisible(false);
+                    nomsJoueurs.get(2).setText("");
+                    nomsJoueurs.get(3).setText("");
+                    playButton.setEnabled(false);
+
+                } else if (!nomsJoueurs.get(1).getText().equals("")){
+                    playButton.setEnabled(true);
+                    nomsJoueurs.get(2).setVisible(true);
+                    couleursJoueurs.get(2).setVisible(true);
                 }
-                public void insertUpdate(DocumentEvent e) {
-                  changed();
+            }
+        });
+
+
+        nomsJoueurs.get(1).getDocument().addDocumentListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+              changed();
+            }
+            public void removeUpdate(DocumentEvent e) {
+              changed();
+            }
+            public void insertUpdate(DocumentEvent e) {
+              changed();
+            }
+
+            public void changed() {
+                if ((!couleursJoueurs.get(1).isEnabled()) && couleursJoueurs.get(1).getSelectedItem().equals("(Aucune)")) {
+                    couleursJoueurs.get(1).setEnabled(true);
                 }
-                
-                public void changed() {
-                    if (joueur1.getText().equals("")){
-                        couleurJoueur3.setVisible(false);
-                        couleurJoueur4.setVisible(false);
-                        joueur3.setVisible(false);
-                        joueur4.setVisible(false);
-                        joueur3.setText("");
-                        joueur4.setText("");
-                        playButton.setEnabled(false);
-                        
-                    } else if (!joueur2.getText().equals("")){
-                        playButton.setEnabled(true);
-                        joueur3.setVisible(true);
-                        couleurJoueur3.setVisible(true);
+                if (nomsJoueurs.get(1).getText().equals("")) {
+                    if (!couleursJoueurs.get(1).getSelectedItem().equals("(Aucune)")) {
+                        couleursJoueurs.get(0).addItem(couleursJoueurs.get(0).getSelectedItem());
+                        couleursJoueurs.get(2).addItem(couleursJoueurs.get(0).getSelectedItem());
+                        couleursJoueurs.get(3).addItem(couleursJoueurs.get(0).getSelectedItem());
+                    }
+                    couleursJoueurs.get(1).setSelectedIndex(0);
+                    couleursJoueurs.get(2).setVisible(false);
+                    couleursJoueurs.get(3).setVisible(false);
+                    nomsJoueurs.get(2).setVisible(false);
+                    nomsJoueurs.get(3).setVisible(false);
+                    nomsJoueurs.get(2).setText("");
+                    nomsJoueurs.get(3).setText("");
+                    playButton.setEnabled(false);
+
+                } else if ((nomsJoueurs.get(2).getText().equals("")) && (!nomsJoueurs.get(0).getText().equals(""))){
+                    playButton.setEnabled(true);
+                    nomsJoueurs.get(2).setVisible(true);
+                    couleursJoueurs.get(2).setVisible(true);
+                }
+            }
+        });
+
+
+        nomsJoueurs.get(2).getDocument().addDocumentListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+              changed();
+            }
+            public void removeUpdate(DocumentEvent e) {
+              changed();
+            }
+            public void insertUpdate(DocumentEvent e) {
+              changed();
+            }
+
+            public void changed() {
+                if (!couleursJoueurs.get(2).isEnabled()) {
+                    if (couleursJoueurs.get(2).getSelectedItem().equals("(Aucune)")) {
+                        couleursJoueurs.get(2).setEnabled(true);
+                    } else {
+
+                    }
+
+                }
+                if (nomsJoueurs.get(2).getText().equals("")){
+                    if (!couleursJoueurs.get(2).getSelectedItem().equals("(Aucune)")) {
+                        couleursJoueurs.get(0).addItem(couleursJoueurs.get(0).getSelectedItem());
+                        couleursJoueurs.get(1).addItem(couleursJoueurs.get(0).getSelectedItem());
+                        couleursJoueurs.get(3).addItem(couleursJoueurs.get(0).getSelectedItem());
+                    }
+                    couleursJoueurs.get(2).setSelectedIndex(0);
+                    couleursJoueurs.get(3).setVisible(false);
+                    nomsJoueurs.get(3).setVisible(false);
+                    nomsJoueurs.get(3).setText("");
+                    playButton.setEnabled(false);
+                } else if ((nomsJoueurs.get(3).getText().equals("")) && (!nomsJoueurs.get(2).getText().equals(""))){
+                    playButton.setEnabled(true);
+                    nomsJoueurs.get(3).setVisible(true);
+                    couleursJoueurs.get(3).setVisible(true);
+                }
+            }
+        });
+
+        nomsJoueurs.get(3).getDocument().addDocumentListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+              changed();
+            }
+            public void removeUpdate(DocumentEvent e) {
+              changed();
+            }
+            public void insertUpdate(DocumentEvent e) {
+              changed();
+            }
+
+            public void changed() {
+                if ((!couleursJoueurs.get(3).isEnabled()) && couleursJoueurs.get(3).getSelectedItem().equals("(Aucune)")) {
+                    couleursJoueurs.get(3).setEnabled(true);
+                }
+                if (nomsJoueurs.get(3).getText().equals("")){
+                    if (!couleursJoueurs.get(3).getSelectedItem().equals("(Aucune)")) {
+                        couleursJoueurs.get(0).addItem(couleursJoueurs.get(0).getSelectedItem());
+                        couleursJoueurs.get(1).addItem(couleursJoueurs.get(0).getSelectedItem());
+                        couleursJoueurs.get(2).addItem(couleursJoueurs.get(0).getSelectedItem());
+                    }
+                    couleursJoueurs.get(3).setSelectedIndex(0);
+                }
+            }
+        });
+        
+        couleursJoueurs.get(0).addItemListener(new ItemListener(){
+            public void itemStateChanged(ItemEvent e) {
+                if(e.getStateChange() == ItemEvent.SELECTED) {
+                    if(!couleursJoueurs.get(0).getSelectedItem().toString().equals("(Aucune)")) {
+                        couleursJoueurs.get(1).removeItem(couleursJoueurs.get(0).getSelectedItem());
+                        couleursJoueurs.get(2).removeItem(couleursJoueurs.get(0).getSelectedItem());
+                        couleursJoueurs.get(3).removeItem(couleursJoueurs.get(0).getSelectedItem());
                     }
                 }
-            });
-            
-            
-            joueur2.getDocument().addDocumentListener(new DocumentListener() {
-                public void changedUpdate(DocumentEvent e) {
-                  changed();
-                }
-                public void removeUpdate(DocumentEvent e) {
-                  changed();
-                }
-                public void insertUpdate(DocumentEvent e) {
-                  changed();
-                }
-                
-                public void changed() {
-                   if (joueur2.getText().equals("")){
-                        couleurJoueur3.setVisible(false);
-                        couleurJoueur4.setVisible(false);
-                        joueur3.setVisible(false);
-                        joueur4.setVisible(false);
-                        joueur3.setText("");
-                        joueur4.setText("");
-                        playButton.setEnabled(false);
-                        
-                    } else if (!joueur2.getText().equals("") && (!joueur1.getText().equals(""))){
-                        playButton.setEnabled(true);
-                        joueur3.setVisible(true);
-                        couleurJoueur3.setVisible(true);
+                couleursJoueurs.get(0).setEnabled(false);
+            }
+        });
+
+        couleursJoueurs.get(1).addItemListener(new ItemListener(){
+            public void itemStateChanged(ItemEvent e) {
+                if(e.getStateChange() == ItemEvent.SELECTED) {
+                    if(!couleursJoueurs.get(1).getSelectedItem().toString().equals("(Aucune)")) {
+                        couleursJoueurs.get(0).removeItem(couleursJoueurs.get(1).getSelectedItem());
+                        couleursJoueurs.get(2).removeItem(couleursJoueurs.get(1).getSelectedItem());
+                        couleursJoueurs.get(3).removeItem(couleursJoueurs.get(1).getSelectedItem());
                     }
                 }
-            });
-            
-            
-            joueur3.getDocument().addDocumentListener(new DocumentListener() {
-                public void changedUpdate(DocumentEvent e) {
-                  changed();
-                }
-                public void removeUpdate(DocumentEvent e) {
-                  changed();
-                }
-                public void insertUpdate(DocumentEvent e) {
-                  changed();
-                }
-                
-                public void changed() {
-                   if (joueur3.getText().equals("")){
-                        couleurJoueur4.setVisible(false);
-                        joueur4.setVisible(false);
-                        joueur4.setText("");
-                        playButton.setEnabled(false);
-                        
-                    } else if (!joueur3.getText().equals("")){
-                        playButton.setEnabled(true);
-                        joueur4.setVisible(true);
-                        couleurJoueur4.setVisible(true);
+                couleursJoueurs.get(1).setEnabled(false);
+            }
+        });
+
+        couleursJoueurs.get(2).addItemListener(new ItemListener(){
+            public void itemStateChanged(ItemEvent e) {
+                if(e.getStateChange() == ItemEvent.SELECTED) {
+                    if(!couleursJoueurs.get(2).getSelectedItem().toString().equals("(Aucune)")) {
+                        couleursJoueurs.get(0).removeItem(couleursJoueurs.get(2).getSelectedItem());
+                        couleursJoueurs.get(1).removeItem(couleursJoueurs.get(2).getSelectedItem());
+                        couleursJoueurs.get(3).removeItem(couleursJoueurs.get(2).getSelectedItem());
                     }
                 }
-            });
- 
+                couleursJoueurs.get(2).setEnabled(false);
+            }
+        });
+
+        couleursJoueurs.get(3).addItemListener(new ItemListener(){
+            public void itemStateChanged(ItemEvent e) {
+                if(e.getStateChange() == ItemEvent.SELECTED) {
+                    if(!couleursJoueurs.get(3).getSelectedItem().toString().equals("(Aucune)")) {
+                        couleursJoueurs.get(0).removeItem(couleursJoueurs.get(3).getSelectedItem());
+                        couleursJoueurs.get(1).removeItem(couleursJoueurs.get(3).getSelectedItem());
+                        couleursJoueurs.get(2).removeItem(couleursJoueurs.get(3).getSelectedItem());
+                    }
+                }
+                couleursJoueurs.get(3).setEnabled(false);
+            }
+        });
             
         // Jouer: change les fenêtres lorsque l'on appuie sur le bouton Jouer   
         
