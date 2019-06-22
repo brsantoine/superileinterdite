@@ -97,8 +97,8 @@ public class VueJeu implements Observe{
             helicoButton = new JButton("Hélicoptère");
             assecherButton = new JButton("Assécher");  
             endTurnButton = new JButton("Fin tour");      
-            deplacerAutre = new JButton("DeplacerAutre");      
-            recupererButton = new JButton("Recuperertresor");      
+            deplacerAutre = new JButton("Deplacer autre joueur");      
+            recupererButton = new JButton("Recuperer Trésor");      
             
             actionsRemainingLabel = new JLabel("3 actions restantes");
 
@@ -161,7 +161,6 @@ public class VueJeu implements Observe{
         seDeplacerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                seDeplacerButton.setEnabled(false);
                 cacherCardsBorder();
                 Message m = new Message(Utils.Commandes.SE_DEPLACER, 0, 0, null, 0);
                 notifierObservateur(m);
@@ -171,7 +170,6 @@ public class VueJeu implements Observe{
         helicoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                helicoButton.setEnabled(false);
                 cacherCardsBorder();
                 Message m = new Message(Utils.Commandes.SE_DEPLACER, 0, 0, null, 0);
                 m.setHelico(true);
@@ -182,7 +180,6 @@ public class VueJeu implements Observe{
         assecherButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                assecherButton.setEnabled(false);
                 cacherCardsBorder();
                 Message m = new Message(Utils.Commandes.ASSECHER, 0, 0, null, 0);
                 notifierObservateur(m);
@@ -204,7 +201,6 @@ public class VueJeu implements Observe{
         defausserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                defausserButton.setEnabled(false);
                 Message m = new Message(Utils.Commandes.DEFAUSSER_CARTE, 0, 0, null, 0);
                 notifierObservateur(m);
             }
@@ -212,7 +208,6 @@ public class VueJeu implements Observe{
         deplacerAutre.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                deplacerAutre.setEnabled(false);
                 Message m = new Message(Utils.Commandes.DEPLACER_AUTRE, 0, 0, null, 0);
                 notifierObservateur(m);
             }
