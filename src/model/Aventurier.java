@@ -72,7 +72,7 @@ public abstract class Aventurier extends ObjetIdentifie{
         }
         
 	public void defausserCarte(CarteMain ca) {
-            ca.changerProprio("defausse");
+            ca.changerProprio(null);
             sesCartes.remove(ca);
         }
 

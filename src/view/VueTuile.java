@@ -11,6 +11,7 @@ import model.*;
 import util.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import javax.swing.border.*;
 
 public class VueTuile extends JPanel implements Observe {
     
@@ -24,8 +25,8 @@ public class VueTuile extends JPanel implements Observe {
         
         this.setLayout(new BorderLayout());
         pionsImages = new ArrayList<>();
-
-        this.inondePanel = new JPanel();
+        
+        this.inondePanel = new JPanel();        
         this.sechePanel = new JPanel();
         this.pionPanel = new JPanel(new GridLayout(2,2));
         inondePanel.setOpaque(false);
