@@ -33,17 +33,16 @@ public class VueTuile extends JPanel implements Observe {
         sechePanel.setOpaque(false);
         pionPanel.setOpaque(false);
         this.layeredPane = new JLayeredPane();
-        sechePanel.setBounds(0, 0, 150, 150);
-        inondePanel.setBounds(0, 0, 150, 150);
-        pionPanel.setBounds(40, 15, 80, 80);
+        sechePanel.setBounds(0, 0, Parameters.TUILE_BOUNDS, Parameters.TUILE_BOUNDS);
+        inondePanel.setBounds(0, 0, Parameters.TUILE_BOUNDS, Parameters.TUILE_BOUNDS);        
+        pionPanel.setBounds(Parameters.PION_HORIZONTAL_SPACE, Parameters.PION_VERTICAL_SPACE, Parameters.PION_BOUNDS, Parameters.PION_BOUNDS);
+        
         layeredPane.add(sechePanel, JLayeredPane.DEFAULT_LAYER);
         layeredPane.add(inondePanel, JLayeredPane.DEFAULT_LAYER);
         layeredPane.add(pionPanel, JLayeredPane.PALETTE_LAYER );
         
         this.add(layeredPane);
         this.setVisible(true);
-        
-
         
         // LISTENER    
         this.addMouseListener(new MouseListener() {
@@ -83,25 +82,23 @@ public class VueTuile extends JPanel implements Observe {
 //        this.setLayout(new BorderLayout());
 //        frame.add(lpane, BorderLayout.CENTER);
 
-        inondePanel.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.TUILES + nomTuile + ".png").getImage().getScaledInstance(145,145, Image.SCALE_SMOOTH))));
+        inondePanel.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.TUILES + nomTuile + ".png").getImage().getScaledInstance(Parameters.TUILE_SIZE,Parameters.TUILE_SIZE, Image.SCALE_SMOOTH))));
     }
 
     public void setSechePanel(String nomTuile){
 //        this.setLayout(new BorderLayout());
 //        frame.add(lpane, BorderLayout.CENTER);
-        sechePanel.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.TUILES + nomTuile + ".png").getImage().getScaledInstance(145,145, Image.SCALE_SMOOTH))));
+        sechePanel.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.TUILES + nomTuile + ".png").getImage().getScaledInstance(Parameters.TUILE_SIZE,Parameters.TUILE_SIZE, Image.SCALE_SMOOTH))));
     }
 
     public void setPionPanel(ArrayList<Aventurier> aventuriers) {
         for (int i = 0; i < aventuriers.size(); i++) {
-            pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"pion" + aventuriers.get(i).getCouleur() + ".png").getImage().getScaledInstance(40,40, Image.SCALE_SMOOTH))));
+            pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"pion" + aventuriers.get(i).getCouleur() + ".png").getImage().getScaledInstance(Parameters.PION_SIZE,Parameters.PION_SIZE, Image.SCALE_SMOOTH))));
 //            pionsImages.get(i).setHorizontalAlignment(30*i);
 //            pionsImages.get(i).setVerticalAlignment(30*i);
             pionsImages.get(i).setVisible(false);
             pionPanel.add(pionsImages.get(i));
         }
-        
-            
         
     }
     

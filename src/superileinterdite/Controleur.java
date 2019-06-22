@@ -610,7 +610,7 @@ public class Controleur implements Observateur {
                     }
                     
                     this.lesJoueurs=listeJoueurs;
-                    this.setIhmVueJeu(new VueJeu(lesJoueurs, m.getNoms(), m.getCouleurs()));
+                    this.setIhmVueJeu(new VueJeu(lesJoueurs, m.getNoms()));
                     
                     ihmJeu.getMessageBox().displayMessage("<h1 style=\"text-align:center;\">Bienvenue dans<br>l'Île Interdite</h1>", Color.black, false, false);
                     ihmJeu.getMessageBox().displayMessage("", Color.black, true, false);   

@@ -13,16 +13,15 @@ import util.*;
  * @author marquest
  */
 public class VueMenu implements Observe {
-    
+    private Observateur observateur;    
     private JFrame menuWindow;
     Integer[] nbJoueurs = new Integer[]{2, 3, 4};
-    String[] couleurs = new String[]{"(Aucune)", "Vert","Violet","Jaune","Noir","Gris","Bronze","Bleu","Rouge"};
+    String[] couleurs = new String[]{"(Couleur)", "Vert", "Violet", "Jaune", "Noir", "Gris", "Bronze", "Bleu", "Rouge"};
     private JButton playButton, randomButton, random2Button, quitButton;
-    private final ArrayList<JTextField> nomsJoueurs;
     private JPanel panelBoutons, playersPanel;
+    private final ArrayList<JTextField> nomsJoueurs;
     private final ArrayList<JComboBox> couleursJoueurs;
-    private Observateur observateur;    
-
+    
     public VueMenu() {
         
         // ---------------------------------------------------------------------
@@ -97,7 +96,7 @@ public class VueMenu implements Observe {
         nomsJoueurs.get(3).setVisible(false);
         couleursJoueurs.get(2).setVisible(false);
         couleursJoueurs.get(3).setVisible(false);
-
+        
         for (JTextField nom : nomsJoueurs) {
             nom.addKeyListener(new KeyAdapter() {
             @Override
@@ -120,28 +119,18 @@ public class VueMenu implements Observe {
             }
 
             public void changed() {
-                if ((!couleursJoueurs.get(0).isEnabled()) && couleursJoueurs.get(0).getSelectedItem().equals("(Aucune)")) {
-                    couleursJoueurs.get(0).setEnabled(true);
-                }
-                if (nomsJoueurs.get(0).getText().equals("")){
-                    if (!couleursJoueurs.get(0).getSelectedItem().equals("(Aucune)")) {
-                        couleursJoueurs.get(1).addItem(couleursJoueurs.get(0).getSelectedItem());
-                        couleursJoueurs.get(2).addItem(couleursJoueurs.get(0).getSelectedItem());
-                        couleursJoueurs.get(3).addItem(couleursJoueurs.get(0).getSelectedItem());
+                if (estPret(2)) {
+                    if (estPret(3)) {
+                        if (estPret(4)) {
+                            playButton.setEnabled(true);
+                        }
                     }
-                    couleursJoueurs.get(0).setSelectedIndex(0);
-                    couleursJoueurs.get(2).setVisible(false);
-                    couleursJoueurs.get(3).setVisible(false);
-                    nomsJoueurs.get(2).setVisible(false);
-                    nomsJoueurs.get(3).setVisible(false);
-                    nomsJoueurs.get(2).setText("");
-                    nomsJoueurs.get(3).setText("");
+                    nouveauJoueur(2);
+                } else {
                     playButton.setEnabled(false);
-
-                } else if (!nomsJoueurs.get(1).getText().equals("") && (!couleursJoueurs.get(1).getSelectedItem().equals("(Aucune)")) && (!couleursJoueurs.get(0).getSelectedItem().equals("(Aucune)"))){
-                    playButton.setEnabled(true);
-                    nomsJoueurs.get(2).setVisible(true);
-                    couleursJoueurs.get(2).setVisible(true);
+                    if (nomsJoueurs.get(0).getText().equals("")) {
+                        nomReset(0);
+                    }
                 }
             }
         });
@@ -159,29 +148,19 @@ public class VueMenu implements Observe {
             }
 
             public void changed() {
-                if ((!couleursJoueurs.get(1).isEnabled()) && couleursJoueurs.get(1).getSelectedItem().equals("(Aucune)")) {
-                    couleursJoueurs.get(1).setEnabled(true);
-                }
-                if (nomsJoueurs.get(1).getText().equals("")) {
-                    if (!couleursJoueurs.get(1).getSelectedItem().equals("(Aucune)")) {
-                        couleursJoueurs.get(0).addItem(couleursJoueurs.get(0).getSelectedItem());
-                        couleursJoueurs.get(2).addItem(couleursJoueurs.get(0).getSelectedItem());
-                        couleursJoueurs.get(3).addItem(couleursJoueurs.get(0).getSelectedItem());
+               if (estPret(2)) {
+                   if (estPret(3)) {
+                        if (estPret(4)) {
+                            playButton.setEnabled(true);
+                        }
                     }
-                    couleursJoueurs.get(1).setSelectedIndex(0);
-                    couleursJoueurs.get(2).setVisible(false);
-                    couleursJoueurs.get(3).setVisible(false);
-                    nomsJoueurs.get(2).setVisible(false);
-                    nomsJoueurs.get(3).setVisible(false);
-                    nomsJoueurs.get(2).setText("");
-                    nomsJoueurs.get(3).setText("");
-                    playButton.setEnabled(false);
-
-                } else if ((nomsJoueurs.get(2).getText().equals("")) && (!nomsJoueurs.get(0).getText().equals("")) && (!couleursJoueurs.get(0).getSelectedItem().equals("(Aucune)")) && (!couleursJoueurs.get(1).getSelectedItem().equals("(Aucune)"))){
-                    playButton.setEnabled(true);
-                    nomsJoueurs.get(2).setVisible(true);
-                    couleursJoueurs.get(2).setVisible(true);
-                }
+                   nouveauJoueur(2);
+               } else {
+                   playButton.setEnabled(false);
+                   if (nomsJoueurs.get(1).getText().equals("")) {
+                        nomReset(1);
+                    }
+               }
             }
         });
 
@@ -198,30 +177,17 @@ public class VueMenu implements Observe {
             }
 
             public void changed() {
-                if (!couleursJoueurs.get(2).isEnabled()) {
-                    if (couleursJoueurs.get(2).getSelectedItem().equals("(Aucune)")) {
-                        couleursJoueurs.get(2).setEnabled(true);
-                    } else {
-
+               if (estPret(3)) {
+                    if (estPret(4)) {
+                        playButton.setEnabled(true);
                     }
-
-                }
-                if (nomsJoueurs.get(2).getText().equals("")){
-                    if (!couleursJoueurs.get(2).getSelectedItem().equals("(Aucune)")) {
-                        couleursJoueurs.get(0).addItem(couleursJoueurs.get(0).getSelectedItem());
-                        couleursJoueurs.get(1).addItem(couleursJoueurs.get(0).getSelectedItem());
-                        couleursJoueurs.get(3).addItem(couleursJoueurs.get(0).getSelectedItem());
+                   nouveauJoueur(3);
+               } else {
+                   playButton.setEnabled(false);
+                   if (nomsJoueurs.get(2).getText().equals("")) {
+                        nomReset(2);
                     }
-                    couleursJoueurs.get(2).setSelectedIndex(0);
-                    couleursJoueurs.get(3).setVisible(false);
-                    nomsJoueurs.get(3).setVisible(false);
-                    nomsJoueurs.get(3).setText("");
-                    playButton.setEnabled(false);
-                } else if ((nomsJoueurs.get(3).getText().equals("")) && (!nomsJoueurs.get(2).getText().equals(""))){
-                    playButton.setEnabled(true);
-                    nomsJoueurs.get(3).setVisible(true);
-                    couleursJoueurs.get(3).setVisible(true);
-                }
+               }
             }
         });
 
@@ -237,32 +203,29 @@ public class VueMenu implements Observe {
             }
 
             public void changed() {
-                if ((!couleursJoueurs.get(3).isEnabled()) && couleursJoueurs.get(3).getSelectedItem().equals("(Aucune)")) {
-                    couleursJoueurs.get(3).setEnabled(true);
-                }
-                if (nomsJoueurs.get(3).getText().equals("")){
-                    if (!couleursJoueurs.get(3).getSelectedItem().equals("(Aucune)")) {
-                        couleursJoueurs.get(0).addItem(couleursJoueurs.get(0).getSelectedItem());
-                        couleursJoueurs.get(1).addItem(couleursJoueurs.get(0).getSelectedItem());
-                        couleursJoueurs.get(2).addItem(couleursJoueurs.get(0).getSelectedItem());
+               if (estPret(4)) {
+                   playButton.setEnabled(true);
+               } else {
+                   playButton.setEnabled(false);
+                   if (nomsJoueurs.get(3).getText().equals("")) {
+                        nomReset(3);
                     }
-                    couleursJoueurs.get(3).setSelectedIndex(0);
-                }
+               }
             }
         });
         
         couleursJoueurs.get(0).addItemListener(new ItemListener(){
             public void itemStateChanged(ItemEvent e) {
                 if(e.getStateChange() == ItemEvent.SELECTED) {
-                    if(!couleursJoueurs.get(0).getSelectedItem().toString().equals("(Aucune)")) {
-                        couleursJoueurs.get(1).removeItem(couleursJoueurs.get(0).getSelectedItem());
-                        couleursJoueurs.get(2).removeItem(couleursJoueurs.get(0).getSelectedItem());
-                        couleursJoueurs.get(3).removeItem(couleursJoueurs.get(0).getSelectedItem());
+                    couleurChoisi(0);
+                    if (estPret(2)) {
+                       playButton.setEnabled(true);
+                       nouveauJoueur(2);
+                    } else {
+                        playButton.setEnabled(false);
+                        deleteJoueur(2);
+                        deleteJoueur(3);
                     }
-                }
-                couleursJoueurs.get(0).setEnabled(false);
-                if ((!nomsJoueurs.get(0).getText().equals("")) && (!nomsJoueurs.get(1).getText().equals(""))) {
-                    playButton.setEnabled(true);
                 }
             }
         });
@@ -270,15 +233,15 @@ public class VueMenu implements Observe {
         couleursJoueurs.get(1).addItemListener(new ItemListener(){
             public void itemStateChanged(ItemEvent e) {
                 if(e.getStateChange() == ItemEvent.SELECTED) {
-                    if(!couleursJoueurs.get(1).getSelectedItem().toString().equals("(Aucune)")) {
-                        couleursJoueurs.get(0).removeItem(couleursJoueurs.get(1).getSelectedItem());
-                        couleursJoueurs.get(2).removeItem(couleursJoueurs.get(1).getSelectedItem());
-                        couleursJoueurs.get(3).removeItem(couleursJoueurs.get(1).getSelectedItem());
+                    couleurChoisi(1);
+                    if (estPret(2)) {
+                        playButton.setEnabled(true);
+                        nouveauJoueur(2);
+                    } else {
+                        playButton.setEnabled(false);
+                        deleteJoueur(2);
+                        deleteJoueur(3);
                     }
-                }
-                couleursJoueurs.get(1).setEnabled(false);
-                if ((!nomsJoueurs.get(0).getText().equals("")) && (!nomsJoueurs.get(1).getText().equals(""))) {
-                    playButton.setEnabled(true);
                 }
             }
         });
@@ -286,26 +249,28 @@ public class VueMenu implements Observe {
         couleursJoueurs.get(2).addItemListener(new ItemListener(){
             public void itemStateChanged(ItemEvent e) {
                 if(e.getStateChange() == ItemEvent.SELECTED) {
-                    if(!couleursJoueurs.get(2).getSelectedItem().toString().equals("(Aucune)")) {
-                        couleursJoueurs.get(0).removeItem(couleursJoueurs.get(2).getSelectedItem());
-                        couleursJoueurs.get(1).removeItem(couleursJoueurs.get(2).getSelectedItem());
-                        couleursJoueurs.get(3).removeItem(couleursJoueurs.get(2).getSelectedItem());
+                    couleurChoisi(2);
+                    if (estPret(3)) {
+                        playButton.setEnabled(true);
+                        nouveauJoueur(3);
+                    } else {
+                        playButton.setEnabled(false);
+                        deleteJoueur(3);
                     }
                 }
-                couleursJoueurs.get(2).setEnabled(false);
             }
         });
 
         couleursJoueurs.get(3).addItemListener(new ItemListener(){
             public void itemStateChanged(ItemEvent e) {
                 if(e.getStateChange() == ItemEvent.SELECTED) {
-                    if(!couleursJoueurs.get(3).getSelectedItem().toString().equals("(Aucune)")) {
-                        couleursJoueurs.get(0).removeItem(couleursJoueurs.get(3).getSelectedItem());
-                        couleursJoueurs.get(1).removeItem(couleursJoueurs.get(3).getSelectedItem());
-                        couleursJoueurs.get(2).removeItem(couleursJoueurs.get(3).getSelectedItem());
+                    couleurChoisi(3);
+                    if (estPret(4)) {
+                        playButton.setEnabled(true);
+                    } else {
+                        playButton.setEnabled(false);
                     }
                 }
-                couleursJoueurs.get(3).setEnabled(false);
             }
         });
             
@@ -344,6 +309,50 @@ public class VueMenu implements Observe {
     public void cacher() {
         this.menuWindow.setVisible(false);
     }
+    
+    public boolean estPret(int k) {
+        int j = 0;
+        for (int i = 0; i < k; i++) {
+            if ((!nomsJoueurs.get(i).getText().equals("")) && (!couleursJoueurs.get(i).getSelectedItem().equals("(Couleur)"))){
+                j++;
+            }
+        }
+        return j == k;
+    }
+    
+    public void couleurChoisi(int k) {
+        if (!couleursJoueurs.get(k).getSelectedItem().equals("(Couleur)")) {
+            couleursJoueurs.get((k+1)%4).removeItem(couleursJoueurs.get(k).getSelectedItem());
+            couleursJoueurs.get((k+2)%4).removeItem(couleursJoueurs.get(k).getSelectedItem());
+            couleursJoueurs.get((k+3)%4).removeItem(couleursJoueurs.get(k).getSelectedItem());
+            
+            couleursJoueurs.get(k).setEnabled(false);
+        }
+    }
+    
+    public void nomReset(int k) {
+        if (couleursJoueurs.get(k).getSelectedIndex() != 0) {
+            couleursJoueurs.get((k+1)%4).addItem(couleursJoueurs.get(k).getSelectedItem());
+            couleursJoueurs.get((k+2)%4).addItem(couleursJoueurs.get(k).getSelectedItem());
+            couleursJoueurs.get((k+3)%4).addItem(couleursJoueurs.get(k).getSelectedItem());
+            couleursJoueurs.get(k).setSelectedIndex(0);
+        }
+        
+        couleursJoueurs.get(k).setEnabled(true);
+    }
+  
+    public void nouveauJoueur(int k) {
+        nomsJoueurs.get(k).setVisible(true);
+        couleursJoueurs.get(k).setVisible(true);
+    }
+    
+    public void deleteJoueur(int k) {
+        nomsJoueurs.get(k).setVisible(false);
+        couleursJoueurs.get(k).setVisible(false);
+        nomReset(k);
+        nomsJoueurs.get(k).setText("");
+    }
+    
     
     @Override
     public void addObservateur(Observateur o) {

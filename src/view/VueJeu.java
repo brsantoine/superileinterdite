@@ -30,25 +30,24 @@ public class VueJeu implements Observe{
     private VueGrille vueGrille;
     private MessageBox messageBox;
     private ArrayList<VueAventurier> vuesAventuriers;
-    private JPanel southPanel, eastPanel, middleSouthPanel;  
+    private JPanel westPanel, eastPanel, gridButtonsPanel, aventurierButtonsPanel, aventuriersPanel;  
     private JButton seDeplacerButton, assecherButton, endTurnButton, actionsRemainingButton, helicoButton, giveButton, defausserButton;
 
     
-    public VueJeu(ArrayList<Aventurier> aventuriers, ArrayList<JTextField> noms, ArrayList<JComboBox> couleurs) {
+    public VueJeu(ArrayList<Aventurier> aventuriers, ArrayList<JTextField> noms) {
         
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
         // ---------------------------------------------------------------------
         // ---------------------------  LEFT WINDOW  ---------------------------
         // ---------------------------------------------------------------------
 
         leftFrame = new JFrame() ;
-        leftFrame.setLayout(new GridLayout(2,1,0,20));
-        leftFrame.setLocation(20, 20);
-        leftFrame.setSize(350, (int) screenSize.getHeight() - 100);
+        leftFrame.setLayout(new GridLayout(2,1));
+        leftFrame.setLocation(Parameters.HORIZONTAL_BUFFER, Parameters.VERTICAL_BUFFER - Parameters.TASKBAR_BUFFER);
+        leftFrame.setSize(Parameters.LEFT_FRAME_WIDTH, Parameters.LEFT_FRAME_HEIGHT);
         leftFrame.setUndecorated(Parameters.UNDECORATED);
         leftFrame.setResizable(Parameters.RESIZABLE);      
-        
+
         messageBox = new MessageBox();
         vueNiveau = new VueNiveau(2);
         
@@ -64,65 +63,95 @@ public class VueJeu implements Observe{
         // -------- Setup window --------
         
         gameFrame = new JFrame();
-        gameFrame.setLayout(new BorderLayout(10,10));
+        gameFrame.setLayout(new BorderLayout(Parameters.HORIZONTAL_SPACE,0));
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
         gameFrame.setResizable(Parameters.RESIZABLE);
         gameFrame.setTitle("Ile Interdite");
-        gameFrame.setLocation(370, 20);
-        gameFrame.setSize((int) screenSize.getWidth() -390, (int) screenSize.getHeight() - 100);  
+        gameFrame.setLocation(Parameters.LEFT_FRAME_WIDTH + Parameters.HORIZONTAL_BUFFER, Parameters.VERTICAL_BUFFER - Parameters.TASKBAR_BUFFER);
+        gameFrame.setSize(Parameters.GAME_FRAME_WIDTH, Parameters.GAME_FRAME_HEIGHT);  
         
-        vueGrille = new VueGrille();
         eastPanel = new JPanel();
-        southPanel = new JPanel();
+        westPanel = new JPanel();
         
-        gameFrame.add(vueGrille);
+        gameFrame.add(new JPanel(), BorderLayout.WEST);
+        gameFrame.add(westPanel, BorderLayout.CENTER);
         gameFrame.add(eastPanel, BorderLayout.EAST);
-        gameFrame.add(southPanel, BorderLayout.SOUTH);  
         
-        // ------------ EASTPANEL ------------
+        // ============= WESTPANEL =============
+        westPanel.setLayout(new BorderLayout(0,Parameters.VERTICAL_SPACE));
+        
+        gridButtonsPanel = new JPanel();
+        vueGrille = new VueGrille();
+        
+        westPanel.add(new JPanel(), BorderLayout.NORTH);
+        westPanel.add(vueGrille, BorderLayout.CENTER);
+        westPanel.add(gridButtonsPanel, BorderLayout.SOUTH);   
+        
+            // ------------- gridButtonsPanel -------------
+            
+            // Met la bonne taille au panel des boutons
+            gridButtonsPanel.setPreferredSize(new Dimension(Parameters.GRID_WIDTH, Parameters.BUTTONS_PANEL_HEIGHT));
 
-        eastPanel.setPreferredSize(new Dimension(600, 1000));
-        eastPanel.setLayout(new GridLayout(4,1,0,10));
-//        eastPanel.setSize(Parameters.LARGEUR_VUE_AVENTURIER, Parameters.HAUTEUR_VUE_AVENTURIER*4);
-        vuesAventuriers = new ArrayList<>();
-        int x = 0;
-        for(Aventurier av : aventuriers){
-            VueAventurier va = new VueAventurier(av.getId(), av.getRole() + " (" + noms.get(x).getText() + ")");
-            this.vuesAventuriers.add(va);
-            x++;
-        }
-        
-        for (VueAventurier aventurier : vuesAventuriers) {
-            eastPanel.add(aventurier);
-        }
-        
-        // ------------ SOUTHPANEL ------------
-//        southPanel.setPreferredSize(new Dimension((int) screenSize.getWidth(), 150));
-        southPanel.setLayout(new BorderLayout());
-        
-        middleSouthPanel = new JPanel();
-        southPanel.add(middleSouthPanel, BorderLayout.CENTER);
-//        southPanel.add(messageBox, BorderLayout.WEST);
-        
-        // Nombre d'actions restantes et boutons assécher et se déplacer
-        seDeplacerButton = new JButton("Se déplacer");
-        helicoButton = new JButton("Hélicoptère");
-        assecherButton = new JButton("Assécher");  
-        endTurnButton = new JButton("Fin tour");        
-        actionsRemainingButton = new JButton("3 actions restantes");
-        giveButton = new JButton("Donner carte");
-        defausserButton = new JButton("Défausser une carte");
+            // Nombre d'actions restantes et boutons assécher et se déplacer
+            seDeplacerButton = new JButton("Se déplacer");
+            helicoButton = new JButton("Hélicoptère");
+            assecherButton = new JButton("Assécher");  
+            endTurnButton = new JButton("Fin tour");        
+            actionsRemainingButton = new JButton("3 actions restantes");
 
-        middleSouthPanel.add(actionsRemainingButton);
-        middleSouthPanel.add(seDeplacerButton);
-        middleSouthPanel.add(assecherButton);
-        middleSouthPanel.add(endTurnButton);
-        middleSouthPanel.add(helicoButton);
-        middleSouthPanel.add(giveButton);
-        middleSouthPanel.add(defausserButton);
+            gridButtonsPanel.add(actionsRemainingButton);
+            gridButtonsPanel.add(seDeplacerButton);
+            gridButtonsPanel.add(assecherButton);
+            gridButtonsPanel.add(endTurnButton);
+            gridButtonsPanel.add(helicoButton);
         
+        // ============= EASTPANEL =============
         
-        // LISTENER 
+        eastPanel.setPreferredSize(new Dimension(Parameters.VUE_AVENTURIER_WIDTH, Parameters.GAME_FRAME_HEIGHT));
+        
+        eastPanel.setLayout(new BorderLayout(0,Parameters.VERTICAL_SPACE));
+        aventuriersPanel = new JPanel();
+        aventurierButtonsPanel = new JPanel();
+        
+        eastPanel.add(new JPanel(), BorderLayout.NORTH);        
+        eastPanel.add(aventuriersPanel, BorderLayout.CENTER);        
+        eastPanel.add(aventurierButtonsPanel, BorderLayout.SOUTH);      
+
+            // ------------- aventuriersPanel -------------
+            
+            aventuriersPanel.setLayout(new GridLayout(4,1,0,Parameters.CARD_VERTICAL_SPACE));            
+            // Ligne qui sépare la grille des vuesAventuriers
+            aventuriersPanel.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 0, Color.BLACK));
+            
+            vuesAventuriers = new ArrayList<>();
+            int x = 0;
+            for(Aventurier av : aventuriers){
+                VueAventurier va = new VueAventurier(av.getId(), av.getRole() + " (" + noms.get(x).getText() + ")");
+                this.vuesAventuriers.add(va);
+                x++;
+            }
+
+            int i = 0;
+            for (VueAventurier aventurier : vuesAventuriers) {                
+                aventuriersPanel.add(aventurier);
+                aventurier.setNameBorder(aventuriers.get(i).getCouleur()); 
+                i++;
+            }
+            
+            // ------------- aventurierButtonsPanel -------------
+            
+            // Met la bonne taille au panel des boutons
+            aventurierButtonsPanel.setPreferredSize(new Dimension(Parameters.VUE_AVENTURIER_WIDTH,Parameters.BUTTONS_PANEL_HEIGHT));
+                    
+            giveButton = new JButton("Donner carte");
+            defausserButton = new JButton("Défausser une carte");
+            
+            aventurierButtonsPanel.add(giveButton);
+            aventurierButtonsPanel.add(defausserButton);
+            
+
+        // ============= LISTENERS =============
+        
         // -------- seDeplacerButton et assecherButton (changer le mode d'actions) --------
         seDeplacerButton.addActionListener(new ActionListener() {
             @Override
