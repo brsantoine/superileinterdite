@@ -29,8 +29,8 @@ public class VueNiveau extends JPanel{
         this.niveau = niveauInitial;
         panelsGauches = new HashMap<>();
 
-        setSize(cellWidth*2+Parameters.SWING_BORDERS_HEIGHT, Parameters.HAUTEUR_AUTRES_VUES);        
-        setLocation(30, Parameters.TOP_AUTRES_VUES);
+//        setSize(cellWidth*2+Parameters.SWING_BORDERS_HEIGHT, Parameters.HAUTEUR_AUTRES_VUES);        
+//        setLocation(30, Parameters.TOP_AUTRES_VUES);
         
         this.mainPanel = new JPanel() ;
         this.add(mainPanel);

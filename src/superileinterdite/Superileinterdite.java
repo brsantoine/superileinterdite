@@ -23,7 +23,5 @@ public class Superileinterdite {
         ihm.addObservateur(controleur);
         controleur.setIhmVueMenu(ihm);
         ihm.afficher();
-        
     }
-    
 }

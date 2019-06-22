@@ -33,7 +33,7 @@ public class MessageBox extends JPanel{
 //        window = new JFrame() ;
 //        this.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
 //        this.setLocation(940, Parameters.TOP_AUTRES_VUES);
-        this.setSize(310, Parameters.HAUTEUR_AUTRES_VUES);
+//        this.setSize(310, Parameters.HAUTEUR_AUTRES_VUES);
 //        this.setUndecorated(Parameters.UNDECORATED);
 //        window.setResizable(Parameters.RESIZABLE);
         
@@ -71,7 +71,7 @@ public class MessageBox extends JPanel{
         html.setEditable(false);
         html.setContentType("text/html");
         scrollPane = new JScrollPane(html);
-        this.scrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, false));
+//        this.scrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, false));
         
         html.setMinimumSize(new Dimension(180, 280));
         html.setPreferredSize(new Dimension(180, 280));
