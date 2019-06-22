@@ -64,6 +64,11 @@ public class Tuile  {
 		return this.etat;
 	}
 
+        public void setEtat(String etat) {
+            this.etat = etat;
+        }
+        
+
 	public int getX() {
 		return this.x;
 	}

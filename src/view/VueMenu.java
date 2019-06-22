@@ -310,6 +310,11 @@ public class VueMenu implements Observe {
     
     public void afficher() {
         this.menuWindow.setVisible(true);
+        this.deleteJoueur(3);
+        this.deleteJoueur(2);
+        nomsJoueurs.get(0).setText("");
+        nomsJoueurs.get(1).setText("");
+        niveauxDifficulte.setSelectedIndex(0);
     }
     
     public void cacher() {
