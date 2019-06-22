@@ -16,7 +16,7 @@ import javax.swing.border.*;
 public class VueTuile extends JPanel implements Observe {
     
     private Observateur observateur;    
-    private int idTuile;
+    private int idTuile,numAv = -1;
     private JPanel inondePanel, sechePanel, pionPanel;
     private ArrayList<JLabel> pionsImages;
     private JLayeredPane layeredPane;
@@ -50,7 +50,7 @@ public class VueTuile extends JPanel implements Observe {
             @Override
             public void mouseClicked(MouseEvent arg0) {
                 if (((LineBorder) getBorder()).getLineColor() == Color.GREEN || ((LineBorder) getBorder()).getLineColor() == Color.BLUE) {                
-                    Message m = new Message(Utils.Commandes.CHOISIR_TUILE,0,0,null,idTuile);
+                    Message m = new Message(Utils.Commandes.CHOISIR_TUILE,numAv,0,null,idTuile);
                     notifierObservateur(m);
                 }
             }
@@ -135,5 +135,11 @@ public class VueTuile extends JPanel implements Observe {
         if (observateur != null) {
             observateur.traiterMessage(m);
         }
-    }  
+    } 
+
+    public void setNumAv(int numAv) {
+        this.numAv = numAv;
+    }
+    
+    
 }

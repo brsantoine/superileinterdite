@@ -10,6 +10,7 @@ public class TuileTresor extends Tuile {
             super(nom);
 	    // Initialise la tuile avec son trésor
             this.sonTresor = tresor;
+            tresor.addTuile(this);
         }
         
         public Tresors getTresor(){

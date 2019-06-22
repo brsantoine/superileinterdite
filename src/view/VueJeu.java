@@ -31,7 +31,7 @@ public class VueJeu implements Observe{
     private MessageBox messageBox;
     private ArrayList<VueAventurier> vuesAventuriers;
     private JPanel southPanel, eastPanel, middleSouthPanel;  
-    private JButton seDeplacerButton, assecherButton, endTurnButton, actionsRemainingButton, helicoButton, giveButton, defausserButton;
+    private JButton seDeplacerButton, assecherButton, endTurnButton, actionsRemainingButton, helicoButton, giveButton, defausserButton, recupererButton, deplacerAutre;
 
     
     public VueJeu(ArrayList<Aventurier> aventuriers, ArrayList<JTextField> noms, ArrayList<JComboBox> couleurs) {
@@ -107,19 +107,23 @@ public class VueJeu implements Observe{
         // Nombre d'actions restantes et boutons assécher et se déplacer
         seDeplacerButton = new JButton("Se déplacer");
         helicoButton = new JButton("Hélicoptère");
+        deplacerAutre = new JButton("Deplacer un autre joueur");
         assecherButton = new JButton("Assécher");  
         endTurnButton = new JButton("Fin tour");        
         actionsRemainingButton = new JButton("3 actions restantes");
         giveButton = new JButton("Donner carte");
         defausserButton = new JButton("Défausser une carte");
+        recupererButton = new JButton("Recuperer un trésor");
 
         middleSouthPanel.add(actionsRemainingButton);
-        middleSouthPanel.add(seDeplacerButton);
         middleSouthPanel.add(assecherButton);
+        middleSouthPanel.add(seDeplacerButton);
         middleSouthPanel.add(endTurnButton);
         middleSouthPanel.add(helicoButton);
+        middleSouthPanel.add(deplacerAutre);
         middleSouthPanel.add(giveButton);
         middleSouthPanel.add(defausserButton);
+        middleSouthPanel.add(recupererButton);
         
         
         // LISTENER 
@@ -128,7 +132,6 @@ public class VueJeu implements Observe{
             @Override
             public void actionPerformed(ActionEvent e) {
                 seDeplacerButton.setEnabled(false);
-                assecherButton.setEnabled(true);
                 cacherCardsBorder();
                 Message m = new Message(Utils.Commandes.SE_DEPLACER, 0, 0, null, 0);
                 notifierObservateur(m);
@@ -139,8 +142,6 @@ public class VueJeu implements Observe{
             @Override
             public void actionPerformed(ActionEvent e) {
                 helicoButton.setEnabled(false);
-                seDeplacerButton.setEnabled(true);
-                assecherButton.setEnabled(true);
                 cacherCardsBorder();
                 Message m = new Message(Utils.Commandes.SE_DEPLACER, 0, 0, null, 0);
                 m.setHelico(true);
@@ -152,7 +153,6 @@ public class VueJeu implements Observe{
             @Override
             public void actionPerformed(ActionEvent e) {
                 assecherButton.setEnabled(false);
-                seDeplacerButton.setEnabled(true);
                 cacherCardsBorder();
                 Message m = new Message(Utils.Commandes.ASSECHER, 0, 0, null, 0);
                 notifierObservateur(m);
@@ -164,11 +164,7 @@ public class VueJeu implements Observe{
         giveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                assecherButton.setEnabled(true);
-                seDeplacerButton.setEnabled(true);
                 giveButton.setEnabled(false);
-                
-                defausserButton.setEnabled(true);
                 Message m = new Message(Utils.Commandes.DONNER, 0, 0, null, 0);
                 notifierObservateur(m);
             }
@@ -179,11 +175,15 @@ public class VueJeu implements Observe{
             @Override
             public void actionPerformed(ActionEvent e) {
                 defausserButton.setEnabled(false);
-                assecherButton.setEnabled(true);
-                seDeplacerButton.setEnabled(true);
-                defausserButton.setEnabled(false);
-                giveButton.setEnabled(true);
                 Message m = new Message(Utils.Commandes.DEFAUSSER_CARTE, 0, 0, null, 0);
+                notifierObservateur(m);
+            }
+        });
+        deplacerAutre.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deplacerAutre.setEnabled(false);
+                Message m = new Message(Utils.Commandes.DEPLACER_AUTRE, 0, 0, null, 0);
                 notifierObservateur(m);
             }
         });
@@ -196,6 +196,16 @@ public class VueJeu implements Observe{
             public void actionPerformed(ActionEvent e) {
                 cacherCardsBorder();
                 Message m = new Message(Utils.Commandes.FIN_TOUR, 0, 0, null, 0);
+                notifierObservateur(m);
+            }
+        });
+        
+        
+        recupererButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                recupererButton.setEnabled(false);
+                Message m = new Message(Utils.Commandes.RECUPERER_TRESOR, 0, 0, null, 0);
                 notifierObservateur(m);
             }
         });
@@ -287,6 +297,17 @@ public class VueJeu implements Observe{
 //        defausserButton.setEnabled(true);
 //        giveButton.setEnabled(true);
     }
+    public void choisirJoueur(ArrayList<Aventurier> aL) {
+        for (Aventurier aventurier : aL) {
+            for (VueAventurier vA : vuesAventuriers) {
+                if (aventurier.getId() == vA.getID()) {
+                    vA.setBorder(new LineBorder(Color.RED, 5));
+                }
+            }
+        }
+//        defausserButton.setEnabled(true);
+//        giveButton.setEnabled(true);
+    }
     
     // Cache les bordures ajoutées à chaque VueAventurier
     public void cacherAventuriersBorder(){
@@ -312,7 +333,13 @@ public class VueJeu implements Observe{
     }
     
     public void afficherDefaite() {
-        throw new UnsupportedOperationException();
+      gameFrame.setEnabled(false);
+      System.out.println("vous avez perdu");
+    }
+    
+    public void afficherVictoire() {
+      gameFrame.setEnabled(false);
+      System.out.println("vous avez gagné");
     }
     
     public void activerHelico() {
@@ -321,12 +348,6 @@ public class VueJeu implements Observe{
     
     public void desactiverHelico() {
         helicoButton.setEnabled(false);
-    }
-
-    public void finTour() {
-//        this.getGrille().resetGrille();
-        seDeplacerButton.setEnabled(true);
-        assecherButton.setEnabled(true);
     }
     
     public VueGrille getGrille() {
@@ -355,6 +376,44 @@ public class VueJeu implements Observe{
             observateur.traiterMessage(m);
         }
     }
+    
+    public void possibleDeplacer() {
+        seDeplacerButton.setEnabled(true);
+    }
+    public void impossibleDeplacer() {
+        seDeplacerButton.setEnabled(false);
+    }
+    
+    public void possibleDeplacerAutre() {
+        deplacerAutre.setEnabled(true);
+    }
+    public void impossibleDeplacerAutre() {
+        deplacerAutre.setEnabled(false);
+    }
+        
+    public void possibleGiveCarte() {
+        giveButton.setEnabled(true);
+    }
+    public void impossibleGiveCarte() {
+        giveButton.setEnabled(false);
+    }
+    
+    public void possibleDefausser() {
+        defausserButton.setEnabled(true);
+    }
+    public void impossibleDefausser() {
+        defausserButton.setEnabled(false);
+    }
+    
+    public void possibleRecupererTresor() {
+        recupererButton.setEnabled(true);
+    }
+    public void impossibleRecupererTresor() {
+        recupererButton.setEnabled(false);
+    }
+    
+    
+    
     
 }
     
