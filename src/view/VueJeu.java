@@ -97,6 +97,8 @@ public class VueJeu implements Observe{
             helicoButton = new JButton("Hélicoptère");
             assecherButton = new JButton("Assécher");  
             endTurnButton = new JButton("Fin tour");      
+            deplacerAutre = new JButton("DeplacerAutre");      
+            recupererButton = new JButton("Recuperertresor");      
             
             actionsRemainingLabel = new JLabel("3 actions restantes");
 
@@ -105,6 +107,7 @@ public class VueJeu implements Observe{
             gridButtonsPanel.add(assecherButton);
             gridButtonsPanel.add(endTurnButton);
             gridButtonsPanel.add(helicoButton);
+            gridButtonsPanel.add(deplacerAutre);
         
         // ============= EASTPANEL =============
         
@@ -150,7 +153,7 @@ public class VueJeu implements Observe{
             
             aventurierButtonsPanel.add(giveButton);
             aventurierButtonsPanel.add(defausserButton);
-            
+            aventurierButtonsPanel.add(recupererButton);
 
         // ============= LISTENERS =============
         
@@ -328,7 +331,7 @@ public class VueJeu implements Observe{
         for (Aventurier aventurier : aL) {
             for (VueAventurier vA : vuesAventuriers) {
                 if (aventurier.getId() == vA.getID()) {
-                    vA.setBorder(new LineBorder(Color.RED, 5));
+                    vA.setNameBackground(Parameters.COULEUR_JOUEUR_SELECTIONNABLE);
                 }
             }
         }

@@ -749,10 +749,10 @@ public class Controleur implements Observateur {
                     this.ihmJeu.getGrille().initialiserGrille(this.laGrille.getTuiles(), lesJoueurs);
                     this.ihmJeu.getGrille().afficherPions(lesJoueurs);
                     this.ihmJeu.afficher();
-                    for(Tresors t : this.lesTresors){
-                        this.recupererTresor(t);
-                        this.enleverRecup(t);                               
-                    }
+//                    for(Tresors t : this.lesTresors){
+//                        this.recupererTresor(t);
+//                        this.enleverRecup(t);                               
+//                    }
                     
                     this.setNiveauEau(m.getNiveauEau().getSelectedIndex()+1);
                     
