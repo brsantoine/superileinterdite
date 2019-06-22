@@ -17,6 +17,7 @@ public class Message implements Serializable {
     private final Integer idTuile ;
     private ArrayList<JTextField> noms;
     private ArrayList<JComboBox> couleurs;
+    private JComboBox niveauEau;
     private boolean helico = false;
     
     public Message(Utils.Commandes commande, Integer idAventurier, Integer idCarte,  Utils.Tresor tresor, Integer idTuile) {
@@ -100,6 +101,14 @@ public class Message implements Serializable {
     public void setHelico(boolean helico) {
         this.helico = helico;
     }   
+
+    public JComboBox getNiveauEau() {
+        return niveauEau;
+    }
+
+    public void setNiveauEau(JComboBox niveauEau) {
+        this.niveauEau = niveauEau;
+    }
     
     @Override
     public String toString() {

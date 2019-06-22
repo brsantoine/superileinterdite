@@ -95,6 +95,19 @@ public class VueGrille extends JPanel implements Observe{
             }
         }
     }
+    public void afficherTuilesDeplacer(ArrayList<Tuile> tuiles, int numAv) {
+
+        for (Tuile tuile : tuiles) {
+            for (VueTuile vTuile : grid) {
+//                vTuile.setEnabled(false);
+                if (vTuile.getID() == tuile.getID()) {
+                    vTuile.setBorder(new LineBorder(Color.GREEN, 3));
+                    vTuile.setEnabled(true);
+                    vTuile.setNumAv(numAv);
+                }
+            }
+        }
+    }
     
     // Affiche en bleu toutes les tuiles asséchables par l'aventurier courant
     public void afficherTuilesAssecher(ArrayList<Tuile> tuiles) {

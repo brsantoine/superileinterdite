@@ -30,11 +30,11 @@ public class VueJeu implements Observe{
     private VueGrille vueGrille;
     private MessageBox messageBox;
     private ArrayList<VueAventurier> vuesAventuriers;
+
+    private JButton seDeplacerButton, assecherButton, endTurnButton, helicoButton, giveButton, defausserButton, recupererButton, deplacerAutre;
     private JPanel westPanel, eastPanel, gridButtonsPanel, aventurierButtonsPanel, aventuriersPanel;  
     private JLabel actionsRemainingLabel;
-    private JButton seDeplacerButton, assecherButton, endTurnButton, helicoButton, giveButton, defausserButton;
 
-    
     public VueJeu(ArrayList<Aventurier> aventuriers, ArrayList<JTextField> noms){
 
         // ---------------------------------------------------------------------
@@ -114,6 +114,7 @@ public class VueJeu implements Observe{
         aventuriersPanel = new JPanel();
         aventurierButtonsPanel = new JPanel();
         
+
         eastPanel.add(new JPanel(), BorderLayout.NORTH);        
         eastPanel.add(aventuriersPanel, BorderLayout.CENTER);        
         eastPanel.add(aventurierButtonsPanel, BorderLayout.SOUTH);      
@@ -158,7 +159,6 @@ public class VueJeu implements Observe{
             @Override
             public void actionPerformed(ActionEvent e) {
                 seDeplacerButton.setEnabled(false);
-                assecherButton.setEnabled(true);
                 cacherCardsBorder();
                 Message m = new Message(Utils.Commandes.SE_DEPLACER, 0, 0, null, 0);
                 notifierObservateur(m);
@@ -169,8 +169,6 @@ public class VueJeu implements Observe{
             @Override
             public void actionPerformed(ActionEvent e) {
                 helicoButton.setEnabled(false);
-                seDeplacerButton.setEnabled(true);
-                assecherButton.setEnabled(true);
                 cacherCardsBorder();
                 Message m = new Message(Utils.Commandes.SE_DEPLACER, 0, 0, null, 0);
                 m.setHelico(true);
@@ -182,7 +180,6 @@ public class VueJeu implements Observe{
             @Override
             public void actionPerformed(ActionEvent e) {
                 assecherButton.setEnabled(false);
-                seDeplacerButton.setEnabled(true);
                 cacherCardsBorder();
                 Message m = new Message(Utils.Commandes.ASSECHER, 0, 0, null, 0);
                 notifierObservateur(m);
@@ -194,11 +191,7 @@ public class VueJeu implements Observe{
         giveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                assecherButton.setEnabled(true);
-                seDeplacerButton.setEnabled(true);
                 giveButton.setEnabled(false);
-                
-                defausserButton.setEnabled(true);
                 Message m = new Message(Utils.Commandes.DONNER, 0, 0, null, 0);
                 notifierObservateur(m);
             }
@@ -209,11 +202,15 @@ public class VueJeu implements Observe{
             @Override
             public void actionPerformed(ActionEvent e) {
                 defausserButton.setEnabled(false);
-                assecherButton.setEnabled(true);
-                seDeplacerButton.setEnabled(true);
-                defausserButton.setEnabled(false);
-                giveButton.setEnabled(true);
                 Message m = new Message(Utils.Commandes.DEFAUSSER_CARTE, 0, 0, null, 0);
+                notifierObservateur(m);
+            }
+        });
+        deplacerAutre.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deplacerAutre.setEnabled(false);
+                Message m = new Message(Utils.Commandes.DEPLACER_AUTRE, 0, 0, null, 0);
                 notifierObservateur(m);
             }
         });
@@ -226,6 +223,16 @@ public class VueJeu implements Observe{
             public void actionPerformed(ActionEvent e) {
                 cacherCardsBorder();
                 Message m = new Message(Utils.Commandes.FIN_TOUR, 0, 0, null, 0);
+                notifierObservateur(m);
+            }
+        });
+        
+        
+        recupererButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                recupererButton.setEnabled(false);
+                Message m = new Message(Utils.Commandes.RECUPERER_TRESOR, 0, 0, null, 0);
                 notifierObservateur(m);
             }
         });
@@ -317,6 +324,17 @@ public class VueJeu implements Observe{
 //        defausserButton.setEnabled(true);
 //        giveButton.setEnabled(true);
     }
+    public void choisirJoueur(ArrayList<Aventurier> aL) {
+        for (Aventurier aventurier : aL) {
+            for (VueAventurier vA : vuesAventuriers) {
+                if (aventurier.getId() == vA.getID()) {
+                    vA.setBorder(new LineBorder(Color.RED, 5));
+                }
+            }
+        }
+//        defausserButton.setEnabled(true);
+//        giveButton.setEnabled(true);
+    }
     
     // Cache les bordures ajoutées à chaque VueAventurier
     public void cacherNameBackground(){
@@ -353,7 +371,13 @@ public class VueJeu implements Observe{
     }
     
     public void afficherDefaite() {
-        throw new UnsupportedOperationException();
+      gameFrame.setEnabled(false);
+      System.out.println("vous avez perdu");
+    }
+    
+    public void afficherVictoire() {
+      gameFrame.setEnabled(false);
+      System.out.println("vous avez gagné");
     }
     
     public void activerHelico() {
@@ -362,12 +386,6 @@ public class VueJeu implements Observe{
     
     public void desactiverHelico() {
         helicoButton.setEnabled(false);
-    }
-
-    public void finTour() {
-//        this.getGrille().resetGrille();
-        seDeplacerButton.setEnabled(true);
-        assecherButton.setEnabled(true);
     }
     
     public VueGrille getGrille() {
@@ -396,6 +414,44 @@ public class VueJeu implements Observe{
             observateur.traiterMessage(m);
         }
     }
+    
+    public void possibleDeplacer() {
+        seDeplacerButton.setEnabled(true);
+    }
+    public void impossibleDeplacer() {
+        seDeplacerButton.setEnabled(false);
+    }
+    
+    public void possibleDeplacerAutre() {
+        deplacerAutre.setEnabled(true);
+    }
+    public void impossibleDeplacerAutre() {
+        deplacerAutre.setEnabled(false);
+    }
+        
+    public void possibleGiveCarte() {
+        giveButton.setEnabled(true);
+    }
+    public void impossibleGiveCarte() {
+        giveButton.setEnabled(false);
+    }
+    
+    public void possibleDefausser() {
+        defausserButton.setEnabled(true);
+    }
+    public void impossibleDefausser() {
+        defausserButton.setEnabled(false);
+    }
+    
+    public void possibleRecupererTresor() {
+        recupererButton.setEnabled(true);
+    }
+    public void impossibleRecupererTresor() {
+        recupererButton.setEnabled(false);
+    }
+    
+    
+    
     
 }
     
