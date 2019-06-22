@@ -52,11 +52,11 @@ public class VueAventurier extends JPanel implements Observe {
         
         this.setBorder(new LineBorder(new JButton().getBackground()));
         
-        this.addMouseListener(new MouseListener() {
+        namePanel.addMouseListener(new MouseListener() {
 
             @Override
             public void mouseClicked(MouseEvent arg0) { 
-                if (((LineBorder) getBorder()).getLineColor() == Color.RED) {
+                if (namePanel.getBackground() == Parameters.COULEUR_JOUEUR_SELECTIONNABLE) {
                     Message m = new Message(Utils.Commandes.CHOISIR_JOUEUR,idAventurier,cardToGive,null,0);
                     notifierObservateur(m);
                 }         
@@ -143,6 +143,13 @@ public class VueAventurier extends JPanel implements Observe {
         }
     }
     
+    public void setNameBackground(Color color) {
+        this.namePanel.setBackground(color);
+    }
+
+    public JPanel getNamePanel() {
+        return namePanel;
+    }
     
     public void setCardToGive(int numCarte) {
         this.cardToGive = numCarte;

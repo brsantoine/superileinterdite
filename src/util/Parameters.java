@@ -82,6 +82,8 @@ public class Parameters {
     public static Color COULEUR_TUILE_INONDEE_GRISEE = new Color(175, 192, 192); // Couleur de fond d'une tuile asséchée non cliquable
     public static Color COULEUR_TUILE_PAIRE = new Color(230, 180, 181) ; // Couleur de fond du titre d'une tuile (1/2)
     public static Color COULEUR_TUILE_IMPAIRE = new Color(184, 208, 138); // Couleur de fond du titre d'une tuile (2/2)
+    public static Color COULEUR_JOUEUR_SELECTIONNABLE = new Color(190, 208, 255);
+    public static Color COULEUR_JOUEUR_COURANT = new Color(150, 198, 137);
 
     // ====================================================================================
     // Chemins vers les images

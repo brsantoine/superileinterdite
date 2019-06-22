@@ -31,7 +31,8 @@ public class VueJeu implements Observe{
     private MessageBox messageBox;
     private ArrayList<VueAventurier> vuesAventuriers;
     private JPanel westPanel, eastPanel, gridButtonsPanel, aventurierButtonsPanel, aventuriersPanel;  
-    private JButton seDeplacerButton, assecherButton, endTurnButton, actionsRemainingButton, helicoButton, giveButton, defausserButton;
+    private JLabel actionsRemainingLabel;
+    private JButton seDeplacerButton, assecherButton, endTurnButton, helicoButton, giveButton, defausserButton;
 
     
     public VueJeu(ArrayList<Aventurier> aventuriers, ArrayList<JTextField> noms) {
@@ -96,10 +97,11 @@ public class VueJeu implements Observe{
             seDeplacerButton = new JButton("Se déplacer");
             helicoButton = new JButton("Hélicoptère");
             assecherButton = new JButton("Assécher");  
-            endTurnButton = new JButton("Fin tour");        
-            actionsRemainingButton = new JButton("3 actions restantes");
+            endTurnButton = new JButton("Fin tour");      
+            
+            actionsRemainingLabel = new JLabel("3 actions restantes");
 
-            gridButtonsPanel.add(actionsRemainingButton);
+            gridButtonsPanel.add(actionsRemainingLabel);
             gridButtonsPanel.add(seDeplacerButton);
             gridButtonsPanel.add(assecherButton);
             gridButtonsPanel.add(endTurnButton);
@@ -248,7 +250,7 @@ public class VueJeu implements Observe{
     
     // Change le label du nombre d'actions restantes
     public void updateActions(int actions) {
-        actionsRemainingButton.setText(actions + " actions restantes");
+        actionsRemainingLabel.setText(actions + " actions restantes");
     }
     
     public void updateCards(int id, ArrayList<CarteMain> cartes) {
@@ -308,7 +310,7 @@ public class VueJeu implements Observe{
         for (Aventurier aventurier : aL) {
             for (VueAventurier vA : vuesAventuriers) {
                 if (aventurier.getId() == vA.getID()) {
-                    vA.setBorder(new LineBorder(Color.RED, 5));
+                    vA.setNameBackground(Parameters.COULEUR_JOUEUR_SELECTIONNABLE);
                     vA.setCardToGive(numCarte);
                 }
             }
@@ -318,16 +320,27 @@ public class VueJeu implements Observe{
     }
     
     // Cache les bordures ajoutées à chaque VueAventurier
-    public void cacherAventuriersBorder(){
+    public void cacherNameBackground(){
         for (VueAventurier vA : vuesAventuriers) {
-            if (((LineBorder) vA.getBorder()).getLineColor() == Color.RED) {
-                vA.setBorder(new LineBorder(new JButton().getBackground()));
+            if (vA.getNamePanel().getBackground() == Parameters.COULEUR_JOUEUR_SELECTIONNABLE) {
+                System.out.println("yeet");
+                vA.setNameBackground(Color.WHITE);
             }
         }
     }
     
     public MessageBox getMessageBox() {
         return messageBox;
+    }
+    
+    public void afficherJoueurCourant(int idAventurierCourant){
+        for (VueAventurier vA : vuesAventuriers) {
+            if (vA.getID() == idAventurierCourant) {
+                vA.setNameBackground(Parameters.COULEUR_JOUEUR_COURANT);
+            } else {
+                vA.setNameBackground(Color.WHITE);
+            }
+        }
     }
             
     public void afficher() {
