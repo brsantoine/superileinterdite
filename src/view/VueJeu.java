@@ -286,7 +286,7 @@ public class VueJeu implements Observe{
                 vA.afficherCardsBorder();
             }
         }   
-        giveButton.setEnabled(false);
+//        giveButton.setEnabled(false);
     }
 
     
@@ -294,17 +294,12 @@ public class VueJeu implements Observe{
         for (VueAventurier vA : vuesAventuriers) {
             vA.cacherCardsBorder();
         }
-        defausserButton.setEnabled(true);
-        giveButton.setEnabled(true);
-        
     }
     
     public void cacherCardsBorder(int numCarte, int idAventurier) {
         for (VueAventurier vA : vuesAventuriers) {
             vA.cacherCardsBorder(numCarte, idAventurier);
         }
-        defausserButton.setEnabled(true);
-        giveButton.setEnabled(true);
         
     }
     
@@ -319,8 +314,7 @@ public class VueJeu implements Observe{
                 }
             }
         }
-//        defausserButton.setEnabled(true);
-//        giveButton.setEnabled(true);
+
     }
     public void choisirJoueur(ArrayList<Aventurier> aL) {
         for (Aventurier aventurier : aL) {

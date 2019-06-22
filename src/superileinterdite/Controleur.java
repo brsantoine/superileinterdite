@@ -22,7 +22,7 @@ public class Controleur implements Observateur {
         private int nbAction;
         private int tour;
         private int cardGiver;
-        private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false, modeDefausser = false, modeDonner = false, modeDeplacerAutre = false;
+        private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false, modeDefausser = false, modeDonner = false, modeDeplacerAutre = false, usingHelico = false;
         private ArrayList<Tuile> tAssech, tAccess;
         private Pile PileTresor,PileInondation,defausseTresor,defausseInondation;
         
@@ -494,11 +494,11 @@ public class Controleur implements Observateur {
             ihmJeu.impossibleDeplacerAutre();
             ihmJeu.impossibleGiveCarte();
             ihmJeu.impossibleRecupererTresor();
+            ihmJeu.impossibleDefausser();
             
             // Regarde si le joueur peut gagner un trésor
             if(this.aQuiLeTour().getTuile() instanceof TuileTresor) {
                 
-            
                 for(CarteMain c : this.aQuiLeTour().getCartes()){                   
                     for(CarteMain a : this.aQuiLeTour().getCartes()){
                        if(a instanceof CarteTresors && c instanceof CarteTresors){
@@ -526,7 +526,7 @@ public class Controleur implements Observateur {
             
             // Regarde si le joueur peut donner une carte tresor
             
-            if(!this.aQuiLeTour().getCartes().isEmpty()){                       
+            if(!this.aQuiLeTour().getCartes().isEmpty()){ 
                 for(Aventurier a : this.getJoueurs()){                               
                     if(a!=this.aQuiLeTour()){  
                         if(a.getCartes().size()<5  && this.aQuiLeTour().getTuile()==a.getTuile()){
@@ -539,9 +539,14 @@ public class Controleur implements Observateur {
                         }
                    }
                 }       
-           }    
+           }   
+            
+            for (Aventurier aventurier : this.lesJoueurs) {
+                if(!aventurier.getCartes().isEmpty()) {
+                    ihmJeu.possibleDefausser();
+                }
+            }
            
-
            tAccess = new ArrayList<>();
            tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
            
@@ -586,6 +591,7 @@ public class Controleur implements Observateur {
             ihmJeu.impossibleDeplacerAutre();
             ihmJeu.impossibleGiveCarte();
             ihmJeu.impossibleRecupererTresor();
+            ihmJeu.impossibleDefausser();
             
             // Regarde si le joueur peut gagner un trésor
             if(this.aQuiLeTour().getTuile() instanceof TuileTresor) {
@@ -609,6 +615,12 @@ public class Controleur implements Observateur {
                         break;
                     }
                    i=0;
+                }
+            }
+            
+            for (Aventurier aventurier : this.lesJoueurs) {
+                if(!aventurier.getCartes().isEmpty()) {
+                    ihmJeu.possibleDefausser();
                 }
             }
             
@@ -797,7 +809,7 @@ public class Controleur implements Observateur {
                         ihmJeu.possibleAssecher();
                     }
 
-                   if(m.getHelico() && (((Pilote) this.aQuiLeTour()).getHelico())){
+                   if( usingHelico && (((Pilote) this.aQuiLeTour()).getHelico())){
                        ((Pilote)this.aQuiLeTour()).desactiverHelico();
                    }
 
@@ -898,13 +910,16 @@ public class Controleur implements Observateur {
   
                 case SE_DEPLACER:
                     AfficherActionsPossibles();
-                    ihmJeu.impossibleDeplacer();
                     ihmJeu.cacherCardsBorder();
                     ihmJeu.cacherNameBackground();
                     modeDefausser = false;
                     modeAssechement = false;
-                    modeDeplacement = true;
                     modeDeplacerAutre = false;
+                    if (!m.getHelico()) {
+                        ihmJeu.impossibleDeplacer();
+                        modeDeplacement = true;
+                    }
+                    
                     ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
                     ihmJeu.getGrille().afficherPions(lesJoueurs);
                                         
@@ -917,13 +932,15 @@ public class Controleur implements Observateur {
 //                        }
                         if (m.getHelico()) {
                             this.tAccess = (((Pilote) this.aQuiLeTour()).deplacementHelico(this.getGrille()));
+                            usingHelico = true;
                             ihmJeu.desactiverHelico();
                         } else if (((Pilote) this.aQuiLeTour()).getHelico()) {
                             ihmJeu.activerHelico();
+                            usingHelico = false;
                         }
                         
                     }
-
+                    
                     ihmJeu.getGrille().afficherTuilesDeplacer(tAccess);
                     
                     // Si le plongeur a une action restante et est sur une tuile coulée, le bouton assécher se désactive
@@ -978,7 +995,6 @@ public class Controleur implements Observateur {
                     tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
                     
                     //ihm.afficherTuilesAssecher(this.aQuiLeTour().TuilesAssechables(this.getGrille()));
-                    System.out.println((((Pilote)this.aQuiLeTour())).getHelico());
                     if(this.aQuiLeTour().getRole().equals("pilote") && ((Pilote) this.aQuiLeTour()).getHelico()){
                         ihmJeu.activerHelico();
                     }
