@@ -784,50 +784,65 @@ public class Controleur implements Observateur {
                 case CHOISIR_TUILE:
                     AfficherActionsPossibles();
                     if(modeDeplacement){
-
-                        // Enleve l'aventurier da la tuile ou il etait
-                        this.aQuiLeTour().getTuile().removeAventurier(this.aQuiLeTour());
-                        // Change la tuile de l'aventurier
-                        this.aQuiLeTour().updateTuile(this.getGrille().getTuiles().get(m.getIdTuile()));                 
-                        // Met un aventurier sur la nouvelle tuile
-                        this.getGrille().getTuiles().get(m.getIdTuile()).addAventurier(this.aQuiLeTour());
-
-                        ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
-                        ihmJeu.getGrille().afficherPions(lesJoueurs);
-
-                        // Retire une action si les joueurs se déplacent sur une
-                        if (!(this.aQuiLeTour().getRole() == "plongeur" && this.aQuiLeTour().getTuile().getEtat() != "seche")) {
-                            this.actionFinie();
-                        }
-
-                        tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
-                        ihmJeu.getGrille().afficherTuilesDeplacer(tAccess);
-
-                        // Si un plongeur est sur une case coulée il ne peut pas finir le tour
-                        if (this.aQuiLeTour().getTuile().getEtat() == "coulé") {
-                            ihmJeu.impossibleFinTour();
-
-                            // S'il ne lui reste qu'une action, le bouton assécher est également désactivé
-                            if (this.getActions() == 1) {
-                                ihmJeu.impossibleAssecher();
-                            }
+                        
+                        if (modeActionSpeciale) {
+//                            for (Aventurier aventurier : this.lesJoueurs) {
+//                                if (aventurier.getTuile().getID() == m.getIdTuile()) {
+//                                    
+//                                }
+//                            }
+                            
+                            for (Tuile t : laGrille.getTuiles()) {
+                                tAccess.add(t);
+                            }            
+                            ihmJeu.getGrille().afficherTuilesDeplacer(tAccess);
                         } else {
-                            ihmJeu.possibleFinTour();
-                            ihmJeu.possibleAssecher();
+
+                            // Enleve l'aventurier da la tuile ou il etait
+                            this.aQuiLeTour().getTuile().removeAventurier(this.aQuiLeTour());
+                            // Change la tuile de l'aventurier
+                            this.aQuiLeTour().updateTuile(this.getGrille().getTuiles().get(m.getIdTuile()));                 
+                            // Met un aventurier sur la nouvelle tuile
+                            this.getGrille().getTuiles().get(m.getIdTuile()).addAventurier(this.aQuiLeTour());
+
+                            ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
+                            ihmJeu.getGrille().afficherPions(lesJoueurs);
+
+                            // Retire une action si les joueurs se déplacent sur une
+                            if (!(this.aQuiLeTour().getRole() == "plongeur" && this.aQuiLeTour().getTuile().getEtat() != "seche")) {
+                                this.actionFinie();
+                            }
+
+                            tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
+                            ihmJeu.getGrille().afficherTuilesDeplacer(tAccess);
+
+                            // Si un plongeur est sur une case coulée il ne peut pas finir le tour
+                            if (this.aQuiLeTour().getTuile().getEtat() == "coulé") {
+                                ihmJeu.impossibleFinTour();
+
+                                // S'il ne lui reste qu'une action, le bouton assécher est également désactivé
+                                if (this.getActions() == 1) {
+                                    ihmJeu.impossibleAssecher();
+                                }
+                            } else {
+                                ihmJeu.possibleFinTour();
+                                ihmJeu.possibleAssecher();
+                            }
+
+                            if( usingHelico && (((Pilote) this.aQuiLeTour()).getHelico())){
+                                ((Pilote)this.aQuiLeTour()).desactiverHelico();
+                            }
+
+                            // Détecte si le joueur peut encore jouer
+                            if(this.getActions()>0){
+                                this.tourDeJeu();
+                                ihmJeu.impossibleDeplacer();
+                            }
+                            else{
+                                this.finTour();
+                            }
+                        
                         }
-
-                       if( usingHelico && (((Pilote) this.aQuiLeTour()).getHelico())){
-                           ((Pilote)this.aQuiLeTour()).desactiverHelico();
-                       }
-
-                       // Détecte si le joueur peut encore jouer
-                       if(this.getActions()>0){
-                           this.tourDeJeu();
-                            ihmJeu.impossibleDeplacer();
-                       }
-                       else{
-                           this.finTour();
-                       }
 
 
                     } else if (modeAssechement)  {
@@ -853,7 +868,7 @@ public class Controleur implements Observateur {
                                     ihmJeu.cacherCardsBorder();
                                 }
                             }
-
+                            modeActionSpeciale = false;
                         } else {
 
 
@@ -1220,23 +1235,21 @@ public class Controleur implements Observateur {
                                     
                                 // Si carte hélicoptère
                                 } else {
-                                    ArrayList<Tuile> temp = new ArrayList<Tuile>();
-                                    for(Tuile t : this.laGrille.getTuiles()){
+                                    
+                                    ArrayList<Tuile> tuilesAvecAventuriers = new ArrayList<Tuile>();
+                                    for (Tuile t : this.laGrille.getTuiles()){
                                         if(!t.getSesAventuriers().isEmpty()) {
-                                            temp.add(t);
+                                            tuilesAvecAventuriers.add(t);
                                         }
-                                    }
-                                    for (Tuile t : laGrille.getTuiles()) {
-                                        tAccess.add(t);
-                                    }
+                                    }   
                                     modeAssechement = false;
                                     modeDeplacement = true;
-                                    //fonction 0 deplacement helico
+                                    ihmJeu.getGrille().afficherTuilesDeplacer(tuilesAvecAventuriers);
 
                                 }
-                            }  
+                                ihmJeu.cacherCardsBorder(m.getIdCarte(), m.getIdAventurier());
+                            }
                         }
-                        ihmJeu.cacherCardsBorder(m.getIdCarte(), m.getIdAventurier() );
                     }
                     
                     this.AfficherActionsPossibles();

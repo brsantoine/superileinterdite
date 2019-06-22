@@ -313,7 +313,11 @@ public class VueJeu implements Observe{
     // Enlève les bordures de toutes les cartes sauf celle choisie (numCarte)
     public void cacherCardsBorder(int numCarte, int idAventurier) {
         for (VueAventurier vA : vuesAventuriers) {
-            vA.cacherCardsBorder(numCarte, idAventurier);
+            if (vA.getID() != idAventurier) {
+                vA.cacherCardsBorder();
+            } else {
+                vA.cacherCardsBorder(numCarte, idAventurier);
+            }
         }
     }
     

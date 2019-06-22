@@ -65,10 +65,6 @@ public class VueCarte extends JPanel implements Observe{
         img.setIcon(null);
         isSpecial = false;
     }
-    
-//    public void setSelectedCard() {
-//        this.setBorder(new LineBorder(Color.BLUE, 5));
-//    }
 
     public int getIdAventurier() {
         return idAventurier;
