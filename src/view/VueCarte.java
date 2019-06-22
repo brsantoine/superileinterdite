@@ -30,6 +30,8 @@ public class VueCarte extends JPanel implements Observe{
         this.numCarte = numCarte;
         this.idAventurier = idAventurier;
         
+        this.setBorder(new LineBorder(new JButton().getBackground()));
+
         this.addMouseListener(new MouseListener() {            
             @Override
             public void mouseClicked(MouseEvent arg0) {                  
@@ -65,13 +67,9 @@ public class VueCarte extends JPanel implements Observe{
 //    public void setSelectedCard() {
 //        this.setBorder(new LineBorder(Color.BLUE, 5));
 //    }
-    
-    public void addCardBorder() {
-        this.setBorder(new LineBorder(Color.RED, 5)); 
-    }
-    
-    public void removeCardBorder() {        
-        this.setBorder(new LineBorder(new JButton().getBackground()));
+
+    public int getIdAventurier() {
+        return idAventurier;
     }
 
     public boolean getHasImage() {

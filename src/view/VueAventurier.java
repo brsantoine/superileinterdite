@@ -15,7 +15,7 @@ import util.*;
 public class VueAventurier extends JPanel implements Observe {
     
     private Observateur observateur;
-    private int idAventurier;
+    private int idAventurier, cardToGive;
     private JPanel cardsPanel, namePanel;
     private ArrayList<VueCarte> cardsList;
     
@@ -52,13 +52,12 @@ public class VueAventurier extends JPanel implements Observe {
         
         this.setBorder(new LineBorder(new JButton().getBackground()));
         
-        
         this.addMouseListener(new MouseListener() {
 
             @Override
             public void mouseClicked(MouseEvent arg0) { 
                 if (((LineBorder) getBorder()).getLineColor() == Color.RED) {
-                    Message m = new Message(Utils.Commandes.CHOISIR_JOUEUR,idAventurier,0,null,0);
+                    Message m = new Message(Utils.Commandes.CHOISIR_JOUEUR,idAventurier,cardToGive,null,0);
                     notifierObservateur(m);
                 }         
             }
@@ -83,7 +82,6 @@ public class VueAventurier extends JPanel implements Observe {
         // Affiche les nouvelles cartes de l'aventurier
         int x = 0;
         for (Carte carte : cartes) {    
-            System.out.println(carte);    
             cardsList.get(x).addCardImage(carte);
             x++;
         }
@@ -101,32 +99,32 @@ public class VueAventurier extends JPanel implements Observe {
     public void afficherCardsBorder() {
         for (VueCarte vC : cardsList) {
             if (vC.getHasImage()) {
-                vC.addCardBorder();
+                vC.setBorder(new LineBorder(Color.RED, 5)); 
             }
         }
     }
     
-    // Ajoute une bordure rouge aux cartes choisissables (si elles ont une image)
+    // Enlève les bordures rouges de toutes les cartes)
     public void cacherCardsBorder() {
         for (VueCarte vC : cardsList) {
-            vC.removeCardBorder();
+            vC.setBorder(new LineBorder(new JButton().getBackground()));
         }
     }
     
-    public void cacherCardsBorder(int numCarte) {
+    // Enlève les bordures rouges de toutes les cartes sauf celle choisie (numCarte)
+    public void cacherCardsBorder(int numCarte, int idAventurier) {
         for (VueCarte vC : cardsList) {
-            System.out.println(vC.getNumCarte());
             if (vC.getNumCarte() != numCarte) {
-                vC.removeCardBorder();
-            } else {
-//                vC.setSelectedCard();
+                vC.setBorder(new LineBorder(new JButton().getBackground()));
+            } else if (idAventurier == vC.getIdAventurier()){
+                vC.setBorder(new LineBorder(Color.BLUE, 5)); 
             }
         }
-        Message m = new Message(Utils.Commandes.CHOISIR_JOUEUR,0,numCarte,null,0);
-        notifierObservateur(m);
 
-        
-
+    }
+    
+    public void setCardToGive(int numCarte) {
+        this.cardToGive = numCarte;
     }
     
     public int getID() {

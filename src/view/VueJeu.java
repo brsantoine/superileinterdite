@@ -217,11 +217,11 @@ public class VueJeu extends JFrame implements Observe{
         }
     }
     
+    // Enleve l'image de la derniere carte après une défausse
     public void defausseLastCard(int id) {
         for (VueAventurier vA : vuesAventuriers) {
             if (vA.getID() == id) {
                 vA.defausseLastCard();
-                System.out.println("yeah");
             }
         }
     }
@@ -238,11 +238,9 @@ public class VueJeu extends JFrame implements Observe{
                 vA.afficherCardsBorder();
             }
         }   
+        giveButton.setEnabled(false);
     }
 
-    public ArrayList<VueAventurier> getVuesAventuriers() {
-        return vuesAventuriers;
-    }
     
     public void cacherCardsBorder() {
         for (VueAventurier vA : vuesAventuriers) {
@@ -253,28 +251,37 @@ public class VueJeu extends JFrame implements Observe{
         
     }
     
-    public void cacherCardsBorder(int numCarte) {
+    public void cacherCardsBorder(int numCarte, int idAventurier) {
         for (VueAventurier vA : vuesAventuriers) {
-            vA.cacherCardsBorder(numCarte);
+            vA.cacherCardsBorder(numCarte, idAventurier);
         }
         defausserButton.setEnabled(true);
         giveButton.setEnabled(true);
         
     }
     
-    public void choisirJoueur(ArrayList<Aventurier> aL,int numCarte) {
-        System.out.println("fortnite");
+    // aL : joueurs qui peuvent recevoir une carte, numCarte : numéro de la carte à donner
+    // Rajoute une bordure rouge aux joueurs auxquels on peut donner une carte
+    public void choisirJoueur(ArrayList<Aventurier> aL, int numCarte) {
         for (Aventurier aventurier : aL) {
             for (VueAventurier vA : vuesAventuriers) {
                 if (aventurier.getId() == vA.getID()) {
                     vA.setBorder(new LineBorder(Color.RED, 5));
+                    vA.setCardToGive(numCarte);
                 }
             }
         }
-
-        defausserButton.setEnabled(true);
-        giveButton.setEnabled(true);
-        
+//        defausserButton.setEnabled(true);
+//        giveButton.setEnabled(true);
+    }
+    
+    // Cache les bordures ajoutées à chaque VueAventurier
+    public void cacherAventuriersBorder(){
+        for (VueAventurier vA : vuesAventuriers) {
+            if (((LineBorder) vA.getBorder()).getLineColor() == Color.RED) {
+                vA.setBorder(new LineBorder(new JButton().getBackground()));
+            }
+        }
     }
     
     public void afficher() {
@@ -311,8 +318,11 @@ public class VueJeu extends JFrame implements Observe{
 
     public VueNiveau getVueNiveau() {
         return vueNiveau;
-    }
+    }    
     
+    public ArrayList<VueAventurier> getVuesAventuriers() {
+        return vuesAventuriers;
+    }
     @Override
     public void addObservateur(Observateur o) {
         this.observateur = o;
