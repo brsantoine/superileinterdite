@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -12,9 +11,8 @@ public class VueGrille extends JPanel implements Observe{
     
     private ArrayList<VueTuile> grid;
     private Observateur observateur;
-
     public VueGrille() {
-
+        
         this.setLayout(new GridBagLayout());       
         GridBagConstraints gc = new GridBagConstraints();
      

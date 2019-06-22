@@ -7,6 +7,7 @@ package view;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -35,7 +36,7 @@ public class VueJeu implements Observe{
     private JButton seDeplacerButton, assecherButton, endTurnButton, helicoButton, giveButton, defausserButton;
 
     
-    public VueJeu(ArrayList<Aventurier> aventuriers, ArrayList<JTextField> noms) {
+    public VueJeu(ArrayList<Aventurier> aventuriers, ArrayList<JTextField> noms) throws IOException {
         
 
         // ---------------------------------------------------------------------
