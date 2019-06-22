@@ -175,6 +175,8 @@ public class VueGrille extends JPanel implements Observe{
                 grid.get(i).afficherSeche();
             } else if (tuile.getEtat().equals("inondé")) {
                 grid.get(i).afficherInonde();
+            } else {
+                grid.get(i).afficherCoule();
             }
             i++;
         }

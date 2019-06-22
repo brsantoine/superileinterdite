@@ -112,10 +112,15 @@ public class VueTuile extends JPanel implements Observe {
         inondePanel.setVisible(false);
     }
     
+    public void afficherCoule() {
+        sechePanel.setVisible(false);
+        inondePanel.setVisible(false);
+    }
+    
     public void afficherPion(int numLabel) {
         pionsImages.get(numLabel).setVisible(true);
     }
-    
+
     public void cacherPion() {
         for (JLabel pionsImage : pionsImages) {
             pionsImage.setVisible(false);
