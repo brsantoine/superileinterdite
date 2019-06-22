@@ -10,6 +10,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import model.*;
+import superileinterdite.*;
 import util.*;
 
 /**
@@ -22,7 +23,7 @@ public class VueCarte extends JPanel implements Observe{
     private int idAventurier;
     private int numCarte;
     private JLabel img;
-    private boolean hasImage = false;
+    private boolean hasImage = false, isSpecial = false;
     
     public VueCarte(int idAventurier, int numCarte) {
         
@@ -52,16 +53,17 @@ public class VueCarte extends JPanel implements Observe{
         });   
     }
     
-    
     public void addCardImage(Carte carte) {
         hasImage = true;
         img.setIcon((new ImageIcon(new ImageIcon(Parameters.CARTES + carte.getNom() + ".png").getImage().getScaledInstance(Parameters.CARD_WIDTH,Parameters.CARD_HEIGHT, Image.SCALE_SMOOTH))));
+        isSpecial = carte instanceof CarteActionSpeciale;
         this.add(img);
     }
     
     public void removeCardImage() {
         hasImage = false;
         img.setIcon(null);
+        isSpecial = false;
     }
     
 //    public void setSelectedCard() {
@@ -74,6 +76,10 @@ public class VueCarte extends JPanel implements Observe{
 
     public boolean getHasImage() {
         return hasImage;
+    }
+    
+    public boolean getIsSpecial() {
+        return isSpecial;
     }
 
     public int getNumCarte() {

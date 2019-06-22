@@ -30,8 +30,7 @@ public class VueJeu implements Observe{
     private VueGrille vueGrille;
     private MessageBox messageBox;
     private ArrayList<VueAventurier> vuesAventuriers;
-
-    private JButton seDeplacerButton, assecherButton, endTurnButton, helicoButton, giveButton, defausserButton, recupererButton, deplacerAutre;
+    private JButton seDeplacerButton, assecherButton, endTurnButton, helicoButton, giveButton, defausserButton, recupererButton, deplacerAutreButton, actionSpecialeButton;
     private JPanel westPanel, eastPanel, gridButtonsPanel, aventurierButtonsPanel, aventuriersPanel;  
     private JLabel actionsRemainingLabel;
 
@@ -78,6 +77,7 @@ public class VueJeu implements Observe{
         gameFrame.add(eastPanel, BorderLayout.EAST);
         
         // ============= WESTPANEL =============
+        
         westPanel.setLayout(new BorderLayout(0,Parameters.VERTICAL_SPACE));
         
         gridButtonsPanel = new JPanel();
@@ -97,9 +97,7 @@ public class VueJeu implements Observe{
             helicoButton = new JButton("Hélicoptère");
             assecherButton = new JButton("Assécher");  
             endTurnButton = new JButton("Fin tour");      
-            deplacerAutre = new JButton("Deplacer autre joueur");      
-            recupererButton = new JButton("Recuperer Trésor");      
-            
+            deplacerAutreButton = new JButton("Deplacer autre joueur");                  
             actionsRemainingLabel = new JLabel("3 actions restantes");
 
             gridButtonsPanel.add(actionsRemainingLabel);
@@ -107,7 +105,7 @@ public class VueJeu implements Observe{
             gridButtonsPanel.add(assecherButton);
             gridButtonsPanel.add(endTurnButton);
             gridButtonsPanel.add(helicoButton);
-            gridButtonsPanel.add(deplacerAutre);
+            gridButtonsPanel.add(deplacerAutreButton);
         
         // ============= EASTPANEL =============
         
@@ -150,12 +148,14 @@ public class VueJeu implements Observe{
                     
             giveButton = new JButton("Donner carte");
             defausserButton = new JButton("Défausser une carte");
-            
+            actionSpecialeButton = new JButton("Utiliser une carte");
+            recupererButton = new JButton("Recuperer Trésor");      
             aventurierButtonsPanel.add(giveButton);
             aventurierButtonsPanel.add(defausserButton);
             aventurierButtonsPanel.add(recupererButton);
-
-        // ============= LISTENERS =============
+            aventurierButtonsPanel.add(actionSpecialeButton);
+            
+        // ============= LISTENERS: GRIDBUTTONS =============
         
         // -------- seDeplacerButton et assecherButton (changer le mode d'actions) --------
         seDeplacerButton.addActionListener(new ActionListener() {
@@ -186,7 +186,24 @@ public class VueJeu implements Observe{
             }
         });
         
-        // -------- giveButton --------
+        deplacerAutreButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Message m = new Message(Utils.Commandes.DEPLACER_AUTRE, 0, 0, null, 0);
+                notifierObservateur(m);
+            }
+        });
+        
+        endTurnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cacherCardsBorder();
+                Message m = new Message(Utils.Commandes.FIN_TOUR, 0, 0, null, 0);
+                notifierObservateur(m);
+            }
+        });
+        
+        // ============= LISTENERS: AVENTURIERSBUTTONS =============
         
         giveButton.addActionListener(new ActionListener() {
             @Override
@@ -197,7 +214,6 @@ public class VueJeu implements Observe{
             }
         });
         
-        // -------- defausserButton --------
         defausserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -205,42 +221,31 @@ public class VueJeu implements Observe{
                 notifierObservateur(m);
             }
         });
-        deplacerAutre.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Message m = new Message(Utils.Commandes.DEPLACER_AUTRE, 0, 0, null, 0);
-                notifierObservateur(m);
-            }
-        });
-        
-        
-        
-        // -------- endTurnButton --------
-        endTurnButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cacherCardsBorder();
-                Message m = new Message(Utils.Commandes.FIN_TOUR, 0, 0, null, 0);
-                notifierObservateur(m);
-            }
-        });
-        
         
         recupererButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                recupererButton.setEnabled(false);
                 Message m = new Message(Utils.Commandes.RECUPERER_TRESOR, 0, 0, null, 0);
                 notifierObservateur(m);
             }
         });
+        
+        actionSpecialeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {                
+                Message m = new Message(Utils.Commandes.ACTION_SPECIALE, 0, 0, null, 0);
+                notifierObservateur(m);
+            }
+        });
     }
+    
+    // ===================================== METHODES =====================================
     
     public void possibleFinTour() {
         endTurnButton.setEnabled(true);
     }
     
-    // Empêche d'assécher et de finir le tour (pour le plongeur lorsqu'il est sur une case coulée)
+    // Empêche de finir le tour (pour le plongeur lorsqu'il est sur une case coulée)
     public void impossibleFinTour() {
         endTurnButton.setEnabled(false);
     }
@@ -248,6 +253,7 @@ public class VueJeu implements Observe{
     public void possibleAssecher() {
         assecherButton.setEnabled(true);
     }
+    
     public void impossibleAssecher() {
         assecherButton.setEnabled(false);
     }
@@ -274,37 +280,45 @@ public class VueJeu implements Observe{
         }
     }
     
-    public void updateCardsBorder() {
+    // Affiche des bordures rouges autour de chaque carte de chaque aventurier
+    public void afficherCardsBorder() {
         for (VueAventurier vA : vuesAventuriers) {
             vA.afficherCardsBorder();
         }   
     }
     
-    public void updateCardsBorder(int id) {
+    // Affiche des bordures rouges autour de chaque carte de l'aventurier d'id idAventurier
+    public void afficherCardsBorder(int idAventurier) {
         for (VueAventurier vA : vuesAventuriers) {
-            if (id == vA.getID()) {
+            if (idAventurier == vA.getID()) {
                 vA.afficherCardsBorder();
             }
         }   
-//        giveButton.setEnabled(false);
     }
-
     
+    // Affiche des bordures rouges autour des cartes Action Spéciales
+    public void afficherCardsActionSpecialeBorder() {
+        for (VueAventurier vA : vuesAventuriers) {
+                vA.afficherCardsActionSpecialeBorder();
+        }   
+    }
+    
+    // Enlève les bordures de toutes les cartes
     public void cacherCardsBorder() {
         for (VueAventurier vA : vuesAventuriers) {
             vA.cacherCardsBorder();
         }
     }
     
+    // Enlève les bordures de toutes les cartes sauf celle choisie (numCarte)
     public void cacherCardsBorder(int numCarte, int idAventurier) {
         for (VueAventurier vA : vuesAventuriers) {
             vA.cacherCardsBorder(numCarte, idAventurier);
         }
-        
     }
     
     // aL : joueurs qui peuvent recevoir une carte, numCarte : numéro de la carte à donner
-    // Rajoute une bordure rouge aux joueurs auxquels on peut donner une carte
+    // Rajoute un arrière plan bleu clair au panel Nom aux joueurs auxquels on peut donner une carte
     public void choisirJoueur(ArrayList<Aventurier> aL, int numCarte) {
         for (Aventurier aventurier : aL) {
             for (VueAventurier vA : vuesAventuriers) {
@@ -314,8 +328,8 @@ public class VueJeu implements Observe{
                 }
             }
         }
-
     }
+    
     public void choisirJoueur(ArrayList<Aventurier> aL) {
         for (Aventurier aventurier : aL) {
             for (VueAventurier vA : vuesAventuriers) {
@@ -324,15 +338,12 @@ public class VueJeu implements Observe{
                 }
             }
         }
-//        defausserButton.setEnabled(true);
-//        giveButton.setEnabled(true);
     }
     
-    // Cache les bordures ajoutées à chaque VueAventurier
+    // Enlève l'arrière plan ajouté à chaque VueAventurier
     public void cacherNameBackground(){
         for (VueAventurier vA : vuesAventuriers) {
             if (vA.getNamePanel().getBackground() == Parameters.COULEUR_JOUEUR_SELECTIONNABLE) {
-                System.out.println("yeet");
                 vA.setNameBackground(Color.WHITE);
             }
         }
@@ -358,18 +369,14 @@ public class VueJeu implements Observe{
             va.afficher();
         }
         vueGrille.setVisible(true);
-//        vueNiveau.afficher();
-        
     }
     
     public void afficherDefaite() {
       gameFrame.setEnabled(false);
-      System.out.println("vous avez perdu");
     }
     
     public void afficherVictoire() {
       gameFrame.setEnabled(false);
-      System.out.println("vous avez gagné");
     }
     
     public void activerHelico() {
@@ -391,6 +398,7 @@ public class VueJeu implements Observe{
     public ArrayList<VueAventurier> getVuesAventuriers() {
         return vuesAventuriers;
     }
+    
     @Override
     public void addObservateur(Observateur o) {
         this.observateur = o;
@@ -415,10 +423,10 @@ public class VueJeu implements Observe{
     }
     
     public void possibleDeplacerAutre() {
-        deplacerAutre.setEnabled(true);
+        deplacerAutreButton.setEnabled(true);
     }
     public void impossibleDeplacerAutre() {
-        deplacerAutre.setEnabled(false);
+        deplacerAutreButton.setEnabled(false);
     }
         
     public void possibleGiveCarte() {
@@ -442,8 +450,12 @@ public class VueJeu implements Observe{
         recupererButton.setEnabled(false);
     }
     
-    
-    
+    public void possibleActionSpeciale() {
+        actionSpecialeButton.setEnabled(true);
+    }
+    public void impossibleActionSpeciale() {
+        actionSpecialeButton.setEnabled(false);
+    }
     
 }
     
