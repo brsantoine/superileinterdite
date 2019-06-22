@@ -9,9 +9,6 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import model.*;
 import util.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import javax.swing.border.*;
 
 public class VueTuile extends JPanel implements Observe {
     
