@@ -380,6 +380,8 @@ public class Controleur implements Observateur {
         // Effectue un nouveau tour
         public void nvtour(){
             this.tour++;
+            ihmJeu.afficherJoueurCourant(this.aQuiLeTour().getId());
+
             this.remettreAJourAction();            
             
             if(this.aQuiLeTour().getRole().equals("pilote")) {
@@ -735,8 +737,9 @@ public class Controleur implements Observateur {
                     }
                     
                     this.lesJoueurs=listeJoueurs;
-                    this.setIhmVueJeu(new VueJeu(lesJoueurs, m.getNoms(), m.getCouleurs()));
-                                      
+
+                    this.setIhmVueJeu(new VueJeu(lesJoueurs, m.getNoms()));
+
                     ihmJeu.getMessageBox().displayMessage("<h1 style=\"text-align:center;\">Bienvenue dans<br>l'Île Interdite</h1>", Color.black, false, false);
                     ihmJeu.getMessageBox().displayMessage("", Color.black, true, false);   
                     
@@ -897,7 +900,7 @@ public class Controleur implements Observateur {
                     AfficherActionsPossibles();
                     ihmJeu.impossibleDeplacer();
                     ihmJeu.cacherCardsBorder();
-                    ihmJeu.cacherAventuriersBorder();
+                    ihmJeu.cacherNameBackground();
                     modeDefausser = false;
                     modeAssechement = false;
                     modeDeplacement = true;
@@ -934,7 +937,7 @@ public class Controleur implements Observateur {
                     AfficherActionsPossibles();
                     ihmJeu.impossibleDeplacerAutre();
                     ihmJeu.cacherCardsBorder();
-                    ihmJeu.cacherAventuriersBorder();
+                    ihmJeu.cacherNameBackground();
                     modeDefausser = false;
                     modeAssechement = false;
                     modeDeplacement = false;
@@ -962,7 +965,7 @@ public class Controleur implements Observateur {
                     AfficherActionsPossibles();
                     ihmJeu.impossibleAssecher();
                     ihmJeu.cacherCardsBorder();
-                    ihmJeu.cacherAventuriersBorder();
+                    ihmJeu.cacherNameBackground();
                     modeDefausser = false;
                     modeAssechement = true;
                     modeDeplacement = false;
@@ -1062,7 +1065,7 @@ public class Controleur implements Observateur {
                     ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
                     ihmJeu.getGrille().afficherPions(lesJoueurs);
                     ihmJeu.updateCardsBorder();
-                    ihmJeu.cacherAventuriersBorder();
+                    ihmJeu.cacherNameBackground();
                     
                 break;
                 
@@ -1070,7 +1073,7 @@ public class Controleur implements Observateur {
                     AfficherActionsPossibles();
                     ihmJeu.impossibleGiveCarte();
                     ihmJeu.cacherCardsBorder();
-                    ihmJeu.cacherAventuriersBorder();
+                    ihmJeu.cacherNameBackground();
                     ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
                     ihmJeu.getGrille().afficherPions(lesJoueurs);
                     if(this.aQuiLeTour().getRole().equals("pilote") && ((Pilote) this.aQuiLeTour()).getHelico()){
@@ -1128,9 +1131,10 @@ public class Controleur implements Observateur {
                 
                 
                 case CHOISIR_JOUEUR:
-                    ihmJeu.cacherAventuriersBorder();
                     if (this.modeDonner) {
-                        
+                    
+                    ihmJeu.cacherNameBackground();
+ 
                         this.donnerCarte(m.getIdAventurier(), m.getIdCarte());
 
                         for (Aventurier a : this.lesJoueurs) {

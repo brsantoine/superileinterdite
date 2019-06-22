@@ -26,9 +26,9 @@ public class VueAventurier extends JPanel implements Observe {
 //        this.add(new JLabel(role));
         
 
-        this.setLayout(new BorderLayout());
+        this.setLayout(new BorderLayout(0,Parameters.CARD_VERTICAL_SPACE));
         
-        cardsPanel = new JPanel();
+        cardsPanel = new JPanel(new GridLayout(1,5,Parameters.CARD_HORIZONTAL_SPACE,0));
         namePanel = new JPanel();
         cardsList = new ArrayList<>();
 
@@ -52,11 +52,11 @@ public class VueAventurier extends JPanel implements Observe {
         
         this.setBorder(new LineBorder(new JButton().getBackground()));
         
-        this.addMouseListener(new MouseListener() {
+        namePanel.addMouseListener(new MouseListener() {
 
             @Override
             public void mouseClicked(MouseEvent arg0) { 
-                if (((LineBorder) getBorder()).getLineColor() == Color.RED) {
+                if (namePanel.getBackground() == Parameters.COULEUR_JOUEUR_SELECTIONNABLE) {
                     Message m = new Message(Utils.Commandes.CHOISIR_JOUEUR,idAventurier,cardToGive,null,0);
                     notifierObservateur(m);
                 }         
@@ -121,6 +121,34 @@ public class VueAventurier extends JPanel implements Observe {
             }
         }
 
+    }
+    
+    public void setNameBorder(String color) {
+        if (color.equals("Vert")) {
+            namePanel.setBorder(new LineBorder(Color.GREEN, 5));
+        } else if (color.equals("Violet")) {
+            namePanel.setBorder(new LineBorder(new Color(255, 0,255), 5));
+        } else if (color.equals("Jaune")) {
+            namePanel.setBorder(new LineBorder(Color.YELLOW, 5));
+        } else if (color.equals("Noir")) {
+            namePanel.setBorder(new LineBorder(Color.BLACK, 5));
+        } else if (color.equals("Gris")) {
+            namePanel.setBorder(new LineBorder(Color.GRAY, 5));
+        } else if (color.equals("Bronze")) {
+            namePanel.setBorder(new LineBorder(new Color(176, 141, 87), 5));
+        } else if (color.equals("Bleu")) {
+            namePanel.setBorder(new LineBorder(Color.BLUE, 5));
+        } else if (color.equals("Rouge")) {
+            namePanel.setBorder(new LineBorder(Color.RED, 5));
+        }
+    }
+    
+    public void setNameBackground(Color color) {
+        this.namePanel.setBackground(color);
+    }
+
+    public JPanel getNamePanel() {
+        return namePanel;
     }
     
     public void setCardToGive(int numCarte) {
