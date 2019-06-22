@@ -52,7 +52,7 @@ public class Parameters {
     public static final Integer VUE_AVENTURIER_HEIGHT = (int) (GAME_FRAME_HEIGHT/4) - BUTTONS_PANEL_HEIGHT - VERTICAL_SPACE*2; // Hauteur des fenêtres Aventuriers
     
     public static final Integer TUILE_BOUNDS = (int) GRID_WIDTH/6; // Limites de longueur de chaque coté de chaque tuile
-    public static final Integer TUILE_SIZE = (int) TUILE_BOUNDS - TUILE_BOUNDS*10/100; // Longueur de chaque coté de chaque tuile
+    public static final Integer TUILE_SIZE = (int) TUILE_BOUNDS - TUILE_BOUNDS*15/100; // Longueur de chaque coté de chaque tuile
     
     public static final Integer PION_BOUNDS = (int) TUILE_BOUNDS/2; // Limites de longueur de chaque coté de chaque pion 
     public static final Integer PION_SIZE = (int) PION_BOUNDS/2; // Longueur de chaque coté de chaque pion
@@ -62,7 +62,7 @@ public class Parameters {
     public static final Integer CARD_VERTICAL_SPACE = 5; // Ecart vertical entre une carte et le nom du joueur
     public static final Integer CARD_HORIZONTAL_SPACE = 10; // Ecart horizontal entre chaque cartes
     public static final Integer CARD_WIDTH = (int) (VUE_AVENTURIER_WIDTH - HORIZONTAL_SPACE*2 - CARD_HORIZONTAL_SPACE*4)/5; // Longueur de chaque carte
-    public static final Integer CARD_HEIGHT = (int) CARD_WIDTH*7/5 -6; // Hauteur de chaque carte (ratio 7/5 - bordures)
+    public static final Integer CARD_HEIGHT = (int) CARD_WIDTH*7/5 -12; // Hauteur de chaque carte (ratio 7/5 - bordures)
     
     
     

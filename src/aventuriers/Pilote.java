@@ -28,6 +28,7 @@ public class Pilote extends Aventurier {
             }
             tuilesAccess.remove(this.getTuile());
             return tuilesAccess;
+  
 	}
     
     

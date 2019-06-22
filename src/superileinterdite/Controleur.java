@@ -978,6 +978,7 @@ public class Controleur implements Observateur {
                     tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
                     
                     //ihm.afficherTuilesAssecher(this.aQuiLeTour().TuilesAssechables(this.getGrille()));
+                    System.out.println((((Pilote)this.aQuiLeTour())).getHelico());
                     if(this.aQuiLeTour().getRole().equals("pilote") && ((Pilote) this.aQuiLeTour()).getHelico()){
                         ihmJeu.activerHelico();
                     }
@@ -1056,7 +1057,6 @@ public class Controleur implements Observateur {
 
                     AfficherActionsPossibles();
                     ihmJeu.impossibleDefausser();
-                    ihmJeu.possibleGiveCarte();
                     if(this.aQuiLeTour().getRole().equals("pilote") && ((Pilote) this.aQuiLeTour()).getHelico()){
                         ihmJeu.activerHelico();
                     }
@@ -1097,13 +1097,11 @@ public class Controleur implements Observateur {
                                 ihmJeu.updateCards(a.getId(), a.getCartes());
                                 ihmJeu.defausseLastCard(a.getId());
                                 ihmJeu.cacherCardsBorder();
-                                modeDefausser = false;
                             }
                         }
                         
                     // le message contient l'id de l'aventurier donneur et le numCarte de la carte choisie
                     } else if (modeDonner) {
-                        modeDonner = false; 
                         cardGiver = m.getIdAventurier();
                         
                         // Enleve la bordure de chaque carte sauf celle choisie
@@ -1126,6 +1124,7 @@ public class Controleur implements Observateur {
                         ihmJeu.choisirJoueur(tempAv2,m.getIdCarte());
 
                     }
+                    this.AfficherActionsPossibles();
                     
                 break;
                 
@@ -1165,7 +1164,8 @@ public class Controleur implements Observateur {
                                tAccess = ((Navigateur)aQuiLeTour()).deplacerAutreJoueur(a,laGrille);
                             }  
                         }
-
+                        ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
+                        ihmJeu.getGrille().afficherPions(lesJoueurs);
                         ihmJeu.getGrille().afficherTuilesDeplacer(tAccess,m.getIdAventurier());
 
                         // Voir deplacement apres
