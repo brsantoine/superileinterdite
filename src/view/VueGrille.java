@@ -87,22 +87,16 @@ public class VueGrille extends JPanel implements Observe{
     
     // Affiche en vert toutes les tuiles accessibles par l'aventurier courant
     public void afficherTuilesDeplacer(ArrayList<Tuile> tuiles) {
-        for (VueTuile tuile : grid) {
+        /*for (VueTuile tuile : grid) {
             tuile.setBorder(new LineBorder(new JButton().getBackground()));
-        }    
-            
+        }*/
         for (Tuile tuile : tuiles) {
             for (VueTuile vTuile : grid) {
 //                vTuile.setEnabled(false);
                 if (vTuile.getID() == tuile.getID()) {
-                    vTuile.setBorder(new LineBorder(Color.GREEN, 6));
+                    vTuile.setBorder(new LineBorder(Color.GREEN, 5));
+                    vTuile.setEnabled(true);
                 }
-            }
-        }
-        
-        for (VueTuile vTuile : grid) {
-            if (((LineBorder) vTuile.getBorder()).getLineColor() == Color.GREEN) {
-                vTuile.setEnabled(true);
             }
         }
     }
@@ -110,93 +104,86 @@ public class VueGrille extends JPanel implements Observe{
     // Affiche en bleu toutes les tuiles asséchables par l'aventurier courant
     public void afficherTuilesAssecher(ArrayList<Tuile> tuiles) {
         
-        for (VueTuile tuile : grid) {
+        /*for (VueTuile tuile : grid) {
             tuile.setBorder(new LineBorder(new JButton().getBackground()));
-        }    
-            
+        }   */
         for (Tuile tuile : tuiles) {
             for (VueTuile vTuile : grid) {
 //                vTuile.setEnabled(false);
-                if (vTuile.getID() == tuile.getID()){
-                    if (tuile.getEtat().equals("inondé")) {
-                        vTuile.setBorder(new LineBorder(Color.BLUE, 6)); 
-                   } else {
-                        vTuile.setBorder(new LineBorder(new JButton().getBackground()));
-                    }
+                if (vTuile.getID() == tuile.getID()) {
+                    vTuile.setBorder(new LineBorder(Color.BLUE, 5));
+                    vTuile.setEnabled(true);
                 }
-            }
-        }
-        
-        for (VueTuile vTuile : grid) {
-
-            if (((LineBorder) vTuile.getBorder()).getLineColor() == Color.BLUE) {
-                vTuile.setEnabled(true);
             }
         }
     }
     
     public void updateDeplacement(ArrayList<Aventurier> aventuriers) {        
         // Remet toutes les bordures à la couleur par défaut
-        for (int i = 0; i < grid.size() ; i++) {
-            grid.get(i).setBorder(new LineBorder(new JButton().getBackground()));
+//        for (int i = 0; i < grid.size() ; i++) {
+//            grid.get(i).setBorder(new LineBorder(new JButton().getBackground()));
 //            grid.get(i).setBackground(new JButton().getBackground());
-        }
+//        }
         
         // Met les labels sur toutes les cases de la grille
         for (int i = 0; i < grid.size() ; i++) {
-            
+//            grid.get(i).setBorder(new LineBorder(new JButton().getBackground()));
             // Met à jour les couleurs des bordures en fonction de la position des aventuriers
+            
+            int j = 0;
             for (Aventurier aventurier : aventuriers) {
                 if (aventurier.getTuile().getID() == grid.get(i).getID()) {
-                    
-//                    grid.get(i).setBorderPainted(true);  
-                    
-                    if (aventurier.getRole().equals("plongeur")) {
+//                    grid.get(i).setBorderPainted(true);
+                        grid.get(i).afficherPion(j);
                         
-                        grid.get(i).setBorder(new LineBorder(Color.BLACK, 5));
-                    } else if (aventurier.getRole().equals("pilote")) {
-                        grid.get(i).setBorder(new LineBorder(Color.BLUE, 5));
-                    } else if (aventurier.getRole().equals("navigateur")) {
-                        grid.get(i).setBorder(new LineBorder(Color.YELLOW, 5));
-                    } else if (aventurier.getRole().equals("messager")) {
-                        grid.get(i).setBorder(new LineBorder(Color.GRAY, 5));
-                    } else if (aventurier.getRole().equals("ingenieur")) {
-                        grid.get(i).setBorder(new LineBorder(Color.RED, 5));
-                    } else if (aventurier.getRole().equals("explorateur")) {
+                    /*if (aventurier.getCouleur().equals("Vert")) {
                         grid.get(i).setBorder(new LineBorder(Color.GREEN, 5));
-                    }                    
+                    } else if (aventurier.getCouleur().equals("Violet")) {
+                        grid.get(i).setBorder(new LineBorder(new Color(255, 0,255), 5));
+                    } else if (aventurier.getCouleur().equals("Jaune")) {
+                        grid.get(i).setBorder(new LineBorder(Color.YELLOW, 5));
+                    } else if (aventurier.getCouleur().equals("Noir")) {
+                        grid.get(i).setBorder(new LineBorder(Color.BLACK, 5));
+                    } else if (aventurier.getCouleur().equals("Gris")) {
+                        grid.get(i).setBorder(new LineBorder(Color.GRAY, 5));
+                    } else if (aventurier.getCouleur().equals("Bronze")) {
+                        grid.get(i).setBorder(new LineBorder(new Color(176, 141, 87), 5));
+                    } else if (aventurier.getCouleur().equals("Bleu")) {
+                        grid.get(i).setBorder(new LineBorder(Color.BLUE, 5));
+                    } else if (aventurier.getCouleur().equals("Rouge")) {
+                        grid.get(i).setBorder(new LineBorder(Color.RED, 5));
+                    }   */                 
                 }
+                j++;
             }    
         }   
     }
     
-    public void intitialiserGrille(ArrayList<Tuile> tuiles) {
-        
-        for (int i = 0; i < grid.size() ; i++) {
-            grid.get(i).setBorder(new LineBorder(new JButton().getBackground()));
-        }        
-        
+    public void initialiserGrille(ArrayList<Tuile> tuiles, ArrayList<Aventurier> aventuriers) {
+        resetGrille(tuiles);   
         // Met les images sur toutes les tuiles de la grille
         for (int i = 0; i < grid.size() ; i++) {
             String nom = new String(tuiles.get(i).getNom());
             nom = nom.replaceAll("\\s", "");
-            
-            grid.get(i).setSechePanel(nom);            
-            nom = nom + "_Inonde";
-            grid.get(i).setInondePanel(nom);
-            grid.get(i).setPionPanel();
-            
+            grid.get(i).setSechePanel(nom);  
+            grid.get(i).setInondePanel(nom + "_Inonde");
+            grid.get(i).setPionPanel(aventuriers);
         }
-        
     }
     
     // Désactive tous les boutons de la grille, et redonne la possibilité de cliquer sur asécher et se déplacer
-    public void resetGrille() {
-        for (int i = 0; i < grid.size() ; i++) {
+    public void resetGrille(ArrayList<Tuile> tuiles) {
+        int i = 0;
+        for (Tuile tuile : tuiles) {
+            grid.get(i).cacherPion();
             grid.get(i).setBorder(new LineBorder(new JButton().getBackground()));
-//            grid.get(i).setEnabled(false);
+            if (tuile.getEtat().equals("seche")) {
+                grid.get(i).afficherSeche();
+            } else if (tuile.getEtat().equals("inondé")) {
+                grid.get(i).afficherInonde();
+            }
+            i++;
         }
-        
     }
     
     @Override

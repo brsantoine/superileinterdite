@@ -138,7 +138,7 @@ public class VueMenu implements Observe {
                     nomsJoueurs.get(3).setText("");
                     playButton.setEnabled(false);
 
-                } else if (!nomsJoueurs.get(1).getText().equals("")){
+                } else if (!nomsJoueurs.get(1).getText().equals("") && (!couleursJoueurs.get(1).getSelectedItem().equals("(Aucune)")) && (!couleursJoueurs.get(0).getSelectedItem().equals("(Aucune)"))){
                     playButton.setEnabled(true);
                     nomsJoueurs.get(2).setVisible(true);
                     couleursJoueurs.get(2).setVisible(true);
@@ -177,7 +177,7 @@ public class VueMenu implements Observe {
                     nomsJoueurs.get(3).setText("");
                     playButton.setEnabled(false);
 
-                } else if ((nomsJoueurs.get(2).getText().equals("")) && (!nomsJoueurs.get(0).getText().equals(""))){
+                } else if ((nomsJoueurs.get(2).getText().equals("")) && (!nomsJoueurs.get(0).getText().equals("")) && (!couleursJoueurs.get(0).getSelectedItem().equals("(Aucune)")) && (!couleursJoueurs.get(1).getSelectedItem().equals("(Aucune)"))){
                     playButton.setEnabled(true);
                     nomsJoueurs.get(2).setVisible(true);
                     couleursJoueurs.get(2).setVisible(true);
@@ -261,6 +261,9 @@ public class VueMenu implements Observe {
                     }
                 }
                 couleursJoueurs.get(0).setEnabled(false);
+                if ((!nomsJoueurs.get(0).getText().equals("")) && (!nomsJoueurs.get(1).getText().equals(""))) {
+                    playButton.setEnabled(true);
+                }
             }
         });
 
@@ -274,6 +277,9 @@ public class VueMenu implements Observe {
                     }
                 }
                 couleursJoueurs.get(1).setEnabled(false);
+                if ((!nomsJoueurs.get(0).getText().equals("")) && (!nomsJoueurs.get(1).getText().equals(""))) {
+                    playButton.setEnabled(true);
+                }
             }
         });
 

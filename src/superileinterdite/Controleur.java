@@ -511,9 +511,9 @@ public class Controleur implements Observateur {
             }
             
             tAssech = new ArrayList<>();
-            
             tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
-            if (tAssech.size()>1) {
+            
+            if (tAssech.size()>0) {
                 tm.add(Utils.Commandes.ASSECHER);  
             }
 
@@ -536,7 +536,7 @@ public class Controleur implements Observateur {
            
 
            tAccess = new ArrayList<>();
-//           tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
+           tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
            
            
            
@@ -599,6 +599,9 @@ public class Controleur implements Observateur {
                test.displayMessage("", Color.black, true, false);
 
             }
+            
+            ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
+            ihmJeu.getGrille().updateDeplacement(lesJoueurs);
             ihmJeu.finTour();
         }
         
@@ -632,7 +635,7 @@ public class Controleur implements Observateur {
                     piocherInondationDebut();
                     piocherTresorDebut();
                     
-                    this.ihmJeu.getGrille().intitialiserGrille(this.laGrille.getTuiles());
+                    this.ihmJeu.getGrille().initialiserGrille(this.laGrille.getTuiles(), lesJoueurs);
                     this.ihmJeu.getGrille().updateDeplacement(lesJoueurs);
                     this.ihmJeu.afficher();
                     
@@ -643,12 +646,15 @@ public class Controleur implements Observateur {
                 
                 case CHOISIR_TUILE:
                 if(modeDeplacement){
+                    
                     // Enleve l'aventurier da la tuile ou il etait
                     this.aQuiLeTour().getTuile().removeAventurier(this.aQuiLeTour());
                     // Change la tuile de l'aventurier
-                    this.aQuiLeTour().updateTuile(this.getGrille().getTuiles().get(m.getIdTuile()));
+                    this.aQuiLeTour().updateTuile(this.getGrille().getTuiles().get(m.getIdTuile()));                 
                     // Met un aventurier sur la nouvelle tuile
                     this.getGrille().getTuiles().get(m.getIdTuile()).addAventurier(this.aQuiLeTour());
+                    
+                    ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
                     ihmJeu.getGrille().updateDeplacement(lesJoueurs);
 
                     // Retire une action si les joueurs se déplacent sur une
@@ -688,9 +694,12 @@ public class Controleur implements Observateur {
 
                         this.getGrille().getTuiles().get(m.getIdTuile()).assecherTuile(); 
 //                        ihm.afficherTuilesAssecher(tAssech);
+                        ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
+                        ihmJeu.getGrille().updateDeplacement(lesJoueurs);
+                        
                         tAssech = this.aQuiLeTour().TuilesAssechables(laGrille);
                         ihmJeu.getGrille().afficherTuilesAssecher(tAssech);
-
+                        
                         // Gere le double assechement d'un ingenieur
                         if(this.aQuiLeTour().getRole()=="ingenieur" && !doubleAssechement){            
                             if(this.getActions()==1){
@@ -719,7 +728,7 @@ public class Controleur implements Observateur {
                             modeDeplacement = false;
                             modeAssechement = false;
                             ihmJeu.impossibleAssecher();
-                            ihmJeu.getGrille().resetGrille();
+                            ihmJeu.getGrille().updateDeplacement(lesJoueurs);
                         }                     
                         
                         ihmJeu.updateActions(this.getActions());
@@ -793,6 +802,12 @@ public class Controleur implements Observateur {
                     
                     modeAssechement = true;
                     modeDeplacement = false;
+                    
+                    ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
+                    ihmJeu.getGrille().updateDeplacement(lesJoueurs);
+                    tAssech = new ArrayList<>();
+                    tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
+                    
                     //ihm.afficherTuilesAssecher(this.aQuiLeTour().TuilesAssechables(this.getGrille()));
                     if(this.aQuiLeTour().getRole().equals("pilote") && ((Pilote) this.aQuiLeTour()).getHelico()){
                             ihmJeu.activerHelico();
