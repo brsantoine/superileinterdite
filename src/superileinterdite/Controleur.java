@@ -15,9 +15,7 @@ public class Controleur implements Observateur {
 	private ArrayList<Tresors> lesTresors ;
 	private Grille laGrille; 
 	private ArrayList<Aventurier> lesJoueurs;
-	private ArrayList<VueAventurier> ihmAventuriers;
         private VueMenu ihmMenu;
-	private VueInscription ihmInscription;
 	private VueJeu ihmJeu;
 	private ArrayList<Pile> sesPiles ;
 	private int niveauEau;
@@ -27,7 +25,6 @@ public class Controleur implements Observateur {
         private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false, modeDefausser = false, modeDonner = false;
         private ArrayList<Tuile> tAssech, tAccess;
         private Pile PileTresor,PileInondation,defausseTresor,defausseInondation;
-        private MessageBox test;
         
 
         public Controleur() {
@@ -41,11 +38,6 @@ public class Controleur implements Observateur {
             this.ihmJeu = ihmJeu;
             this.ihmJeu.addObservateur(this);
         }
-        
-         public void setIhmVueInscription(VueInscription ihmInscription){
-            this.ihmInscription = ihmInscription;
-            this.ihmInscription.addObservateur(this);
-        }
          
         public void setIhmVueMenu(VueMenu ihmMenu){
             this.ihmMenu = ihmMenu;
@@ -53,10 +45,7 @@ public class Controleur implements Observateur {
         
         // Instanciation de la grille de toutes les tuiles et les aventuriers
         public void commencerJeu() {    
-            // Creation des aventuriers
-            test = new MessageBox();
-            test.displayMessage("<h1 style=\"text-align:center;\">Bienvenue dans<br>l'Île Interdite</h1>", Color.black, false, false);
-            test.displayMessage("", Color.black, true, false);
+            // Creation des aventuriers            
             Aventurier plongeur = new Plongeur();
             Aventurier ingenieur = new Ingenieur();
             Aventurier messager = new Messager();
@@ -168,21 +157,21 @@ public class Controleur implements Observateur {
 		tresor.setEtat(true);
                 switch (tresor.getNom()) {
                     case "La Statue du zéphyr":
-                        test.setZephyrVisible();
+                        ihmJeu.getMessageBox().setZephyrVisible();
                         break;
                     
                     case "La Pierre sacrée":
-                        test.setPierreVisible();
+                        ihmJeu.getMessageBox().setPierreVisible();
 
                         break;
                     
                     case "Le Cristal ardent":
-                        test.setCristalVisible();
+                        ihmJeu.getMessageBox().setCristalVisible();
   
                         break;
                     
                     case "Le Calice de l’onde":
-                        test.setCaliceVisible();
+                        ihmJeu.getMessageBox().setCaliceVisible();
 
                         break;
                         
@@ -275,7 +264,7 @@ public class Controleur implements Observateur {
                 if (!PileInondation.getSesCartes().isEmpty()) {
                     defausseInondation.addPile(PileInondation.getSesCartes().get(0));
                     ((CarteInondation)PileInondation.getSesCartes().get(0)).getTuile().inonderTuile();     
-                    test.displayMessage("La tuile "+PileInondation.getSesCartes().get(0).getNom()+ " est "+((CarteInondation)PileInondation.getSesCartes().get(0)).getTuile().getEtat(), Color.blue, false, true);
+                    ihmJeu.getMessageBox().displayMessage("La tuile "+PileInondation.getSesCartes().get(0).getNom()+ " est "+((CarteInondation)PileInondation.getSesCartes().get(0)).getTuile().getEtat(), Color.blue, false, true);
                     PileInondation.RemoveCarte(PileInondation.getSesCartes().get(0));    
                }         
             }
@@ -287,7 +276,7 @@ public class Controleur implements Observateur {
 //                if (!PileInondation.getSesCartes().isEmpty()) {
                     defausseInondation.addPile(PileInondation.getSesCartes().get(0));
                     ((CarteInondation)PileInondation.getSesCartes().get(0)).getTuile().inonderTuile();
-                    test.displayMessage("La tuile "+PileInondation.getSesCartes().get(0).getNom()+ " est "+((CarteInondation)PileInondation.getSesCartes().get(0)).getTuile().getEtat(), Color.blue, false, true);
+                    ihmJeu.getMessageBox().displayMessage("La tuile "+PileInondation.getSesCartes().get(0).getNom()+ " est "+((CarteInondation)PileInondation.getSesCartes().get(0)).getTuile().getEtat(), Color.blue, false, true);
                     PileInondation.RemoveCarte(PileInondation.getSesCartes().get(0));                 
 //                }         
             }
@@ -393,31 +382,31 @@ public class Controleur implements Observateur {
             }
             
             
-            test.displayMessage("<h2>C'est à " + aQuiLeTour().getRole() + " de jouer.</h2>", Color.black, true, false);
+            ihmJeu.getMessageBox().displayMessage("<h2>C'est à " + aQuiLeTour().getRole() + " de jouer.</h2>", Color.black, true, false);
             
             switch(this.aQuiLeTour().getRole()){
                 case "explorateur":
-                    test.displayMessage("<h3>Action spéciale :</h3> se déplacer et assecher en diagonale.<br><br>", Color.black, false, false);
+                    ihmJeu.getMessageBox().displayMessage("<h3>Action spéciale :</h3> se déplacer et assecher en diagonale.<br><br>", Color.black, false, false);
                     break;
                 
                 case "messager":
-                    test.displayMessage("<h3>Action spéciale :</h3> peut donner une carte depuis n'importe quelle case.<br><br>", Color.black, false, false);
+                    ihmJeu.getMessageBox().displayMessage("<h3>Action spéciale :</h3> peut donner une carte depuis n'importe quelle case.<br><br>", Color.black, false, false);
                     break;
                     
                 case "ingenieur":
-                    test.displayMessage("<h3>Action spéciale :</h3> peut assecher deux case pour une action.<br><br>", Color.black, false, false);
+                    ihmJeu.getMessageBox().displayMessage("<h3>Action spéciale :</h3> peut assecher deux case pour une action.<br><br>", Color.black, false, false);
                     break;
                     
                 case "pilote":
-                    test.displayMessage("<h3>Action spéciale :</h3> peut se déplacer où il veut sur la carte une fois.<br><br>", Color.black, false, false);
+                    ihmJeu.getMessageBox().displayMessage("<h3>Action spéciale :</h3> peut se déplacer où il veut sur la carte une fois.<br><br>", Color.black, false, false);
                     break;
                     
                 case "plongeur":
-                    test.displayMessage("<h3>Action spéciale :</h3> peut se deplacer sur une case inondé ou coulé sans dépenser d'action.<br><br>", Color.black, false, false);
+                    ihmJeu.getMessageBox().displayMessage("<h3>Action spéciale :</h3> peut se deplacer sur une case inondé ou coulé sans dépenser d'action.<br><br>", Color.black, false, false);
                     break;
                     
                 case "navigateur":
-                    test.displayMessage("<h3>Action spéciale :</h3> peut déplacer jusqu'à deux cases n'importe quel joueur pour une action.<br><br>", Color.black, false, false);
+                    ihmJeu.getMessageBox().displayMessage("<h3>Action spéciale :</h3> peut déplacer jusqu'à deux cases n'importe quel joueur pour une action.<br><br>", Color.black, false, false);
                     break;
             }
             this.tourDeJeu();
@@ -568,17 +557,13 @@ public class Controleur implements Observateur {
 
             tm.add(Utils.Commandes.FIN_TOUR);
             //envoyer a l'ihm les actions possibles
-            test.displayMessage("Voici vos actions possibles", Color.black, false, false);
+            ihmJeu.getMessageBox().displayMessage("Voici vos actions possibles", Color.black, false, false);
             String actions = new String();
             for(Utils.Commandes u : tm){
                 actions = actions + "<li>" + u.toString() + "</li>";
             }
-            test.displayMessage("<ul>" + actions + "</ul>", Color.black, false, false);
+            ihmJeu.getMessageBox().displayMessage("<ul>" + actions + "</ul>", Color.black, false, false);
         }
-        
-                  
-        
-        
 
         // Effectue toutes les actions nécessaires apres qu'un joueur ai fini ses actions  
         public void finTour(){                                                                                                 
@@ -597,13 +582,13 @@ public class Controleur implements Observateur {
                 this.nvtour();
             } else {
                 ihmJeu.afficherDefaite();
-               test.displayMessage("<h1 style=\"text-align:center;\">Vous avez <br>Perdu</h1>", Color.red, true, true);
-               test.displayMessage("", Color.black, true, false);
+               ihmJeu.getMessageBox().displayMessage("<h1 style=\"text-align:center;\">Vous avez <br>Perdu</h1>", Color.red, true, true);
+               ihmJeu.getMessageBox().displayMessage("", Color.black, true, false);
 
             }
             
             ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
-            ihmJeu.getGrille().updateDeplacement(lesJoueurs);
+            ihmJeu.getGrille().afficherPions(lesJoueurs);
             ihmJeu.finTour();
         }
         
@@ -615,30 +600,26 @@ public class Controleur implements Observateur {
                 case COMMENCER_JEU:
                     
                     ihmMenu.cacher();
-                     
                     this.commencerJeu();
-
 
                     // Créer la liste de joueur en fonction du nombre de joueur choisi
                     ArrayList<Aventurier> listeJoueurs = new ArrayList<>();               
                     for(int i=0; i<m.getIdAventurier();i++){
                         listeJoueurs.add(this.lesJoueurs.get(i));
-                        //--- ANTOINE ---
                         listeJoueurs.get(i).setCouleur((String) (m.getCouleurs().get(i).getSelectedItem()));
-                        //--- ANTOINE ---
                     }
-
+                    
                     this.lesJoueurs=listeJoueurs;
-                    
-                    //--- ANTOINE ---
                     this.setIhmVueJeu(new VueJeu(lesJoueurs, m.getNoms(), m.getCouleurs()));
-                    //--- ANTOINE ---
                     
-                    piocherInondationDebut();
+                    ihmJeu.getMessageBox().displayMessage("<h1 style=\"text-align:center;\">Bienvenue dans<br>l'Île Interdite</h1>", Color.black, false, false);
+                    ihmJeu.getMessageBox().displayMessage("", Color.black, true, false);   
+                    
+                    piocherInondationDebut();                    
                     piocherTresorDebut();
                     
                     this.ihmJeu.getGrille().initialiserGrille(this.laGrille.getTuiles(), lesJoueurs);
-                    this.ihmJeu.getGrille().updateDeplacement(lesJoueurs);
+                    this.ihmJeu.getGrille().afficherPions(lesJoueurs);
                     this.ihmJeu.afficher();
                     
                     this.nvtour();
@@ -657,7 +638,7 @@ public class Controleur implements Observateur {
                     this.getGrille().getTuiles().get(m.getIdTuile()).addAventurier(this.aQuiLeTour());
                     
                     ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
-                    ihmJeu.getGrille().updateDeplacement(lesJoueurs);
+                    ihmJeu.getGrille().afficherPions(lesJoueurs);
 
                     // Retire une action si les joueurs se déplacent sur une
                     if (!(this.aQuiLeTour().getRole() == "plongeur" && this.aQuiLeTour().getTuile().getEtat() != "seche")) {
@@ -697,7 +678,7 @@ public class Controleur implements Observateur {
                         this.getGrille().getTuiles().get(m.getIdTuile()).assecherTuile(); 
 //                        ihm.afficherTuilesAssecher(tAssech);
                         ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
-                        ihmJeu.getGrille().updateDeplacement(lesJoueurs);
+                        ihmJeu.getGrille().afficherPions(lesJoueurs);
                         
                         tAssech = this.aQuiLeTour().TuilesAssechables(laGrille);
                         ihmJeu.getGrille().afficherTuilesAssecher(tAssech);
@@ -730,7 +711,7 @@ public class Controleur implements Observateur {
                             modeDeplacement = false;
                             modeAssechement = false;
                             ihmJeu.impossibleAssecher();
-                            ihmJeu.getGrille().updateDeplacement(lesJoueurs);
+                            ihmJeu.getGrille().afficherPions(lesJoueurs);
                         }                     
                         
                         ihmJeu.updateActions(this.getActions());
@@ -813,7 +794,7 @@ public class Controleur implements Observateur {
                     modeDeplacement = false;
                     
                     ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
-                    ihmJeu.getGrille().updateDeplacement(lesJoueurs);
+                    ihmJeu.getGrille().afficherPions(lesJoueurs);
                     tAssech = new ArrayList<>();
                     tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
                     
@@ -895,9 +876,10 @@ public class Controleur implements Observateur {
                     if(this.aQuiLeTour().getRole().equals("pilote") && ((Pilote) this.aQuiLeTour()).getHelico()){
                         ihmJeu.activerHelico();
                     }
-                    
                     modeDefausser = true;
                     modeDonner = false;    
+                    ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
+                    ihmJeu.getGrille().afficherPions(lesJoueurs);
                     ihmJeu.updateCardsBorder();
                     ihmJeu.cacherAventuriersBorder();
                     
@@ -906,7 +888,8 @@ public class Controleur implements Observateur {
                 case DONNER:                       
                     ihmJeu.cacherCardsBorder();
                     ihmJeu.cacherAventuriersBorder();
-                    
+                    ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
+                    ihmJeu.getGrille().afficherPions(lesJoueurs);
                     if(this.aQuiLeTour().getRole().equals("pilote") && ((Pilote) this.aQuiLeTour()).getHelico()){
                         ihmJeu.activerHelico();
                     }

@@ -33,9 +33,9 @@ public class VueTuile extends JPanel implements Observe {
         sechePanel.setOpaque(false);
         pionPanel.setOpaque(false);
         this.layeredPane = new JLayeredPane();
-        sechePanel.setBounds(0, 0, 100, 100);
-        inondePanel.setBounds(0, 0, 100, 100);
-        pionPanel.setBounds(30, 5, 80, 80);
+        sechePanel.setBounds(0, 0, 150, 150);
+        inondePanel.setBounds(0, 0, 150, 150);
+        pionPanel.setBounds(40, 15, 80, 80);
         layeredPane.add(sechePanel, JLayeredPane.DEFAULT_LAYER);
         layeredPane.add(inondePanel, JLayeredPane.DEFAULT_LAYER);
         layeredPane.add(pionPanel, JLayeredPane.PALETTE_LAYER );
@@ -83,18 +83,18 @@ public class VueTuile extends JPanel implements Observe {
 //        this.setLayout(new BorderLayout());
 //        frame.add(lpane, BorderLayout.CENTER);
 
-        inondePanel.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.TUILES + nomTuile + ".png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH))));
+        inondePanel.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.TUILES + nomTuile + ".png").getImage().getScaledInstance(145,145, Image.SCALE_SMOOTH))));
     }
 
     public void setSechePanel(String nomTuile){
 //        this.setLayout(new BorderLayout());
 //        frame.add(lpane, BorderLayout.CENTER);
-        sechePanel.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.TUILES + nomTuile + ".png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH))));
+        sechePanel.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.TUILES + nomTuile + ".png").getImage().getScaledInstance(145,145, Image.SCALE_SMOOTH))));
     }
 
     public void setPionPanel(ArrayList<Aventurier> aventuriers) {
         for (int i = 0; i < aventuriers.size(); i++) {
-            pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"pion" + aventuriers.get(i).getCouleur() + ".png").getImage().getScaledInstance(30,30, Image.SCALE_SMOOTH))));
+            pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"pion" + aventuriers.get(i).getCouleur() + ".png").getImage().getScaledInstance(40,40, Image.SCALE_SMOOTH))));
 //            pionsImages.get(i).setHorizontalAlignment(30*i);
 //            pionsImages.get(i).setVerticalAlignment(30*i);
             pionsImages.get(i).setVisible(false);

@@ -48,7 +48,7 @@ public class Explorateur extends Aventurier {
             }
             
             //On ajoute aussi la tuile sur laquelle il est car on a le droit d'assécher sa propre tuile
-            tuilesAssech.add(this.getTuile());
+//            tuilesAssech.add(this.getTuile());
             
             return tuilesAssech;
 	}

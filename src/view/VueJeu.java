@@ -18,60 +18,71 @@ import util.*;
  *
  * @author aragnoua
  */
-public class VueJeu extends JFrame implements Observe{
+public class VueJeu implements Observe{
 
     /**
      * @param args the command line arguments
      */
     
+    private JFrame leftFrame, gameFrame;
     private Observateur observateur;
     private VueNiveau vueNiveau;
     private VueGrille vueGrille;
+    private MessageBox messageBox;
     private ArrayList<VueAventurier> vuesAventuriers;
-    private JPanel southPanel, westPanel, eastPanel, centerPanel;  
+    private JPanel southPanel, eastPanel, middleSouthPanel;  
     private JButton seDeplacerButton, assecherButton, endTurnButton, actionsRemainingButton, helicoButton, giveButton, defausserButton;
 
     
     public VueJeu(ArrayList<Aventurier> aventuriers, ArrayList<JTextField> noms, ArrayList<JComboBox> couleurs) {
         
-        // -------- Setup window --------
-
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
-        this.setResizable(Parameters.RESIZABLE);
-        this.setTitle("Ile Interdite");
-        this.setSize((int) screenSize.getWidth() -100, (int) screenSize.getHeight() - 100);  
 
         // ---------------------------------------------------------------------
-        // ---------------------------  GAME WINDOW  ---------------------------
+        // ---------------------------  LEFT WINDOW  ---------------------------
         // ---------------------------------------------------------------------
+
+        leftFrame = new JFrame() ;
+        leftFrame.setLayout(new GridLayout(2,1,0,20));
+        leftFrame.setLocation(20, 20);
+        leftFrame.setSize(350, (int) screenSize.getHeight() - 100);
+        leftFrame.setUndecorated(Parameters.UNDECORATED);
+        leftFrame.setResizable(Parameters.RESIZABLE);      
         
-        this.setLayout(new BorderLayout(10,10));
+        messageBox = new MessageBox();
         vueNiveau = new VueNiveau(2);
         
+        leftFrame.add(vueNiveau);
+        leftFrame.add(messageBox);
+        
+        leftFrame.setVisible(true);
+        
+        // ---------------------------------------------------------------------
+        // ---------------------------  GAME WINDOW  ---------------------------
+        // ---------------------------------------------------------------------      
+        
+        // -------- Setup window --------
+        
+        gameFrame = new JFrame();
+        gameFrame.setLayout(new BorderLayout(10,10));
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
+        gameFrame.setResizable(Parameters.RESIZABLE);
+        gameFrame.setTitle("Ile Interdite");
+        gameFrame.setLocation(370, 20);
+        gameFrame.setSize((int) screenSize.getWidth() -390, (int) screenSize.getHeight() - 100);  
+        
         vueGrille = new VueGrille();
-        centerPanel = new JPanel();
         eastPanel = new JPanel();
-        westPanel = new JPanel();
         southPanel = new JPanel();
         
-        this.add(vueGrille, BorderLayout.CENTER);
-        this.add(eastPanel, BorderLayout.EAST);
-        this.add(westPanel, BorderLayout.WEST);
-        this.add(southPanel, BorderLayout.SOUTH);
-         
-        // ------------ WESTPANEL ------------
+        gameFrame.add(vueGrille);
+        gameFrame.add(eastPanel, BorderLayout.EAST);
+        gameFrame.add(southPanel, BorderLayout.SOUTH);  
         
-        westPanel.setLayout(new BorderLayout());
-//        westPanel.add(new JPanel(), BorderLayout.NORTH);
-        westPanel.add(vueNiveau, BorderLayout.CENTER);
-//        westPanel.setPreferredSize(new Dimension(300,300));
-        
-
         // ------------ EASTPANEL ------------
 
         eastPanel.setPreferredSize(new Dimension(600, 1000));
-        eastPanel.setLayout(new GridLayout(4,1,0,30));
+        eastPanel.setLayout(new GridLayout(4,1,0,10));
 //        eastPanel.setSize(Parameters.LARGEUR_VUE_AVENTURIER, Parameters.HAUTEUR_VUE_AVENTURIER*4);
         vuesAventuriers = new ArrayList<>();
         int x = 0;
@@ -87,7 +98,11 @@ public class VueJeu extends JFrame implements Observe{
         
         // ------------ SOUTHPANEL ------------
 //        southPanel.setPreferredSize(new Dimension((int) screenSize.getWidth(), 150));
-
+        southPanel.setLayout(new BorderLayout());
+        
+        middleSouthPanel = new JPanel();
+        southPanel.add(middleSouthPanel, BorderLayout.CENTER);
+//        southPanel.add(messageBox, BorderLayout.WEST);
         
         // Nombre d'actions restantes et boutons assécher et se déplacer
         seDeplacerButton = new JButton("Se déplacer");
@@ -98,13 +113,14 @@ public class VueJeu extends JFrame implements Observe{
         giveButton = new JButton("Donner carte");
         defausserButton = new JButton("Défausser une carte");
 
-        southPanel.add(actionsRemainingButton);
-        southPanel.add(seDeplacerButton);
-        southPanel.add(assecherButton);
-        southPanel.add(endTurnButton);
-        southPanel.add(helicoButton);
-        southPanel.add(giveButton);
-        southPanel.add(defausserButton);
+        middleSouthPanel.add(actionsRemainingButton);
+        middleSouthPanel.add(seDeplacerButton);
+        middleSouthPanel.add(assecherButton);
+        middleSouthPanel.add(endTurnButton);
+        middleSouthPanel.add(helicoButton);
+        middleSouthPanel.add(giveButton);
+        middleSouthPanel.add(defausserButton);
+        
         
         // LISTENER 
         // -------- seDeplacerButton et assecherButton (changer le mode d'actions) --------
@@ -153,7 +169,6 @@ public class VueJeu extends JFrame implements Observe{
                 giveButton.setEnabled(false);
                 
                 defausserButton.setEnabled(true);
-                vueGrille.resetGrille();
                 Message m = new Message(Utils.Commandes.DONNER, 0, 0, null, 0);
                 notifierObservateur(m);
             }
@@ -168,7 +183,6 @@ public class VueJeu extends JFrame implements Observe{
                 seDeplacerButton.setEnabled(true);
                 defausserButton.setEnabled(false);
                 giveButton.setEnabled(true);
-                vueGrille.resetGrille();
                 Message m = new Message(Utils.Commandes.DEFAUSSER_CARTE, 0, 0, null, 0);
                 notifierObservateur(m);
             }
@@ -185,7 +199,6 @@ public class VueJeu extends JFrame implements Observe{
                 notifierObservateur(m);
             }
         });
-    
     }
     
     public void possibleFinTour() {
@@ -284,13 +297,17 @@ public class VueJeu extends JFrame implements Observe{
         }
     }
     
+    public MessageBox getMessageBox() {
+        return messageBox;
+    }
+            
     public void afficher() {
-        this.setVisible(true);
+        gameFrame.setVisible(true);
         for (VueAventurier va : vuesAventuriers) {
             va.afficher();
         }
         vueGrille.setVisible(true);
-        vueNiveau.afficher();
+//        vueNiveau.afficher();
         
     }
     

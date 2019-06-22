@@ -55,7 +55,7 @@ public class VueCarte extends JPanel implements Observe{
     
     public void addCardImage(Carte carte) {
         hasImage = true;
-        img.setIcon((new ImageIcon(new ImageIcon(Parameters.CARTES + carte.getNom() + ".png").getImage().getScaledInstance(80,110, Image.SCALE_SMOOTH))));
+        img.setIcon((new ImageIcon(new ImageIcon(Parameters.CARTES + carte.getNom() + ".png").getImage().getScaledInstance(100,140, Image.SCALE_SMOOTH))));
         this.add(img);
     }
     

@@ -19,8 +19,8 @@ import util.Utils;
  *
  * @author IUT2-Dept Info
  */
-public class MessageBox {
-    private final JFrame window ;
+public class MessageBox extends JPanel{
+//    private final JFrame window ;
     private final JEditorPane html ;
     private final JScrollPane scrollPane;
     String texte ;
@@ -30,18 +30,18 @@ public class MessageBox {
     private final JPanel panelPierre;
     
     public MessageBox() {
-        window = new JFrame() ;
-        window.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-        window.setLocation(940, Parameters.TOP_AUTRES_VUES);
-        window.setSize(310, Parameters.HAUTEUR_AUTRES_VUES);
-        window.setUndecorated(Parameters.UNDECORATED);
-        window.setResizable(Parameters.RESIZABLE);
+//        window = new JFrame() ;
+//        this.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+//        this.setLocation(940, Parameters.TOP_AUTRES_VUES);
+        this.setSize(310, Parameters.HAUTEUR_AUTRES_VUES);
+//        this.setUndecorated(Parameters.UNDECORATED);
+//        window.setResizable(Parameters.RESIZABLE);
         
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        window.add(mainPanel);
+        this.setLayout(new BorderLayout());
+//        window.add(mainPanel);
         
         JPanel panelTresors = new JPanel(new GridLayout(1,4));
-        mainPanel.add(panelTresors, BorderLayout.NORTH);
+        this.add(panelTresors, BorderLayout.NORTH);
         
         this.panelZephyr = new JPanel();
         panelZephyr.setBackground(Utils.Tresor.ZEPHYR.getBgColor());
@@ -81,9 +81,9 @@ public class MessageBox {
         scrollPane.setMinimumSize(new Dimension(180, 280));
         
         html.setText("<html><h1 style=\"text-align:center; color:black;\">Bienvenue dans<br>l'Île Interdite</h1></html>");
-        mainPanel.add(scrollPane, BorderLayout.CENTER) ;
+        this.add(scrollPane, BorderLayout.CENTER) ;
         
-        window.setVisible(true);
+//        window.setVisible(true);
         
         this.texte = "" ;
     }

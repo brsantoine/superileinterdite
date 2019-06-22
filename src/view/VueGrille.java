@@ -86,14 +86,12 @@ public class VueGrille extends JPanel implements Observe{
     
     // Affiche en vert toutes les tuiles accessibles par l'aventurier courant
     public void afficherTuilesDeplacer(ArrayList<Tuile> tuiles) {
-        /*for (VueTuile tuile : grid) {
-            tuile.setBorder(new LineBorder(new JButton().getBackground()));
-        }*/
+
         for (Tuile tuile : tuiles) {
             for (VueTuile vTuile : grid) {
 //                vTuile.setEnabled(false);
                 if (vTuile.getID() == tuile.getID()) {
-                    vTuile.setBorder(new LineBorder(Color.GREEN, 5));
+                    vTuile.setBorder(new LineBorder(Color.GREEN, 3));
                     vTuile.setEnabled(true);
                 }
             }
@@ -103,21 +101,18 @@ public class VueGrille extends JPanel implements Observe{
     // Affiche en bleu toutes les tuiles asséchables par l'aventurier courant
     public void afficherTuilesAssecher(ArrayList<Tuile> tuiles) {
         
-        /*for (VueTuile tuile : grid) {
-            tuile.setBorder(new LineBorder(new JButton().getBackground()));
-        }   */
         for (Tuile tuile : tuiles) {
             for (VueTuile vTuile : grid) {
 //                vTuile.setEnabled(false);
                 if (vTuile.getID() == tuile.getID()) {
-                    vTuile.setBorder(new LineBorder(Color.BLUE, 5));
+                    vTuile.setBorder(new LineBorder(Color.BLUE, 3));
                     vTuile.setEnabled(true);
                 }
             }
         }
     }
     
-    public void updateDeplacement(ArrayList<Aventurier> aventuriers) {        
+    public void afficherPions(ArrayList<Aventurier> aventuriers) {        
         // Remet toutes les bordures à la couleur par défaut
 //        for (int i = 0; i < grid.size() ; i++) {
 //            grid.get(i).setBorder(new LineBorder(new JButton().getBackground()));

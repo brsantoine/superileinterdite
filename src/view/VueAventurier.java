@@ -44,7 +44,7 @@ public class VueAventurier extends JPanel implements Observe {
         for (int i = 0; i < 5; i++) {
             VueCarte vueC = new VueCarte(id, i);
             cardsList.add(vueC);
-        }     
+        }
         
         for (VueCarte vueCarte : cardsList) {
             cardsPanel.add(vueCarte);            
@@ -99,7 +99,7 @@ public class VueAventurier extends JPanel implements Observe {
     public void afficherCardsBorder() {
         for (VueCarte vC : cardsList) {
             if (vC.getHasImage()) {
-                vC.setBorder(new LineBorder(Color.RED, 5)); 
+                vC.setBorder(new LineBorder(Color.RED, 3)); 
             }
         }
     }
@@ -117,7 +117,7 @@ public class VueAventurier extends JPanel implements Observe {
             if (vC.getNumCarte() != numCarte) {
                 vC.setBorder(new LineBorder(new JButton().getBackground()));
             } else if (idAventurier == vC.getIdAventurier()){
-                vC.setBorder(new LineBorder(Color.BLUE, 5)); 
+                vC.setBorder(new LineBorder(Color.BLUE, 3)); 
             }
         }
 
