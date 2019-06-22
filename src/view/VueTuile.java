@@ -28,14 +28,14 @@ public class VueTuile extends JPanel implements Observe {
         
         this.inondePanel = new JPanel();        
         this.sechePanel = new JPanel();
-        this.pionPanel = new JPanel();
+        this.pionPanel = new JPanel(new GridLayout(2,2));
         inondePanel.setOpaque(false);
         sechePanel.setOpaque(false);
         pionPanel.setOpaque(false);
         this.layeredPane = new JLayeredPane();
         sechePanel.setBounds(0, 0, 100, 100);
         inondePanel.setBounds(0, 0, 100, 100);
-        pionPanel.setBounds(0,0,50,50);
+        pionPanel.setBounds(30, 5, 80, 80);
         layeredPane.add(sechePanel, JLayeredPane.DEFAULT_LAYER);
         layeredPane.add(inondePanel, JLayeredPane.DEFAULT_LAYER);
         layeredPane.add(pionPanel, JLayeredPane.PALETTE_LAYER );
@@ -92,17 +92,17 @@ public class VueTuile extends JPanel implements Observe {
         sechePanel.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.TUILES + nomTuile + ".png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH))));
     }
 
-    public void setPionPanel() {    
+    public void setPionPanel(ArrayList<Aventurier> aventuriers) {
+        for (int i = 0; i < aventuriers.size(); i++) {
+            pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"pion" + aventuriers.get(i).getCouleur() + ".png").getImage().getScaledInstance(30,30, Image.SCALE_SMOOTH))));
+//            pionsImages.get(i).setHorizontalAlignment(30*i);
+//            pionsImages.get(i).setVerticalAlignment(30*i);
+            pionsImages.get(i).setVisible(false);
+            pionPanel.add(pionsImages.get(i));
+        }
         
-        pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"pionVert.png").getImage().getScaledInstance(30,30, Image.SCALE_SMOOTH))));
-//        pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"Bleu.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH))));
-//        pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"Violet.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH))));
-//        pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"Jaune.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH))));
-//        pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"Rouge.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH))));
-//        pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"Noir.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH))));
-//        pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"Bronze.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH))));
-//        pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"Gris.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH))));
-        pionPanel.add(pionsImages.get(0));
+            
+        
     }
     
     public void afficherInonde() {
@@ -115,14 +115,14 @@ public class VueTuile extends JPanel implements Observe {
         inondePanel.setVisible(false);
     }
     
-    public void afficherPion(String color) {
-        
-        pionPanel.setVisible(true);
+    public void afficherPion(int numLabel) {
+        pionsImages.get(numLabel).setVisible(true);
     }
     
     public void cacherPion() {
-        pionPanel.setVisible(false);
-        
+        for (JLabel pionsImage : pionsImages) {
+            pionsImage.setVisible(false);
+        }
     }
     
     @Override

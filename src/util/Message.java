@@ -2,6 +2,7 @@ package util;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
 /**
@@ -15,6 +16,7 @@ public class Message implements Serializable {
     private final Utils.Tresor tresor ;
     private final Integer idTuile ;
     private ArrayList<JTextField> noms;
+    private ArrayList<JComboBox> couleurs;
     private boolean helico = false;
     
     public Message(Utils.Commandes commande, Integer idAventurier, Integer idCarte,  Utils.Tresor tresor, Integer idTuile) {
@@ -82,6 +84,14 @@ public class Message implements Serializable {
     public void setNoms(ArrayList<JTextField> noms) {
         this.noms = noms;
     }   
+
+    public ArrayList<JComboBox> getCouleurs() {
+        return couleurs;
+    }
+
+    public void setCouleurs(ArrayList<JComboBox> couleurs) {
+        this.couleurs = couleurs;
+    }
 
     public boolean getHelico() {
         return helico;

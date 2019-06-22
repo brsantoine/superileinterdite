@@ -10,7 +10,7 @@ public abstract class Aventurier extends ObjetIdentifie{
 
 	private ArrayList<CarteMain> sesCartes = new ArrayList();
 	private Tuile saTuile;
-	private String role;    //nom type de l'aventurier
+	private String role, couleur;    //nom type de l'aventurier
         private boolean vivant;
         
         public Aventurier(String role) {
@@ -24,29 +24,29 @@ public abstract class Aventurier extends ObjetIdentifie{
 	 */
 
 	public ArrayList<Tuile> TuilesAccessibles(Grille grille) {
-		// TODO - implement Aventurier.deplacement
-                
-                //Récupération des coordonnées de l'aventurier
-		int x = saTuile.getX();
-                int y = saTuile.getY();
-                
-                
-                //On parcourt les tuiles de la grille, puis, on vérifie si les tuiles sont adjacentes au joueur (fonction TuileAccessible)
-                ArrayList<Tuile> tuilesAccess1 = new ArrayList<>();
-                for (Tuile tuile : grille.getTuiles()) {
-                    if (TuileAccessible(x, y, tuile.getX(), tuile.getY(), tuile.getEtat())) {
-                        tuilesAccess1.add(tuile);
-                    }
+            // TODO - implement Aventurier.deplacement
+
+            //Récupération des coordonnées de l'aventurier
+            int x = saTuile.getX();
+            int y = saTuile.getY();
+
+
+            //On parcourt les tuiles de la grille, puis, on vérifie si les tuiles sont adjacentes au joueur (fonction TuileAccessible)
+            ArrayList<Tuile> tuilesAccess1 = new ArrayList<>();
+            for (Tuile tuile : grille.getTuiles()) {
+                if (TuileAccessible(x, y, tuile.getX(), tuile.getY(), tuile.getEtat())) {
+                    tuilesAccess1.add(tuile);
                 }
-                
-                //On ajoute dans une HashMap les tuiles que l'on a récupéré, avec un Integer qui indique le nombre de coût à rétirer
+            }
+
+            //On ajoute dans une HashMap les tuiles que l'on a récupéré, avec un Integer qui indique le nombre de coût à rétirer
 //                ArrayList<Tuile> tuilesAccess = new ArrayList<>();
 //                for (Tuile tuile : tuilesAccess1) {
 //                    
 //                    tuilesAccess.putIfAbsent(tuile);
 //                }
 //
-                return tuilesAccess1;
+            return tuilesAccess1;
 	}
 
 	/**
@@ -101,7 +101,7 @@ public abstract class Aventurier extends ObjetIdentifie{
                     tuilesAssech.add(tuile);
                 }
             }
-            tuilesAssech.add(saTuile);
+//            tuilesAssech.add(saTuile);
             return tuilesAssech;
 	}
 
@@ -128,8 +128,7 @@ public abstract class Aventurier extends ObjetIdentifie{
             //Si la tuile est adjacente et inondé, renvoie vrai, faux sinon
             if (etat.equals("inondé")) {
                 return ((x2 == x && (y2 == y || y2 == y-1 || y2 == y+1)) ||
-                        (y2 == y && (x2 == x-1 || x2 == x+1))            );        
-//                        ||                        (y2 == y && x2 == x));
+                        (y2 == y && (x2 == x-1 || x2 == x+1)) ||  (y2 == y && x2 == x));
             } else {
                 return false;
             }
@@ -146,7 +145,14 @@ public abstract class Aventurier extends ObjetIdentifie{
         public void setEtat(boolean etat) {
             this.vivant = etat;
         }
-        
+
+        public String getCouleur() {
+            return couleur;
+        }
+
+        public void setCouleur(String couleur) {
+            this.couleur = couleur;
+        }
         
 
 	/**

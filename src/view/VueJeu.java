@@ -32,7 +32,7 @@ public class VueJeu extends JFrame implements Observe{
     private JButton seDeplacerButton, assecherButton, endTurnButton, actionsRemainingButton, helicoButton, giveButton, defausserButton;
 
     
-    public VueJeu(ArrayList<Aventurier> aventuriers, ArrayList<JTextField> noms) {
+    public VueJeu(ArrayList<Aventurier> aventuriers, ArrayList<JTextField> noms, ArrayList<JComboBox> couleurs) {
         
         // -------- Setup window --------
 
@@ -307,7 +307,7 @@ public class VueJeu extends JFrame implements Observe{
     }
 
     public void finTour() {
-        this.getGrille().resetGrille();
+//        this.getGrille().resetGrille();
         seDeplacerButton.setEnabled(true);
         assecherButton.setEnabled(true);
     }
