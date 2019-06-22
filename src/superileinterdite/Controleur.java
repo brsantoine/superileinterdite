@@ -419,6 +419,8 @@ public class Controleur implements Observateur {
                     break;
             }
             this.tourDeJeu();
+            
+            
         }
         
         // Renvoie la grille contenant les tuiles 
@@ -717,6 +719,26 @@ public class Controleur implements Observateur {
                 ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
                 ihmJeu.getGrille().afficherPions(lesJoueurs);
             }
+            
+            for(Aventurier a : lesJoueurs) {
+                if (a.getTuile().getEtat().equals("inondé")) {
+                    a.getTuile().removeAventurier(a);
+                    if (a.getRole().equals("explorateur")) {
+                        a.updateTuile(a.TuilesAccessibles(laGrille).get(1));
+                    } else if (a.getRole().equals("plongeur")) {
+                        for(Tuile t : a.TuilesAccessibles(laGrille)) {
+                            if (!t.getEtat().equals("coulé")){
+                                a.updateTuile(t);
+                            }
+                        }
+                    } else {
+                        a.updateTuile(a.TuilesAccessibles(laGrille).get(0));
+                    }
+                }
+                a.getTuile().addAventurier(a);             
+            }
+            ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
+            ihmJeu.getGrille().afficherPions(lesJoueurs);
         }
         
       
@@ -978,7 +1000,6 @@ public class Controleur implements Observateur {
                     tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
                     
                     //ihm.afficherTuilesAssecher(this.aQuiLeTour().TuilesAssechables(this.getGrille()));
-                    System.out.println((((Pilote)this.aQuiLeTour())).getHelico());
                     if(this.aQuiLeTour().getRole().equals("pilote") && ((Pilote) this.aQuiLeTour()).getHelico()){
                         ihmJeu.activerHelico();
                     }
