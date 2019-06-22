@@ -26,8 +26,10 @@ public class Pilote extends Aventurier {
                     tuilesAccess.add(tuile);
                 }
             }
+            tuilesAccess.remove(this.getTuile());
             return tuilesAccess;
 	}
+    
     
     public void resetHelico() {
         helico = true;

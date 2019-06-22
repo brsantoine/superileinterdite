@@ -76,7 +76,6 @@ public class VueGrille extends JPanel implements Observe{
         
         for (int i = 0; i < grid.size(); i++) {
             grid.get(i).setID(i);
-            System.out.println(grid.get(i).getID());
             grid.get(i).addObservateur(this.observateur);
         }
     }
