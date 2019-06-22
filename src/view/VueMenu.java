@@ -17,10 +17,12 @@ public class VueMenu implements Observe {
     private JFrame menuWindow;
     Integer[] nbJoueurs = new Integer[]{2, 3, 4};
     String[] couleurs = new String[]{"(Couleur)", "Vert", "Violet", "Jaune", "Noir", "Gris", "Bronze", "Bleu", "Rouge"};
-    private JButton playButton, randomButton, random2Button, quitButton;
-    private JPanel panelBoutons, playersPanel;
+    String[] difficulte = new String[]{"Novice", "Normal", "Elite", "Légendaire"};
+    private JButton playButton, demoButton, quitButton;
+    private JPanel panelBoutons, playersPanel, eauPanel;
     private final ArrayList<JTextField> nomsJoueurs;
     private final ArrayList<JComboBox> couleursJoueurs;
+    private JComboBox niveauxDifficulte;
     
     public VueMenu() {
         
@@ -55,8 +57,8 @@ public class VueMenu implements Observe {
         
         playButton = new JButton("Jouer");
         playersPanel = new JPanel();
-        randomButton = new JButton("???");
-        random2Button = new JButton("???");
+        eauPanel = new JPanel();
+        demoButton = new JButton("???");
         quitButton = new JButton("Quitter");
         
         panelBoutons.add(playButton);
@@ -78,13 +80,26 @@ public class VueMenu implements Observe {
         }
 
         for (int i = 0; i < 4; i++) {
-            playersPanel.add(new JLabel("Joueur " + (i+1) + ": "));
+            playersPanel.add(new JLabel("Joueur " + (i+1) + " :"));
             playersPanel.add(nomsJoueurs.get(i));
             playersPanel.add(couleursJoueurs.get(i));
         }
         
-        panelBoutons.add(randomButton);
-        panelBoutons.add(random2Button);
+        //-- Eau panel
+        eauPanel.setLayout(new GridLayout(3,3, 10,10));
+        for (int i = 0; i < 3; i++) {
+            eauPanel.add(new JPanel());
+        }
+        eauPanel.add(new JLabel("Difficulté :"), BorderLayout.CENTER);
+        niveauxDifficulte = new JComboBox(difficulte);
+        eauPanel.add(new JPanel());
+        eauPanel.add(niveauxDifficulte, BorderLayout.CENTER);
+        for (int i = 0; i < 3; i++) {
+            eauPanel.add(new JPanel());
+        }
+        
+        panelBoutons.add(eauPanel);
+        panelBoutons.add(demoButton);
         panelBoutons.add(quitButton);
 
         JPanel panelVide = new JPanel();
@@ -120,11 +135,7 @@ public class VueMenu implements Observe {
 
             public void changed() {
                 if (estPret(2)) {
-                    if (estPret(3)) {
-                        if (estPret(4)) {
-                            playButton.setEnabled(true);
-                        }
-                    }
+                    playButton.setEnabled(true);
                     nouveauJoueur(2);
                 } else {
                     playButton.setEnabled(false);
@@ -149,11 +160,7 @@ public class VueMenu implements Observe {
 
             public void changed() {
                if (estPret(2)) {
-                   if (estPret(3)) {
-                        if (estPret(4)) {
-                            playButton.setEnabled(true);
-                        }
-                    }
+                    playButton.setEnabled(true);
                    nouveauJoueur(2);
                } else {
                    playButton.setEnabled(false);
@@ -178,9 +185,7 @@ public class VueMenu implements Observe {
 
             public void changed() {
                if (estPret(3)) {
-                    if (estPret(4)) {
-                        playButton.setEnabled(true);
-                    }
+                    playButton.setEnabled(true);
                    nouveauJoueur(3);
                } else {
                    playButton.setEnabled(false);
@@ -289,6 +294,7 @@ public class VueMenu implements Observe {
                 Message m = new Message(Utils.Commandes.COMMENCER_JEU,nbJoueurs,0,null,0);                
                 m.setNoms(nomsJoueurs);
                 m.setCouleurs(couleursJoueurs);
+                m.setNiveauEau(niveauxDifficulte);
                 notifierObservateur(m);
            } 
         });
