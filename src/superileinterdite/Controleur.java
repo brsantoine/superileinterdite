@@ -25,7 +25,6 @@ public class Controleur implements Observateur {
         private int tuileInitialeId;
         private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false, modeDefausser = false, deuxiemetouravant=false,
                         modeDonner = false, modeDeplacerAutre = false, modeActionSpeciale = false, modeChoixHelicoDestination = false;
-        private ArrayList<Tuile> tAssech, tAccess;
         private Pile PileTresor,PileInondation,defausseTresor,defausseInondation;
         
 
@@ -521,8 +520,8 @@ public class Controleur implements Observateur {
                    i=0;
                 }
             }
-            
-            tAssech = new ArrayList<>();
+
+            ArrayList<Tuile> tAssech = new ArrayList<>();
             tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
 
             if (tAssech.size()>0) {
@@ -558,7 +557,7 @@ public class Controleur implements Observateur {
                 }
             }
             
-           tAccess = new ArrayList<>();
+           ArrayList<Tuile> tAccess = new ArrayList<>();
            tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
            
             // Regarde si le joueur peut se deplacer en fonction de son rôle
@@ -639,7 +638,7 @@ public class Controleur implements Observateur {
                 }
             }
             
-            tAssech = new ArrayList<>();
+            ArrayList<Tuile> tAssech = new ArrayList<>();
             tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
 
             if (tAssech.size()>0) {
@@ -668,7 +667,7 @@ public class Controleur implements Observateur {
            }    
            
 
-           tAccess = new ArrayList<>();
+           ArrayList<Tuile> tAccess = new ArrayList<>();
            tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
            
            
@@ -799,6 +798,10 @@ public class Controleur implements Observateur {
       
         @Override
 	public void traiterMessage(Message m) {
+            
+            ArrayList<Tuile> tAccess = new ArrayList<>();
+            ArrayList<Tuile> tAssech = new ArrayList<>();
+            
             switch (m.getCommande()) {
                 
                 case COMMENCER_JEU:
@@ -1075,12 +1078,12 @@ public class Controleur implements Observateur {
                     ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
                     ihmJeu.getGrille().afficherPions(lesJoueurs);
                                         
-                    this.tAccess = this.aQuiLeTour().TuilesAccessibles(this.laGrille);
+                    tAccess = this.aQuiLeTour().TuilesAccessibles(this.laGrille);
 
                     if(this.aQuiLeTour().getRole().equals("pilote")){
 
                         if (m.getHelico()) {
-                            this.tAccess = (((Pilote) this.aQuiLeTour()).deplacementHelico(this.getGrille()));
+                            tAccess = (((Pilote) this.aQuiLeTour()).deplacementHelico(this.getGrille()));
                             ((Pilote)this.aQuiLeTour()).activerHelico();
                             ihmJeu.desactiverHelico();
                         } else if (((Pilote) this.aQuiLeTour()).getHelico()) {
