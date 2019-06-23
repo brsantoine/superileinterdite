@@ -23,7 +23,7 @@ public class Controleur implements Observateur {
         private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false, modeDefausser = false, 
                         modeDonner = false, modeDeplacerAutre = false, modeActionSpeciale = false, modeChoixHelicoDestination = false, modePiocher = false, modeRemplacer = false, deuxiemeTourAvant = false;
         private ArrayList<Carte> montrerCartes;
-	      private int niveauEau, nbAction, tour, cardOwnerId, cardSelectedId, nbtourassech, tuileInitialeId;
+        private int niveauEau, nbAction, tour, cardOwnerId, cardSelectedId, nbtourassech, tuileInitialeId;
 
         private Pile PileTresor,PileInondation,defausseTresor,defausseInondation;
 
@@ -512,6 +512,7 @@ public class Controleur implements Observateur {
             if (!modePiocher) {
                 
                 ihmJeu.possibleFinTour();
+
                 // Regarde si le joueur peut gagner un trésor
                 if(this.aQuiLeTour().getTuile() instanceof TuileTresor) {
 
@@ -531,12 +532,8 @@ public class Controleur implements Observateur {
                        i=0;
                     }
                 }
-            }
 
-            ArrayList<Tuile> tAssech = new ArrayList<>();
-            tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
-
-                tAssech = new ArrayList<>();
+                ArrayList<Tuile> tAssech = new ArrayList<>();
                 tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
 
                 if (tAssech.size()>0) {
@@ -571,30 +568,8 @@ public class Controleur implements Observateur {
                         }
                     }
                 }
-            
-            
-           ArrayList<Tuile> tAccess = new ArrayList<>();
-           tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
-           
-            // Regarde si le joueur peut se deplacer en fonction de son rôle
-            if(this.aQuiLeTour().getRole()=="plongeur"){                         
-                ihmJeu.possibleDeplacer();
-            }
-            else if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==true){
-                ihmJeu.possibleDeplacer();
-            }
-            else if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==false && tAccess.size()>0){
-                ihmJeu.possibleDeplacer();
-            }
-            else if(tAccess.size()>0){
-                if(this.aQuiLeTour().getRole()=="ingenieur" && this.doubleAssechement && this.getActions()==1 && !this.deuxiemeTourAvant){
-                    ihmJeu.impossibleDeplacer();
-                } else{
-                    ihmJeu.possibleDeplacer();
-                }
-            }
 
-               tAccess = new ArrayList<>();
+               ArrayList<Tuile> tAccess = new ArrayList<>();
                tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
 
                 // Regarde si le joueur peut se deplacer en fonction de son rôle
@@ -608,7 +583,11 @@ public class Controleur implements Observateur {
                     ihmJeu.possibleDeplacer();
                 }
                 else if(tAccess.size()>0){
-                    ihmJeu.possibleDeplacer();
+                    if(this.aQuiLeTour().getRole()=="ingenieur" && this.doubleAssechement && this.getActions()==1 && !this.deuxiemeTourAvant){
+                        ihmJeu.impossibleDeplacer();
+                    } else{
+                        ihmJeu.possibleDeplacer();
+                    }
                 }
 
                 // Regarde si le navigateur peut se déplacer
@@ -620,10 +599,9 @@ public class Controleur implements Observateur {
                        }
                     }
                 }
+            }
         }
-            
         
-       
         // Renvoie toutes les actions possibles en fonction des multiples parametres du joueur(tuile,carte, role ect..)
         public void tourDeJeu(){                       
             // Actions possibles
@@ -638,11 +616,10 @@ public class Controleur implements Observateur {
             ihmJeu.impossibleDefausser();
             ihmJeu.impossibleActionSpeciale();
             
-            
-            if (!modePiocher) {
+            if (!modePiocher){
                 
                 ihmJeu.possibleFinTour();
-                
+
                 // Regarde si le joueur peut gagner un trésor
                 if(this.aQuiLeTour().getTuile() instanceof TuileTresor) {
 
@@ -677,12 +654,8 @@ public class Controleur implements Observateur {
                         }
                     }
                 }
-            }
-            
-            ArrayList<Tuile> tAssech = new ArrayList<>();
-            tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
 
-                tAssech = new ArrayList<>();
+                ArrayList<Tuile>tAssech = new ArrayList<>();
                 tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
 
                 if (tAssech.size()>0) {
@@ -711,34 +684,7 @@ public class Controleur implements Observateur {
                }    
 
 
-           ArrayList<Tuile> tAccess = new ArrayList<>();
-           tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
-           
-           
-           
-            // Regarde si le joueur peut se deplacer en fonction de son rôle
-            if(this.aQuiLeTour().getRole()=="plongeur"){                         
-                tm.add(Utils.Commandes.SE_DEPLACER);
-                ihmJeu.possibleDeplacer();
-            }
-            else if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==true){
-                ihmJeu.possibleDeplacer();
-                tm.add(Utils.Commandes.SE_DEPLACER);
-            }
-            else if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==false && tAccess.size()>0){
-                ihmJeu.possibleDeplacer();
-                tm.add(Utils.Commandes.SE_DEPLACER);
-            }
-            else if(tAccess.size()>0){
-                if(this.aQuiLeTour().getRole()=="ingenieur" && this.doubleAssechement && this.getActions()==1 && !this.deuxiemeTourAvant){
-                    ihmJeu.impossibleDeplacer();
-                } else{
-                    ihmJeu.possibleDeplacer();
-                    tm.add(Utils.Commandes.SE_DEPLACER);
-                }
-            }
-
-               tAccess = new ArrayList<>();
+               ArrayList<Tuile> tAccess = new ArrayList<>();
                tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
 
 
@@ -757,8 +703,12 @@ public class Controleur implements Observateur {
                     tm.add(Utils.Commandes.SE_DEPLACER);
                 }
                 else if(tAccess.size()>0){
-                    ihmJeu.possibleDeplacer();
-                    tm.add(Utils.Commandes.SE_DEPLACER);
+                    if(this.aQuiLeTour().getRole()=="ingenieur" && this.doubleAssechement && this.getActions()==1 && !this.deuxiemeTourAvant){
+                        ihmJeu.impossibleDeplacer();
+                    } else{
+                        ihmJeu.possibleDeplacer();
+                        tm.add(Utils.Commandes.SE_DEPLACER);
+                    }
                 }
 
                 // Regarde si le navigateur peut se déplacer
@@ -781,6 +731,7 @@ public class Controleur implements Observateur {
                 }
                 ihmJeu.getMessageBox().displayMessage("<ul>" + actions + "</ul>", Color.black, false, false);
             }
+        }
         
 
         // Effectue toutes les actions nécessaires apres qu'un joueur ai fini ses actions  
@@ -798,8 +749,6 @@ public class Controleur implements Observateur {
             if (cestgagne()){
                 ihmJeu.afficherVictoire();
                 ihmJeu.afficherBoutonRecommencer();
-                ihmJeu.afficherDefaite();
-                ihmJeu.afficherBoutonRecommencer();
                 ihmJeu.impossibleAssecher();
                 ihmJeu.impossibleDefausser();
                 ihmJeu.impossibleDeplacer();
@@ -807,6 +756,7 @@ public class Controleur implements Observateur {
                 ihmJeu.impossibleFinTour();
                 ihmJeu.impossibleGiveCarte();
                 ihmJeu.impossibleRecupererTresor(); 
+                ihmJeu.cacherPioche();
                 ihmJeu.desactiverHelico();
                 ihmJeu.impossibleActionSpeciale();
                 ihmJeu.getMessageBox().displayMessage("<h1 style=\"text-align:center;\">Vous avez <br>Gagné</h1>", Color.green, true, true);              
@@ -822,6 +772,7 @@ public class Controleur implements Observateur {
                 } else {
                    ihmJeu.afficherDefaite();
                    ihmJeu.afficherBoutonRecommencer();
+                   ihmJeu.cacherPioche();
                    ihmJeu.impossibleAssecher();
                    ihmJeu.impossibleDefausser();
                    ihmJeu.impossibleDeplacer();
@@ -1139,9 +1090,9 @@ public class Controleur implements Observateur {
                     modeDeplacerAutre = false;
                     modeDeplacement = true;
 
-//                    if (m.getHelico()) {
-//                        ihmJeu.impossibleDeplacer();
-//                    }
+                    if (!m.getHelico()) {
+                        ihmJeu.impossibleDeplacer();
+                    }
                     
                     ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
                     ihmJeu.getGrille().afficherPions(lesJoueurs);
@@ -1379,7 +1330,6 @@ public class Controleur implements Observateur {
                     ihmJeu.cacherCardsBorder();
                     montrerCartes.removeAll(montrerCartes);
                     
-            
                 case CHOISIR_CARTE:                    
                     if (modeDefausser) {
                         for (Aventurier a : this.lesJoueurs) {
