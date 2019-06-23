@@ -266,6 +266,7 @@ public class Controleur implements Observateur {
                 ihmJeu.impossibleRemplacer();
                 ihmJeu.impossibleFinTour();
                 ihmJeu.possibleAnnuler();
+                ihmJeu.desactiverHelico();
                 
             }
             
@@ -1449,7 +1450,6 @@ public class Controleur implements Observateur {
                             this.finTour();
                         }
                     } else if (this.modeDeplacerAutre) {
-                        
                         
                         for (Aventurier a : lesJoueurs) {
                             if (a.getId() == m.getIdAventurier()) {
