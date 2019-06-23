@@ -181,7 +181,7 @@ public class Controleur implements Observateur {
     // Pioche 2 cartes trésors pour chaque aventurier 
     public void piocherTresorDebut() {     
         for (Aventurier a : getJoueurs()) {
-            for (int i = 0; i <= 1; i++) {
+            for (int i = 0; i <= 4; i++) {
                 if ( ((CarteMain)PileTresor.getSesCartes().get(0)).getNom() == "MDeaux") {
                     i--;
                     PileTresor.randomizePile();
