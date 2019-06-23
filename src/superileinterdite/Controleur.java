@@ -24,6 +24,7 @@ public class Controleur implements Observateur {
         private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false, modeDefausser = false, 
                         modeDonner = false, modeDeplacerAutre = false, modeActionSpeciale = false, modeChoixHelicoDestination = false, modePiocher = false, modeRemplacer = false;
         private ArrayList<Tuile> tAssech, tAccess;
+        private ArrayList<Carte> montrerCartes;
         private Pile PileTresor,PileInondation,defausseTresor,defausseInondation;
         
 
@@ -202,7 +203,7 @@ public class Controleur implements Observateur {
         
 	public void piocherTresor(Aventurier a) {  
             
-            ArrayList montrerCartes = new ArrayList<Carte>();
+            montrerCartes = new ArrayList<Carte>();
             
             for (int i = 0; i <= 1; i++) {
                 
@@ -242,6 +243,7 @@ public class Controleur implements Observateur {
                 } else if (a.getCartes().size() == 5) {                
 
                     montrerCartes.add(PileTresor.getSesCartes().get(0));   
+                    PileTresor.RemoveCarte(PileTresor.getSesCartes().get(0));  
                     
                 } else {
                     a.addCarte((CarteMain) PileTresor.getSesCartes().get(0));
@@ -257,7 +259,7 @@ public class Controleur implements Observateur {
                 
                 modePiocher = true;      
                 lastPlayer = this.aQuiLeTour();
-                
+                ihmJeu.afficherPioche();
                 ihmJeu.afficherCartesPioche(montrerCartes);   
                 
                 AfficherActionsPossibles();                
@@ -1211,6 +1213,7 @@ public class Controleur implements Observateur {
                     ihmJeu.getGrille().afficherPions(lesJoueurs);
                     ihmJeu.afficherCardsBorder();
                     ihmJeu.cacherNameBackground();
+                    ihmJeu.cacherPioche();
                     
                 break;
                 
@@ -1272,12 +1275,26 @@ public class Controleur implements Observateur {
                     ihmJeu.afficherCardsBorder(this.lastPlayer.getId());
                     
                 break;
+                
+                case DEFAUSSER_PIOCHE:
+                    modePiocher = false;
+                    modeRemplacer = false;
+                    ihmJeu.cacherPioche();
+                    // Enleve les images et ajoute à la défausse les cartes piochées
+                    for (Carte cartePiochee : montrerCartes) {
+                        defausseTresor.addPile(cartePiochee);
+                        ihmJeu.removeCardPiochee(0);
+                        ihmJeu.removeCardPiochee(1);
+                    }
+                    // Cache les bordures autour des cartes de chaque vueAventurier (si clic sur remplacer avant tout défausser)
+                    ihmJeu.cacherCardsBorder();
+                    montrerCartes.removeAll(montrerCartes);
+                    
             
                 case CHOISIR_CARTE:                    
                     if (modeDefausser) {
                         for (Aventurier a : this.lesJoueurs) {
                             if(a.getId() == m.getIdAventurier() ) {
-                                a.getCartes().get(m.getIdCarte()).changerProprio(null);                    
                                 defausseTresor.addPile(a.getCartes().get(m.getIdCarte()));                    
                                 a.defausserCarte(a.getCartes().get(m.getIdCarte()));
                                 
@@ -1348,36 +1365,52 @@ public class Controleur implements Observateur {
                                 ihmJeu.cacherCardsBorder(m.getIdCarte(), m.getIdAventurier());
                             }
                         }
-                    } else if (modePiocher) {                     
-
-                        System.out.println("dab");
+                    } else if (modePiocher) {
+                        
                         
                         if (modeRemplacer) {
                             
-                            System.out.println("yeet");
+                            // Enleve la carte remplacée de l'aventurier, et l'ajoute à la défausse
+                            this.defausseTresor.addPile(this.lastPlayer.getCartes().get(m.getIdCarte()));                        
+                            lastPlayer.getCartes().remove(this.lastPlayer.getCartes().get(m.getIdCarte()));
+
+                            // Ajoute la carte choisie à l'aventurier
+                            this.lastPlayer.getCartes().add((CarteMain) montrerCartes.get(cardSelectedId));
                             
-                           // Enleve la carte remplacée de l'aventurier, et l'ajoute à la défausse
-                           lastPlayer.getCartes().remove(this.lastPlayer.getCartes().get(m.getIdCarte()));
-                           this.defausseTresor.addPile(this.lastPlayer.getCartes().get(m.getIdCarte()));                        
+                            ihmJeu.afficherPioche();
 
-                           // Ajoute la carte choisie à l'aventurier
-                           this.lastPlayer.getCartes().add((CarteMain) PileTresor.getSesCartes().get(cardSelectedId));
-                           PileTresor.getSesCartes().remove(cardSelectedId);
+                            // S'il ne reste qu'une carte piochée, enlever l'image de la carte contenue dans le panel VueCarte d'index 1
+                            if (montrerCartes.size() == 1) {
+                                ihmJeu.removeCardPiochee(1);
+                                ihmJeu.cacherPioche();
+                            }                            
+                            
+                            // Enlever la carte choisie à l'ArrayList de cartes piochées
+                            montrerCartes.remove(cardSelectedId);
 
-                           // Met à jour les cartes de l'aventurier
-                           ihmJeu.updateCards(this.lastPlayer.getId(), this.lastPlayer.getCartes());
+                            // Met à jour les cartes de l'aventurier
+                            ihmJeu.updateCards(this.lastPlayer.getId(), this.lastPlayer.getCartes());
 
-                           // Enlève l'image de la carte choisie, ainsi que sa bordure
-                           ihmJeu.removeCardReplaced(cardSelectedId);
+                            // Enlève l'image de la carte choisie, ainsi que sa bordure
 
-                           // Cache les bordures rouges autour de chaque carte de chaque aventurier
-                           ihmJeu.cacherCardsBorder();
+                            ihmJeu.removeCardPiochee(cardSelectedId);
+                            
+                            // Cache les bordures rouges autour de chaque carte de chaque aventurier
+                            ihmJeu.cacherCardsBorder();
 
-                           modeRemplacer = false;
-
+                            modeRemplacer = false;
+                            // S'il n'y a plus de cartes à remplalcer, désactiver le mode Piocher
+                            
+                            // modePiocher tant qu'on peut remplacer des cartes
+                            modePiocher = !montrerCartes.isEmpty();
+                                
                         } else {
                             cardSelectedId = m.getIdCarte();
-                            System.out.println(cardSelectedId);
+                            
+                            // Si l'ArrayList de cartes piochées ne contient qu'une seule carte, cardSelectedId est forcée à 0
+                            // (Comme montrerCartes supprime les cartes déjà remplacées, l'index des cartes change)
+                            cardSelectedId = (montrerCartes.size() == 1 ? 0 : m.getIdCarte());
+                            
                             ihmJeu.possibleRemplacer();
                             ihmJeu.cacherCardsPiocheBorder(m.getIdCarte());
                         }

@@ -315,7 +315,7 @@ public class VueJeu implements Observe{
         annulerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Message m = new Message(Utils.Commandes.RECOMMENCER, 0, 0, null, 0);
+                    Message m = new Message(Utils.Commandes.DEFAUSSER_PIOCHE, 0, 0, null, 0);
                 notifierObservateur(m);
             }
         });
@@ -363,7 +363,7 @@ public class VueJeu implements Observe{
     }
     
     // Affiche les cartes piochées si le joueur courant en a déjà 5 dans sa main
-    public void afficherCartesPioche(ArrayList<CarteMain> cartes) {
+    public void afficherCartesPioche(ArrayList<Carte> cartes) {
         // Enleve toutes les cartes affichées
         for (VueCarte vC : vuesCartesPioche) {
             vC.removeCardImage();
@@ -377,8 +377,8 @@ public class VueJeu implements Observe{
         }
     }
     
-    // Enlève l'image de la carte d'id idCarte
-    public void removeCardReplaced(int idCarte) {
+    // Enlève l'image de la carte d'id idCarte du panel piocherPanel
+    public void removeCardPiochee(int idCarte) {
         for (VueCarte vC : vuesCartesPioche) {
             if (vC.getNumCarte() == idCarte) {
                 vC.removeCardImage();
@@ -397,14 +397,6 @@ public class VueJeu implements Observe{
             }
         }
     }
-//    // Enleve l'image de la derniere carte des cartes piochées
-//    public void defausseLastCardPioche(int idCarte) {
-//        for (VueCarte vC : vuesCartesPioche) {
-//            if (vC.getNumCarte() == idCarte) {
-//                vuesCartesPioche.get(vuesCartesPioche.size()-1).removeCardImage();
-//            }
-//        }
-//    }
     
     // Affiche des bordures rouges autour de chaque carte de chaque aventurier
     public void afficherCardsBorder() {
@@ -431,14 +423,12 @@ public class VueJeu implements Observe{
     
     // Enlève les bordures des cartes affichées après une pioche, sauf celle choisie auquelle on met une bordure bleue
     public void cacherCardsPiocheBorder(int numCarte) {
-        int x = 0;
         for (VueCarte vC : vuesCartesPioche) {
             if (vC.getNumCarte() == numCarte) {
-                vuesCartesPioche.get(x).setBorder(new LineBorder(Color.BLUE, 3)); 
+                vC.setBorder(new LineBorder(Color.BLUE, 3)); 
             } else {
-                vuesCartesPioche.get(x).setBorder(new LineBorder(new JButton().getBackground()));
+                vC.setBorder(new LineBorder(new JButton().getBackground()));
             }
-            x++;
         }
     }
     
@@ -512,7 +502,14 @@ public class VueJeu implements Observe{
         for (VueAventurier va : vuesAventuriers) {
             va.afficher();
         }
+    }
+    
+    public void afficherPioche() {
         piocherFrame.setVisible(true);
+    }
+    
+    public void cacherPioche() {
+        piocherFrame.setVisible(false);
     }
     
     public void cacher(){
