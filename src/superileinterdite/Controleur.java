@@ -24,7 +24,7 @@ public class Controleur implements Observateur {
         private int cardOwnerId, cardUsedId;
         private int tuileInitialeId;
         private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false, modeDefausser = false, 
-                modeDonner = false, modeDeplacerAutre = false, usingHelico = false, modeActionSpeciale = false, modeChoixHelicoDestination = false;
+                modeDonner = false, modeDeplacerAutre = false, modeActionSpeciale = false, modeChoixHelicoDestination = false;
         private ArrayList<Tuile> tAssech, tAccess;
         private Pile PileTresor,PileInondation,defausseTresor,defausseInondation;
         
@@ -554,7 +554,7 @@ public class Controleur implements Observateur {
                     }
                 }
             }
-           
+            
            tAccess = new ArrayList<>();
            tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
            
@@ -712,7 +712,7 @@ public class Controleur implements Observateur {
             this.piocherTresor(aQuiLeTour());
             
             if (this.aQuiLeTour().getRole().equals("pilote") && ((Pilote) this.aQuiLeTour()).getHelico()==false) {
-               ((Pilote) this.aQuiLeTour()).resetHelico();
+                ((Pilote) this.aQuiLeTour()).activerHelico();
             }
             piocherInondation();
             // Detecte si la victoire est encore possible
@@ -857,9 +857,10 @@ public class Controleur implements Observateur {
                                 ihmJeu.possibleAssecher();
                             }
 
-                            if( usingHelico && (((Pilote) this.aQuiLeTour()).getHelico())){
-                                ((Pilote)this.aQuiLeTour()).desactiverHelico();
+                            if(this.aQuiLeTour().getRole().equals("pilote") && ((Pilote) this.aQuiLeTour()).getHelico()){
+                                ((Pilote) this.aQuiLeTour()).desactiverHelico();                  
                             }
+
                         }
                         
                         // Détecte si le joueur peut encore jouer
@@ -985,6 +986,7 @@ public class Controleur implements Observateur {
                     modeDefausser = false;
                     modeAssechement = false;
                     modeDeplacerAutre = false;
+                    
                     if (!m.getHelico()) {
                         ihmJeu.impossibleDeplacer();
                         modeDeplacement = true;
@@ -996,17 +998,14 @@ public class Controleur implements Observateur {
                     this.tAccess = this.aQuiLeTour().TuilesAccessibles(this.laGrille);
 
                     if(this.aQuiLeTour().getRole().equals("pilote")){
-                        //on affiche le deplacement hélicoptère
-//                        if (((Pilote) this.aQuiLeTour()).getHelico()) {
-//                            ihmJeu.activerHelico();
-//                        }
+
                         if (m.getHelico()) {
                             this.tAccess = (((Pilote) this.aQuiLeTour()).deplacementHelico(this.getGrille()));
-                            usingHelico = true;
+                            ((Pilote)this.aQuiLeTour()).activerHelico();
                             ihmJeu.desactiverHelico();
                         } else if (((Pilote) this.aQuiLeTour()).getHelico()) {
                             ihmJeu.activerHelico();
-                            usingHelico = false;
+                            ((Pilote)this.aQuiLeTour()).desactiverHelico();
                         }
                         
                     }
