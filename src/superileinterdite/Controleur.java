@@ -20,10 +20,10 @@ public class Controleur implements Observateur {
 	private ArrayList<Pile> sesPiles ;
 	private int niveauEau;
         private int nbAction;
-        private int tour;
+        private int tour,nbtourassech;
         private int cardOwnerId, cardUsedId;
         private int tuileInitialeId;
-        private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false, modeDefausser = false, 
+        private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false, modeDefausser = false, deuxiemetouravant=false,
                         modeDonner = false, modeDeplacerAutre = false, modeActionSpeciale = false, modeChoixHelicoDestination = false;
         private ArrayList<Tuile> tAssech, tAccess;
         private Pile PileTresor,PileInondation,defausseTresor,defausseInondation;
@@ -382,6 +382,7 @@ public class Controleur implements Observateur {
         // Effectue un nouveau tour
         public void nvtour(){
             this.tour++;
+            doubleAssechement=false;
             ihmJeu.afficherJoueurCourant(this.aQuiLeTour().getId());
 
             this.remettreAJourAction();            
@@ -571,7 +572,11 @@ public class Controleur implements Observateur {
                 ihmJeu.possibleDeplacer();
             }
             else if(tAccess.size()>0){
-                ihmJeu.possibleDeplacer();
+                if(this.aQuiLeTour().getRole()=="ingenieur" && this.doubleAssechement && this.getActions()==1 && !this.deuxiemetouravant){
+                    ihmJeu.impossibleDeplacer();
+                } else{
+                    ihmJeu.possibleDeplacer();
+                }
             }
 
             // Regarde si le navigateur peut se déplacer
@@ -682,8 +687,12 @@ public class Controleur implements Observateur {
                 tm.add(Utils.Commandes.SE_DEPLACER);
             }
             else if(tAccess.size()>0){
-                ihmJeu.possibleDeplacer();
-                tm.add(Utils.Commandes.SE_DEPLACER);
+                if(this.aQuiLeTour().getRole()=="ingenieur" && this.doubleAssechement && this.getActions()==1 && !this.deuxiemetouravant){
+                    ihmJeu.impossibleDeplacer();
+                } else{
+                    ihmJeu.possibleDeplacer();
+                    tm.add(Utils.Commandes.SE_DEPLACER);
+                }
             }
 
             // Regarde si le navigateur peut se déplacer
@@ -711,6 +720,7 @@ public class Controleur implements Observateur {
         public void finTour(){            
             
             // Actualiser l'ihm   
+            nbtourassech=0;
             this.piocherTresor(aQuiLeTour());
             
             if (this.aQuiLeTour().getRole().equals("pilote") && ((Pilote) this.aQuiLeTour()).getHelico()==false) {
@@ -945,25 +955,48 @@ public class Controleur implements Observateur {
                         } else {
 
                             ihmJeu.getGrille().afficherTuilesAssecher(tAssech);
-
                             // Gere le double assechement d'un ingenieur
                             if(this.aQuiLeTour().getRole()=="ingenieur" && !doubleAssechement){            
                                 if(this.getActions()==1){
                                     //appeler fonction qui desactive tous les boutons sauf celui de assechement et fintour
                                     doubleAssechement=true;
+                                    ihmJeu.impossibleAssecher();
+                                    ihmJeu.impossibleDefausser();
+                                    ihmJeu.impossibleDeplacer();
+                                    ihmJeu.impossibleDeplacerAutre();
+                                    ihmJeu.impossibleGiveCarte();
+                                    ihmJeu.impossibleRecupererTresor(); 
+                                    ihmJeu.desactiverHelico();
+                                    ihmJeu.impossibleActionSpeciale();
+                                    nbtourassech=this.nbAction;
                                 }
                                 else{
-                                    this.actionFinie();
-                                    doubleAssechement=true;
+                                    if(this.nbAction==2){
+                                        this.deuxiemetouravant=true;
+                                        this.actionFinie();
+                                        nbtourassech=this.nbAction;
+                                        doubleAssechement=true;
+                                        ihmJeu.possibleDeplacer();
+                                    } else{
+                                        this.actionFinie();
+                                        nbtourassech=this.nbAction;
+                                        doubleAssechement=true;
+                                        ihmJeu.possibleDeplacer();                                        
+                                    }
                                 }
                             } 
                             else if(this.aQuiLeTour().getRole()=="ingenieur" && doubleAssechement){
-                                if(doubleAssechement=false && this.getActions()==1){
-                                    this.actionFinie();
+                                if(nbtourassech!=this.nbAction){
+                                    this.doubleAssechement=true;
+                                   nbtourassech=this.nbAction;
+                                }
+                                else if(doubleAssechement=true && this.getActions()==1 && !this.deuxiemetouravant){
+                                   this.actionFinie();
                                     doubleAssechement=false;
                                 }
-                                else{
+                                else {
                                 doubleAssechement=false;
+                                this.deuxiemetouravant=false;
 
                                 }
                             } else {

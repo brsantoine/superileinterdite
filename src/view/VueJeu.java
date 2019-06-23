@@ -486,7 +486,3 @@ public class VueJeu implements Observe{
     
     
 }
-    
-
-    
-
