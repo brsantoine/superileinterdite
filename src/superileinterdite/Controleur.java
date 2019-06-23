@@ -777,17 +777,19 @@ public class Controleur implements Observateur {
             for(Aventurier a : lesJoueurs) {
                 if (a.getTuile().getEtat().equals("coulé")) {
                     a.getTuile().removeAventurier(a);
-                    if (a.getRole().equals("explorateur")) {
-                        a.updateTuile(a.TuilesAccessibles(laGrille).get(1));
-                    } else if (a.getRole().equals("plongeur")) {
-                        for(Tuile t : a.TuilesAccessibles(laGrille)) {
-                            if (!t.getEtat().equals("coulé")){
-                                a.updateTuile(t);
+                    if (!a.TuilesAccessibles(laGrille).isEmpty()) {
+                        if (a.getRole().equals("explorateur")) {
+                            a.updateTuile(a.TuilesAccessibles(laGrille).get(0));
+                        } else if (a.getRole().equals("plongeur")) {
+                            for(Tuile t : a.TuilesAccessibles(laGrille)) {
+                                if (!t.getEtat().equals("coulé")){
+                                    a.updateTuile(t);
+                                }
                             }
+                        } else {
+                            a.updateTuile(a.TuilesAccessibles(laGrille).get(0));
                         }
-                    } else {
-                        a.updateTuile(a.TuilesAccessibles(laGrille).get(0));
-                    }
+                    }                       
                 }
                 a.getTuile().addAventurier(a);             
             }
