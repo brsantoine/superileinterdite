@@ -41,6 +41,7 @@ public class VueAventurier extends JPanel implements Observe {
         this.add(namePanel, BorderLayout.NORTH);
         this.add(cardsPanel, BorderLayout.CENTER);
 
+        // id: id de l'aventurier qui a la carte, i: position de la carte
         for (int i = 0; i < 5; i++) {
             VueCarte vueC = new VueCarte(id, i);
             cardsList.add(vueC);

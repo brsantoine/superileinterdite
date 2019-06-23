@@ -36,7 +36,7 @@ public class Navigateur extends Aventurier {
         
         tuilesAccess2.addAll(tuilesAccess1);
         
-        tuilesAccess2.remove(this.getTuile());
+        tuilesAccess2.remove(a.getTuile());
         
         return tuilesAccess2;
     }

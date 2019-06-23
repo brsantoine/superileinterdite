@@ -18,13 +18,11 @@ public class Controleur implements Observateur {
         private VueMenu ihmMenu;
 	private VueJeu ihmJeu;
 	private ArrayList<Pile> sesPiles ;
-	private int niveauEau;
-        private int nbAction;
-        private int tour;
-        private int cardOwnerId, cardUsedId;
+	private int niveauEau, nbAction, tour, cardOwnerId, cardSelectedId;
+        private Aventurier lastPlayer;
         private int tuileInitialeId;
         private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false, modeDefausser = false, 
-                        modeDonner = false, modeDeplacerAutre = false, modeActionSpeciale = false, modeChoixHelicoDestination = false;
+                        modeDonner = false, modeDeplacerAutre = false, modeActionSpeciale = false, modeChoixHelicoDestination = false, modePiocher = false, modeRemplacer = false;
         private ArrayList<Tuile> tAssech, tAccess;
         private Pile PileTresor,PileInondation,defausseTresor,defausseInondation;
         
@@ -258,7 +256,18 @@ public class Controleur implements Observateur {
             ihmJeu.updateCards(a.getId(), a.getCartes());
            
             if (montrerCartes.size() > 0) {
-                // Envoyer l arraylist a l ihm
+                modeDefausser = false;
+                modeDonner = false;
+                modeActionSpeciale = false;
+                modePiocher = true;                
+                lastPlayer = this.aQuiLeTour();
+                
+                ihmJeu.afficherCartesPioche(montrerCartes);   
+                
+                AfficherActionsPossibles();                
+                ihmJeu.impossibleRemplacer();
+                ihmJeu.impossibleFinTour();
+                ihmJeu.possibleAnnuler();
                 
             }
             
@@ -501,86 +510,90 @@ public class Controleur implements Observateur {
             ihmJeu.impossibleDefausser();
             ihmJeu.impossibleActionSpeciale();
             
-            // Regarde si le joueur peut gagner un trésor
-            if(this.aQuiLeTour().getTuile() instanceof TuileTresor) {
+            if (!modePiocher) {
                 
-                for(CarteMain c : this.aQuiLeTour().getCartes()){                   
-                    for(CarteMain a : this.aQuiLeTour().getCartes()){
-                       if(a instanceof CarteTresors && c instanceof CarteTresors){
+                ihmJeu.possibleFinTour();
+                // Regarde si le joueur peut gagner un trésor
+                if(this.aQuiLeTour().getTuile() instanceof TuileTresor) {
 
-                       if(((CarteTresors) c).getTresor().equals(((CarteTresors) a).getTresor())){
-                        i++;
+                    for(CarteMain c : this.aQuiLeTour().getCartes()){                   
+                        for(CarteMain a : this.aQuiLeTour().getCartes()){
+                           if(a instanceof CarteTresors && c instanceof CarteTresors){
+
+                           if(((CarteTresors) c).getTresor().equals(((CarteTresors) a).getTresor())){
+                            i++;
+                           }
+                           if(i==4 && ((TuileTresor) this.aQuiLeTour().getTuile()).getTresor()==((CarteTresors) c).getTresor()){
+                               ihmJeu.possibleRecupererTresor();
+                               break;
+                           }
+                         }
                        }
-                       if(i==4 && ((TuileTresor) this.aQuiLeTour().getTuile()).getTresor()==((CarteTresors) c).getTresor()){
-                           ihmJeu.possibleRecupererTresor();
-                           break;
-                       }
-                     }
-                   }
-                   i=0;
-                }
-            }
-            
-            tAssech = new ArrayList<>();
-            tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
-
-            if (tAssech.size()>0) {
-
-                ihmJeu.possibleAssecher();
-            }
-            
-            // Regarde si le joueur peut donner une carte tresor
-            
-            if(!this.aQuiLeTour().getCartes().isEmpty()){ 
-                for(Aventurier a : this.getJoueurs()){                               
-                    if(a!=this.aQuiLeTour()){  
-                        if(a.getCartes().size()<5  && this.aQuiLeTour().getTuile()==a.getTuile()){
-                            ihmJeu.possibleGiveCarte();
-                            break;
-                        }
-                        else if(a.getCartes().size()<5  && this.aQuiLeTour().getRole()=="messager"){
-                            ihmJeu.possibleGiveCarte();
-                            break;
-                        }
-                   }
-                }       
-           }   
-            
-            for (Aventurier aventurier : this.lesJoueurs) {
-                if(!aventurier.getCartes().isEmpty()) {
-                    ihmJeu.possibleDefausser();
-                }
-                for (Carte carte : aventurier.getCartes()) {
-                    if (carte instanceof CarteActionSpeciale) {
-                        ihmJeu.possibleActionSpeciale();
+                       i=0;
                     }
                 }
-            }
-            
-           tAccess = new ArrayList<>();
-           tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
-           
-            // Regarde si le joueur peut se deplacer en fonction de son rôle
-            if(this.aQuiLeTour().getRole()=="plongeur"){                         
-                ihmJeu.possibleDeplacer();
-            }
-            else if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==true){
-                ihmJeu.possibleDeplacer();
-            }
-            else if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==false && tAccess.size()>0){
-                ihmJeu.possibleDeplacer();
-            }
-            else if(tAccess.size()>0){
-                ihmJeu.possibleDeplacer();
-            }
 
-            // Regarde si le navigateur peut se déplacer
-            if(this.aQuiLeTour().getRole()=="navigateur"){                       
-               for(Aventurier a : this.getJoueurs()){
-                   if(!a.TuilesAccessibles(this.getGrille()).isEmpty() && this.aQuiLeTour() != a){
-                   ihmJeu.possibleDeplacerAutre();
-                   break;
-                   }
+                tAssech = new ArrayList<>();
+                tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
+
+                if (tAssech.size()>0) {
+
+                    ihmJeu.possibleAssecher();
+                }
+
+                // Regarde si le joueur peut donner une carte tresor
+
+                if(!this.aQuiLeTour().getCartes().isEmpty()){ 
+                    for(Aventurier a : this.getJoueurs()){                               
+                        if(a!=this.aQuiLeTour()){  
+                            if(a.getCartes().size()<5  && this.aQuiLeTour().getTuile()==a.getTuile()){
+                                ihmJeu.possibleGiveCarte();
+                                break;
+                            }
+                            else if(a.getCartes().size()<5  && this.aQuiLeTour().getRole()=="messager"){
+                                ihmJeu.possibleGiveCarte();
+                                break;
+                            }
+                       }
+                    }       
+               }   
+
+                for (Aventurier aventurier : this.lesJoueurs) {
+                    if(!aventurier.getCartes().isEmpty()) {
+                        ihmJeu.possibleDefausser();
+                    }
+                    for (Carte carte : aventurier.getCartes()) {
+                        if (carte instanceof CarteActionSpeciale) {
+                            ihmJeu.possibleActionSpeciale();
+                        }
+                    }
+                }
+
+               tAccess = new ArrayList<>();
+               tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
+
+                // Regarde si le joueur peut se deplacer en fonction de son rôle
+                if(this.aQuiLeTour().getRole()=="plongeur"){                         
+                    ihmJeu.possibleDeplacer();
+                }
+                else if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==true){
+                    ihmJeu.possibleDeplacer();
+                }
+                else if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==false && tAccess.size()>0){
+                    ihmJeu.possibleDeplacer();
+                }
+                else if(tAccess.size()>0){
+                    ihmJeu.possibleDeplacer();
+                }
+
+                // Regarde si le navigateur peut se déplacer
+                if(this.aQuiLeTour().getRole()=="navigateur"){                       
+                   for(Aventurier a : this.getJoueurs()){
+                       if(!a.TuilesAccessibles(this.getGrille()).isEmpty() && this.aQuiLeTour() != a){
+                       ihmJeu.possibleDeplacerAutre();
+                       break;
+                       }
+                    }
                 }
             }
         }
@@ -599,112 +612,118 @@ public class Controleur implements Observateur {
             ihmJeu.impossibleDefausser();
             ihmJeu.impossibleActionSpeciale();
             
-            // Regarde si le joueur peut gagner un trésor
-            if(this.aQuiLeTour().getTuile() instanceof TuileTresor) {
+            
+            if (!modePiocher) {
                 
-                for(CarteMain c : this.aQuiLeTour().getCartes()){                   
-                    for(CarteMain a : this.aQuiLeTour().getCartes()){
-                       if(a instanceof CarteTresors && c instanceof CarteTresors){
+                ihmJeu.possibleFinTour();
+                
+                // Regarde si le joueur peut gagner un trésor
+                if(this.aQuiLeTour().getTuile() instanceof TuileTresor) {
 
-                       if(((CarteTresors) c).getTresor().equals(((CarteTresors) a).getTresor())){
-                        i++;
+                    for(CarteMain c : this.aQuiLeTour().getCartes()){                   
+                        for(CarteMain a : this.aQuiLeTour().getCartes()){
+                           if(a instanceof CarteTresors && c instanceof CarteTresors){
+
+                           if(((CarteTresors) c).getTresor().equals(((CarteTresors) a).getTresor())){
+                            i++;
+                           }
+                           if(i==4 && ((TuileTresor) this.aQuiLeTour().getTuile()).getTresor()==((CarteTresors) c).getTresor()){
+                               tm.add(Utils.Commandes.RECUPERER_TRESOR);
+                               ihmJeu.possibleRecupererTresor();
+                               break;
+                           }
+                         }
                        }
-                       if(i==4 && ((TuileTresor) this.aQuiLeTour().getTuile()).getTresor()==((CarteTresors) c).getTresor()){
-                           tm.add(Utils.Commandes.RECUPERER_TRESOR);
-                           ihmJeu.possibleRecupererTresor();
-                           break;
-                       }
-                     }
-                   }
-                    if (tm.contains(Utils.Commandes.RECUPERER_TRESOR)) {
-                        break;
-                    }
-                   i=0;
-                }
-            }
-            
-            for (Aventurier aventurier : this.lesJoueurs) {
-                if(!aventurier.getCartes().isEmpty()) {
-                    ihmJeu.possibleDefausser();
-                }
-                for (Carte carte : aventurier.getCartes()) {
-                    if (carte instanceof CarteActionSpeciale) {
-                        ihmJeu.possibleActionSpeciale();
-                    }
-                }
-            }
-            
-            tAssech = new ArrayList<>();
-            tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
-
-            if (tAssech.size()>0) {
-
-                tm.add(Utils.Commandes.ASSECHER);  
-                ihmJeu.possibleAssecher();
-            }
-            
-            // Regarde si le joueur peut donner une carte tresor
-            
-            if(!this.aQuiLeTour().getCartes().isEmpty()){                       
-                for(Aventurier a : this.getJoueurs()){                               
-                    if(a!=this.aQuiLeTour()){  
-                        if(a.getCartes().size()<5  && this.aQuiLeTour().getTuile()==a.getTuile()){
-                            tm.add(Utils.Commandes.DONNER);
-                            ihmJeu.possibleGiveCarte();
+                        if (tm.contains(Utils.Commandes.RECUPERER_TRESOR)) {
                             break;
                         }
-                        else if(a.getCartes().size()<5  && this.aQuiLeTour().getRole()=="messager"){
-                            ihmJeu.possibleGiveCarte();
-                            tm.add(Utils.Commandes.DONNER);
-                            break;
-                        }
-                   }
-                }       
-           }    
-           
-
-           tAccess = new ArrayList<>();
-           tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
-           
-           
-           
-            // Regarde si le joueur peut se deplacer en fonction de son rôle
-            if(this.aQuiLeTour().getRole()=="plongeur"){                         
-                tm.add(Utils.Commandes.SE_DEPLACER);
-                ihmJeu.possibleDeplacer();
-            }
-            else if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==true){
-                ihmJeu.possibleDeplacer();
-                tm.add(Utils.Commandes.SE_DEPLACER);
-            }
-            else if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==false && tAccess.size()>0){
-                ihmJeu.possibleDeplacer();
-                tm.add(Utils.Commandes.SE_DEPLACER);
-            }
-            else if(tAccess.size()>0){
-                ihmJeu.possibleDeplacer();
-                tm.add(Utils.Commandes.SE_DEPLACER);
-            }
-
-            // Regarde si le navigateur peut se déplacer
-            if(this.aQuiLeTour().getRole()=="navigateur"){                       
-               for(Aventurier a : this.getJoueurs()){
-                   if(!a.TuilesAccessibles(this.getGrille()).isEmpty() && this.aQuiLeTour() != a){
-                   tm.add(Utils.Commandes.DEPLACER_AUTRE);
-                   ihmJeu.possibleDeplacerAutre();
-                   break;
-                   }
+                       i=0;
+                    }
                 }
-            }
 
-            tm.add(Utils.Commandes.FIN_TOUR);
-            //envoyer a l'ihm les actions possibles
-            ihmJeu.getMessageBox().displayMessage("Voici vos actions possibles", Color.black, false, false);
-            String actions = new String();
-            for(Utils.Commandes u : tm){
-                actions = actions + "<li>" + u.toString() + "</li>";
+                for (Aventurier aventurier : this.lesJoueurs) {
+                    if(!aventurier.getCartes().isEmpty()) {
+                        ihmJeu.possibleDefausser();
+                    }
+                    for (Carte carte : aventurier.getCartes()) {
+                        if (carte instanceof CarteActionSpeciale) {
+                            ihmJeu.possibleActionSpeciale();
+                        }
+                    }
+                }
+
+                tAssech = new ArrayList<>();
+                tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
+
+                if (tAssech.size()>0) {
+
+                    tm.add(Utils.Commandes.ASSECHER);  
+                    ihmJeu.possibleAssecher();
+                }
+
+                // Regarde si le joueur peut donner une carte tresor
+
+                if(!this.aQuiLeTour().getCartes().isEmpty()){                       
+                    for(Aventurier a : this.getJoueurs()){                               
+                        if(a!=this.aQuiLeTour()){  
+                            if(a.getCartes().size()<5  && this.aQuiLeTour().getTuile()==a.getTuile()){
+                                tm.add(Utils.Commandes.DONNER);
+                                ihmJeu.possibleGiveCarte();
+                                break;
+                            }
+                            else if(a.getCartes().size()<5  && this.aQuiLeTour().getRole()=="messager"){
+                                ihmJeu.possibleGiveCarte();
+                                tm.add(Utils.Commandes.DONNER);
+                                break;
+                            }
+                       }
+                    }       
+               }    
+
+
+               tAccess = new ArrayList<>();
+               tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
+
+
+
+                // Regarde si le joueur peut se deplacer en fonction de son rôle
+                if(this.aQuiLeTour().getRole()=="plongeur"){                         
+                    tm.add(Utils.Commandes.SE_DEPLACER);
+                    ihmJeu.possibleDeplacer();
+                }
+                else if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==true){
+                    ihmJeu.possibleDeplacer();
+                    tm.add(Utils.Commandes.SE_DEPLACER);
+                }
+                else if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==false && tAccess.size()>0){
+                    ihmJeu.possibleDeplacer();
+                    tm.add(Utils.Commandes.SE_DEPLACER);
+                }
+                else if(tAccess.size()>0){
+                    ihmJeu.possibleDeplacer();
+                    tm.add(Utils.Commandes.SE_DEPLACER);
+                }
+
+                // Regarde si le navigateur peut se déplacer
+                if(this.aQuiLeTour().getRole()=="navigateur"){                       
+                   for(Aventurier a : this.getJoueurs()){
+                       if(!a.TuilesAccessibles(this.getGrille()).isEmpty() && this.aQuiLeTour() != a){
+                       tm.add(Utils.Commandes.DEPLACER_AUTRE);
+                       ihmJeu.possibleDeplacerAutre();
+                       break;
+                       }
+                    }
+                }
+
+                tm.add(Utils.Commandes.FIN_TOUR);
+                //envoyer a l'ihm les actions possibles
+                ihmJeu.getMessageBox().displayMessage("Voici vos actions possibles", Color.black, false, false);
+                String actions = new String();
+                for(Utils.Commandes u : tm){
+                    actions = actions + "<li>" + u.toString() + "</li>";
+                }
+                ihmJeu.getMessageBox().displayMessage("<ul>" + actions + "</ul>", Color.black, false, false);
             }
-            ihmJeu.getMessageBox().displayMessage("<ul>" + actions + "</ul>", Color.black, false, false);
         }
 
         // Effectue toutes les actions nécessaires apres qu'un joueur ai fini ses actions  
@@ -855,9 +874,9 @@ public class Controleur implements Observateur {
                                 }
                                 
                                 if(a.getId() == cardOwnerId) {
-                                    a.getCartes().get(cardUsedId).changerProprio(null);                    
-                                    defausseTresor.addPile(a.getCartes().get(cardUsedId));                    
-                                    a.defausserCarte(a.getCartes().get(cardUsedId));
+                                    a.getCartes().get(cardSelectedId).changerProprio(null);                    
+                                    defausseTresor.addPile(a.getCartes().get(cardSelectedId));                    
+                                    a.defausserCarte(a.getCartes().get(cardSelectedId));
                                     
                                     ihmJeu.updateCards(a.getId(), a.getCartes());
                                     ihmJeu.defausseLastCard(a.getId());
@@ -931,9 +950,9 @@ public class Controleur implements Observateur {
                             for (Aventurier a : this.lesJoueurs) {
                                 if(a.getId() == cardOwnerId) {
                                 
-                                    a.getCartes().get(cardUsedId).changerProprio(null);                    
-                                    defausseTresor.addPile(a.getCartes().get(cardUsedId));                    
-                                    a.defausserCarte(a.getCartes().get(cardUsedId));
+                                    a.getCartes().get(cardSelectedId).changerProprio(null);                    
+                                    defausseTresor.addPile(a.getCartes().get(cardSelectedId));                    
+                                    a.defausserCarte(a.getCartes().get(cardSelectedId));
                                     
                                     ihmJeu.updateCards(a.getId(), a.getCartes());
                                     ihmJeu.defausseLastCard(a.getId());
@@ -1247,6 +1266,18 @@ public class Controleur implements Observateur {
                     
                 break;
                 
+                case REMPLACER: 
+                    modeRemplacer = true;
+                    modePiocher = false;
+                    modeDonner = false;
+                    modeDefausser = false;
+                    modeActionSpeciale = false;
+                    
+                    ihmJeu.impossibleRemplacer();
+                    ihmJeu.afficherCardsBorder(this.lastPlayer.getId());
+                    
+                break;
+            
                 case CHOISIR_CARTE:                    
                     if (modeDefausser) {
                         for (Aventurier a : this.lesJoueurs) {
@@ -1287,7 +1318,7 @@ public class Controleur implements Observateur {
                     } else if (modeActionSpeciale) {
 
                         cardOwnerId = m.getIdAventurier();
-                        cardUsedId = m.getIdCarte();
+                        cardSelectedId = m.getIdCarte();
                         
                         tAssech.removeAll(tAssech);
                         tAccess.removeAll(tAccess);
@@ -1322,7 +1353,32 @@ public class Controleur implements Observateur {
                                 ihmJeu.cacherCardsBorder(m.getIdCarte(), m.getIdAventurier());
                             }
                         }
-                    }
+                    } else if (modePiocher) {
+                        
+                        cardSelectedId = m.getIdCarte();
+                        ihmJeu.possibleRemplacer();
+                        ihmJeu.cacherCardsPiocheBorder(m.getIdCarte());
+                        
+                    } else if (modeRemplacer) {
+                        
+                        // Enleve la carte remplacée de l'aventurier, et l'ajoute à la défausse
+                        lastPlayer.getCartes().remove(this.lastPlayer.getCartes().get(m.getIdCarte()));
+                        this.defausseTresor.addPile(this.lastPlayer.getCartes().get(m.getIdCarte()));                        
+                        
+                        // Ajoute la carte choisie à l'aventurier
+                        this.lastPlayer.getCartes().add((CarteMain) PileTresor.getSesCartes().get(cardSelectedId));
+                        PileTresor.getSesCartes().remove(cardSelectedId);
+                        
+                        // Met à jour les cartes de l'aventurier
+                        ihmJeu.updateCards(this.lastPlayer.getId(), this.lastPlayer.getCartes());
+                        
+                        // Enlève l'image de la carte choisie, ainsi que sa bordure
+                        ihmJeu.removeCardReplaced(cardSelectedId);
+                        
+                        // Cache les bordures rouges autour de chaque carte de chaque aventurier
+                        ihmJeu.cacherCardsBorder();
+                        
+                    }                    
                     
                     AfficherActionsPossibles();
                     
