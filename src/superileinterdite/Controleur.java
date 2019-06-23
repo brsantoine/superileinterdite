@@ -24,7 +24,7 @@ public class Controleur implements Observateur {
         private int cardOwnerId, cardUsedId;
         private int tuileInitialeId;
         private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false, modeDefausser = false, 
-                modeDonner = false, modeDeplacerAutre = false, modeActionSpeciale = false, modeChoixHelicoDestination = false;
+                        modeDonner = false, modeDeplacerAutre = false, modeActionSpeciale = false, modeChoixHelicoDestination = false;
         private ArrayList<Tuile> tAssech, tAccess;
         private Pile PileTresor,PileInondation,defausseTresor,defausseInondation;
         
@@ -718,7 +718,7 @@ public class Controleur implements Observateur {
             }
             piocherInondation();
             // Detecte si la victoire est encore possible
-            if(cestgagne()){
+            if (cestgagne()){
                 ihmJeu.afficherVictoire();
                 ihmJeu.afficherBoutonRecommencer();
                 ihmJeu.afficherDefaite();
@@ -761,8 +761,9 @@ public class Controleur implements Observateur {
                 ihmJeu.getGrille().afficherPions(lesJoueurs);
             }
             
+            // Déplace chaque pion automatiquement si leur tuile coule
             for(Aventurier a : lesJoueurs) {
-                if (a.getTuile().getEtat().equals("inondé")) {
+                if (a.getTuile().getEtat().equals("coulé")) {
                     a.getTuile().removeAventurier(a);
                     if (a.getRole().equals("explorateur")) {
                         a.updateTuile(a.TuilesAccessibles(laGrille).get(1));
@@ -781,7 +782,6 @@ public class Controleur implements Observateur {
             ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
             ihmJeu.getGrille().afficherPions(lesJoueurs);
         }
-        
       
         @Override
 	public void traiterMessage(Message m) {
@@ -1390,7 +1390,6 @@ public class Controleur implements Observateur {
                     modeDefausser = false; 
                     modeDonner = false; 
                     modeDeplacerAutre = false; 
-                    usingHelico = false;
                     tAssech.removeAll(tAssech);
                     tAccess.removeAll(tAccess);
                     for (Aventurier a : this.getJoueurs()) {
@@ -1405,7 +1404,6 @@ public class Controleur implements Observateur {
                     this.defausseTresor.ViderPile();
                     this.lesTresors.removeAll(this.lesTresors);
                     this.laGrille.getTuiles().removeAll(laGrille.getTuiles());
-                    
                     
                     this.ihmJeu.cacher();
                 break;
