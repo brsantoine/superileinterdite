@@ -18,13 +18,13 @@ public class VueGrille extends JPanel implements Observe{
      
         gc.weightx = 0.15;
         gc.weighty = 0.15;        
-        gc.insets = new Insets(0,0,0,0);
         gc.fill = GridBagConstraints.BOTH;           
         gc.gridy = 0;
         
         grid = new ArrayList<>();
         
-        // Création des boutons composant la grille 
+        // Création des vueTuiles composant la grille 
+        
         for (int i = 2; i < 4; i++) {
             gc.gridx = i;
             VueTuile tuile = new VueTuile();  
@@ -72,6 +72,7 @@ public class VueGrille extends JPanel implements Observe{
             grid.add(tuile);
         }
         
+        // Ajoute les id des tuiles, de 0 a 23 (identique aux tuiles)
         for (int i = 0; i < grid.size(); i++) {
             grid.get(i).setID(i);
             grid.get(i).addObservateur(this.observateur);
@@ -84,10 +85,8 @@ public class VueGrille extends JPanel implements Observe{
     
     // Affiche en vert toutes les tuiles accessibles par l'aventurier courant (ou avec la carte Heli)
     public void afficherTuilesDeplacer(ArrayList<Tuile> tuilesAccessibles) {
-
         for (Tuile tuile : tuilesAccessibles) {
             for (VueTuile vTuile : grid) {
-//                vTuile.setEnabled(false);
                 if (vTuile.getID() == tuile.getID()) {
                     vTuile.setBorder(new LineBorder(Color.GREEN, 3));
                     vTuile.setEnabled(true);
@@ -96,11 +95,10 @@ public class VueGrille extends JPanel implements Observe{
         }
     }
     
+    // Affiche en vert toutes les tuiles accessibles par l'aventurier d'id numAv (utilisé par Navigateur pour déplacer un autre aventurier)
     public void afficherTuilesDeplacer(ArrayList<Tuile> tuiles, int numAv) {
-
         for (Tuile tuile : tuiles) {
             for (VueTuile vTuile : grid) {
-//                vTuile.setEnabled(false);
                 if (vTuile.getID() == tuile.getID()) {
                     vTuile.setBorder(new LineBorder(Color.GREEN, 3));
                     vTuile.setEnabled(true);
@@ -112,10 +110,8 @@ public class VueGrille extends JPanel implements Observe{
     
     // Affiche en bleu toutes les tuiles asséchables par l'aventurier courant (ou avec la carte Sac)
     public void afficherTuilesAssecher(ArrayList<Tuile> tuiles) {
-        
         for (Tuile tuile : tuiles) {
             for (VueTuile vTuile : grid) {
-//                vTuile.setEnabled(false);
                 if (vTuile.getID() == tuile.getID()) {
                     vTuile.setBorder(new LineBorder(Color.BLUE, 3));
                     vTuile.setEnabled(true);
@@ -124,50 +120,22 @@ public class VueGrille extends JPanel implements Observe{
         }
     }
     
+    // Affiche les pions sur la grille
     public void afficherPions(ArrayList<Aventurier> aventuriers) {        
-        // Remet toutes les bordures à la couleur par défaut
-//        for (int i = 0; i < grid.size() ; i++) {
-//            grid.get(i).setBorder(new LineBorder(new JButton().getBackground()));
-//            grid.get(i).setBackground(new JButton().getBackground());
-//        }
-        
-        // Met les labels sur toutes les cases de la grille
         for (int i = 0; i < grid.size() ; i++) {
-//            grid.get(i).setBorder(new LineBorder(new JButton().getBackground()));
-            // Met à jour les couleurs des bordures en fonction de la position des aventuriers
-            
             int j = 0;
             for (Aventurier aventurier : aventuriers) {
                 if (aventurier.getTuile().getID() == grid.get(i).getID()) {
-//                    grid.get(i).setBorderPainted(true);
-                        grid.get(i).afficherPion(j);
-                        
-                    /*if (aventurier.getCouleur().equals("Vert")) {
-                        grid.get(i).setBorder(new LineBorder(Color.GREEN, 5));
-                    } else if (aventurier.getCouleur().equals("Violet")) {
-                        grid.get(i).setBorder(new LineBorder(new Color(255, 0,255), 5));
-                    } else if (aventurier.getCouleur().equals("Jaune")) {
-                        grid.get(i).setBorder(new LineBorder(Color.YELLOW, 5));
-                    } else if (aventurier.getCouleur().equals("Noir")) {
-                        grid.get(i).setBorder(new LineBorder(Color.BLACK, 5));
-                    } else if (aventurier.getCouleur().equals("Gris")) {
-                        grid.get(i).setBorder(new LineBorder(Color.GRAY, 5));
-                    } else if (aventurier.getCouleur().equals("Bronze")) {
-                        grid.get(i).setBorder(new LineBorder(new Color(176, 141, 87), 5));
-                    } else if (aventurier.getCouleur().equals("Bleu")) {
-                        grid.get(i).setBorder(new LineBorder(Color.BLUE, 5));
-                    } else if (aventurier.getCouleur().equals("Rouge")) {
-                        grid.get(i).setBorder(new LineBorder(Color.RED, 5));
-                    }   */                 
+                    grid.get(i).afficherPion(j);
                 }
                 j++;
             }    
         }   
     }
     
+    // Met les images sur toutes les tuiles de la grille
     public void initialiserGrille(ArrayList<Tuile> tuiles, ArrayList<Aventurier> aventuriers) {
         resetGrille(tuiles);   
-        // Met les images sur toutes les tuiles de la grille
         for (int i = 0; i < grid.size() ; i++) {
             String nom = new String(tuiles.get(i).getNom());
             nom = nom.replaceAll("\\s", "");
@@ -177,7 +145,7 @@ public class VueGrille extends JPanel implements Observe{
         }
     }
     
-    // Désactive tous les boutons de la grille, et redonne la possibilité de cliquer sur asécher et se déplacer
+    // Cache les pions, retire les bordures et affiche uniquement les tuiles en fonction de leur état
     public void resetGrille(ArrayList<Tuile> tuiles) {
         int i = 0;
         for (Tuile tuile : tuiles) {
@@ -200,7 +168,6 @@ public class VueGrille extends JPanel implements Observe{
         for (int i = 0; i < grid.size(); i++) {
             grid.get(i).addObservateur(o);
         }
-
     }
     
     @Override
@@ -209,6 +176,4 @@ public class VueGrille extends JPanel implements Observe{
             observateur.traiterMessage(m);
         }
     }
-    
-    
 }

@@ -5,10 +5,6 @@ import java.util.ArrayList;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
-/**
- *
- * @author IUT2-Dept Info
- */
 public class Message implements Serializable {
     private final Utils.Commandes commande ;
     private final Integer idAventurier ;
@@ -28,9 +24,6 @@ public class Message implements Serializable {
         this.idTuile = idTuile ;
     }
    
-    /**
-     * @return the commande
-     */
     public Boolean hasCommande() {
         return commande != null ;
     }
@@ -38,9 +31,6 @@ public class Message implements Serializable {
         return commande;
     }
 
-    /**
-     * @return the idAventurier`
-     */
     public Boolean hasIdAventurier() {
         return idAventurier != null ;
     }
@@ -48,9 +38,6 @@ public class Message implements Serializable {
         return idAventurier;
     }
 
-    /**
-     * @return the idCarte
-     */
     public Boolean hasIdCarte() {
         return idCarte != null ;
     }
@@ -58,9 +45,6 @@ public class Message implements Serializable {
         return idCarte;
     }
 
-    /**
-     * @return the tresor
-     */
     public Boolean hasTresor() {
         return tresor != null ;
     }
@@ -68,9 +52,6 @@ public class Message implements Serializable {
         return tresor;
     }
 
-    /**
-     * @return the idTuile
-     */
     public Boolean hasIdTuile() {
         return idTuile != null;
     }
@@ -109,23 +90,5 @@ public class Message implements Serializable {
     public void setNiveauEau(JComboBox niveauEau) {
         this.niveauEau = niveauEau;
     }
-    
-    @Override
-    public String toString() {
-        String txt = "" ;
-        txt += commande.toString() + " " ;
-        if (hasIdAventurier()) {
-            txt += " aventurier=" + idAventurier ;
-        }
-        if (hasIdCarte()) {
-            txt += " carte=" + idCarte ;
-        }
-        if (hasIdTuile()) {
-            txt += " tuile=" + idTuile ;
-        }
-        if (hasTresor()) {
-            txt += " tresor=" + tresor.toString() ;
-        }
-        return txt ;
-    }
+
 }

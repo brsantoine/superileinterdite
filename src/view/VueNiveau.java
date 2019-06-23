@@ -8,10 +8,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.HashMap;
-import java.util.Scanner;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
@@ -28,9 +26,6 @@ public class VueNiveau extends JPanel{
     public VueNiveau(Integer niveauInitial) {
         this.niveau = niveauInitial;
         panelsGauches = new HashMap<>();
-
-//        setSize(cellWidth*2+Parameters.SWING_BORDERS_HEIGHT, Parameters.HAUTEUR_AUTRES_VUES);        
-//        setLocation(30, Parameters.TOP_AUTRES_VUES);
         
         this.mainPanel = new JPanel() ;
         this.add(mainPanel);
@@ -40,7 +35,6 @@ public class VueNiveau extends JPanel{
         
         JLabel labelTitre = new JLabel("Niveau", JLabel.CENTER);
         this.mainPanel.add(labelTitre, BorderLayout.NORTH);
-        // labelTitre.setFont(labelTitre.getFont().deriveFont(Font.BOLD));
         labelTitre.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 14));
         
         JPanel panelNiveaux = new JPanel(new GridBagLayout());
@@ -117,7 +111,6 @@ public class VueNiveau extends JPanel{
     }
 
     public void setNiveau(Integer niveau) {
-        System.out.println("VueNiveau_nopic.setNiveau(" + niveau + ")");
         panelsGauches.get(this.niveau).setBackground(getBgColor(this.niveau - 1));
         this.niveau = niveau ;
         panelsGauches.get(this.niveau).setBackground(this.niveau == 10 ? Color.RED : Color.YELLOW);
@@ -172,17 +165,4 @@ public class VueNiveau extends JPanel{
         this.setVisible(true);
     }
     
-//    public static void main(String[] args) {   
-//        VueNiveau vueNiveau = new VueNiveau(1);
-//
-//        Scanner scanner = new Scanner(System.in);
-//
-//        System.out.println("Pour passer au niveau 5, appuyer sur entrée");
-//        String suite = scanner.nextLine();        
-//        vueNiveau.setNiveau(5);
-//
-//        System.out.println("Pour passer au niveau 5, appuyer sur entrée");
-//        suite = scanner.nextLine();
-//        vueNiveau.setNiveau(10);
-//    }    
 }

@@ -1,8 +1,6 @@
 package view;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.*;
@@ -19,12 +17,8 @@ public class VueAventurier extends JPanel implements Observe {
     private JPanel cardsPanel, namePanel;
     private ArrayList<VueCarte> cardsList;
     
-    
     public VueAventurier(int id, String role) {
-        this.setID(id);                
-//        this.setSize(new Dimension(Parameters.LARGEUR_VUE_AVENTURIER, Parameters.HAUTEUR_VUE_AVENTURIER));
-//        this.add(new JLabel(role));
-        
+        this.setID(id);                       
 
         this.setLayout(new BorderLayout(0,Parameters.CARD_VERTICAL_SPACE));
         
@@ -74,6 +68,7 @@ public class VueAventurier extends JPanel implements Observe {
         });    
         
     }   
+    
     public void afficherCartes(ArrayList<CarteMain> cartes) {
         // Enleve toutes les cartes affichées
         for (VueCarte vC : cardsList) {
@@ -96,7 +91,11 @@ public class VueAventurier extends JPanel implements Observe {
         this.idAventurier = id;
     }
     
-    // Ajoute une bordure rouge aux cartes choisissables (si elles ont une image)
+    public int getID() {
+        return this.idAventurier;
+    }
+    
+    // Affiche une bordure rouge aux cartes choisissables (si elles ont une image)
     public void afficherCardsBorder() {
         for (VueCarte vC : cardsList) {
             if (vC.getHasImage()) {
@@ -105,6 +104,7 @@ public class VueAventurier extends JPanel implements Observe {
         }
     }
     
+    // Affiche une bordure rouge aux carte actions spéciales
     public void afficherCardsActionSpecialeBorder() {
         for (VueCarte vC : cardsList) {
             if (vC.getIsSpecial()){
@@ -132,6 +132,7 @@ public class VueAventurier extends JPanel implements Observe {
 
     }
     
+    // Affiche la bordure autour des noms de chaque aventurier, en fonction de leur couleur choisie
     public void setNameBorder(String color) {
         if (color.equals("Vert")) {
             namePanel.setBorder(new LineBorder(Color.GREEN, 5));
@@ -164,10 +165,6 @@ public class VueAventurier extends JPanel implements Observe {
         this.cardToGive = numCarte;
     }
     
-    public int getID() {
-        return this.idAventurier;
-    }
-    
     public void afficher() {
         this.setVisible(true);
     }
@@ -186,6 +183,5 @@ public class VueAventurier extends JPanel implements Observe {
             observateur.traiterMessage(m);
         }
     }
-    
    
 }

@@ -16,7 +16,7 @@ public class Navigateur extends Aventurier {
         int x = a.getTuile().getX();
         int y = a.getTuile().getY();
         
-        //Comme pour les tuilesAccessibles, mais avec les coordonnées de l'aventurier qu'il souhaite déplacer
+        // Comme pour les tuilesAccessibles, mais avec les coordonnées de l'aventurier qu'il souhaite déplacer
         // Fonction non testée pour le moment
         ArrayList<Tuile> tuilesAccess1 = new ArrayList<Tuile>();
         for (Tuile tuile : g.getTuiles()) {
@@ -33,9 +33,7 @@ public class Navigateur extends Aventurier {
                 }
             }
         }
-        
         tuilesAccess2.addAll(tuilesAccess1);
-        
         tuilesAccess2.remove(a.getTuile());
         
         return tuilesAccess2;

@@ -7,5 +7,4 @@ public class Messager extends Aventurier {
     public Messager () {
         super("messager");
     }
-    
 }

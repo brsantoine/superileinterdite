@@ -1,7 +1,6 @@
 package aventuriers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import model.Aventurier;
 import superileinterdite.Grille;
 import model.Tuile;

@@ -15,8 +15,5 @@ public class CarteInondation extends Carte {
     public Tuile getTuile() {
         return tuile;
     }
-    
-    
-    
-    
+        
 }

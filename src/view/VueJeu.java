@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
 
 import java.awt.*;
@@ -14,16 +9,8 @@ import model.*;
 import superileinterdite.*;
 import util.*;
 
-/**
- *
- * @author aragnoua
- */
 public class VueJeu implements Observe{
 
-    /**
-     * @param args the command line arguments
-     */
-    
     private JFrame leftFrame, gameFrame, piocherFrame;
     private Observateur observateur;
     private VueNiveau vueNiveau;
@@ -171,7 +158,6 @@ public class VueJeu implements Observe{
         
 
         piocherFrame.setLayout(new BorderLayout());
-//        piocherFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
         piocherFrame.setResizable(Parameters.RESIZABLE);
         piocherFrame.setUndecorated(Parameters.UNDECORATED);
         piocherFrame.setLocation(Parameters.LEFT_FRAME_WIDTH + Parameters.HORIZONTAL_BUFFER + Parameters.HORIZONTAL_SPACE + (Parameters.GRID_WIDTH/4),
@@ -183,26 +169,26 @@ public class VueJeu implements Observe{
         piocherFrame.add(new JPanel(), BorderLayout.SOUTH);
         
         
-            // ------------- cardsProposesPanel -------------
-            
-            cardsProposesPanel.setPreferredSize(new Dimension(Parameters.PIOCHER_FRAME_WIDTH, Parameters.PIOCHER_FRAME_HEIGHT*80/100));            
-            cardsProposesPanel.setLayout(new BorderLayout());
-            
-            cartesPiocheesLabel = new JLabel("Cartes piochées: ", SwingConstants.CENTER);            
-            cartesPiocheesLabel.setFont(cartesPiocheesLabel.getFont ().deriveFont (20.0f));
-            cardsProposesGridPanel = new JPanel();
-            
-            cardsProposesPanel.add(cartesPiocheesLabel, BorderLayout.NORTH);
-            cardsProposesPanel.add(cardsProposesGridPanel, BorderLayout.CENTER);
-            
-            vuesCartesPioche = new ArrayList<>();
-            for (int j = 0; j < 2; j++) {
-                VueCarte vC = new VueCarte(-1, j);
-                vuesCartesPioche.add(vC);
-            }
-            for (VueCarte vueCarte : vuesCartesPioche) {
-                cardsProposesGridPanel.add(vueCarte);
-            }
+        // ============= CARDSPROPOSESPANEL =============
+
+        cardsProposesPanel.setPreferredSize(new Dimension(Parameters.PIOCHER_FRAME_WIDTH, Parameters.PIOCHER_FRAME_HEIGHT*80/100));            
+        cardsProposesPanel.setLayout(new BorderLayout());
+
+        cartesPiocheesLabel = new JLabel("Cartes piochées: ", SwingConstants.CENTER);            
+        cartesPiocheesLabel.setFont(cartesPiocheesLabel.getFont ().deriveFont (20.0f));
+        cardsProposesGridPanel = new JPanel();
+
+        cardsProposesPanel.add(cartesPiocheesLabel, BorderLayout.NORTH);
+        cardsProposesPanel.add(cardsProposesGridPanel, BorderLayout.CENTER);
+
+        vuesCartesPioche = new ArrayList<>();
+        for (int j = 0; j < 2; j++) {
+            VueCarte vC = new VueCarte(-1, j);
+            vuesCartesPioche.add(vC);
+        }
+        for (VueCarte vueCarte : vuesCartesPioche) {
+            cardsProposesGridPanel.add(vueCarte);
+        }
 
             // ------------- cardsProposesButtonsPanel -------------
             
@@ -306,7 +292,6 @@ public class VueJeu implements Observe{
         recommencerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                recupererButton.setEnabled(false);
                 Message m = new Message(Utils.Commandes.RECOMMENCER, 0, 0, null, 0);
                 notifierObservateur(m);
             }
@@ -317,7 +302,7 @@ public class VueJeu implements Observe{
         annulerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                    Message m = new Message(Utils.Commandes.DEFAUSSER_PIOCHE, 0, 0, null, 0);
+                Message m = new Message(Utils.Commandes.DEFAUSSER_PIOCHE, 0, 0, null, 0);
                 notifierObservateur(m);
             }
         });
@@ -334,28 +319,12 @@ public class VueJeu implements Observe{
     
     // ===================================== METHODES =====================================
     
-    public void possibleFinTour() {
-        endTurnButton.setEnabled(true);
-    }
-    
-    // Empêche de finir le tour (pour le plongeur lorsqu'il est sur une case coulée)
-    public void impossibleFinTour() {
-        endTurnButton.setEnabled(false);
-    }
-    
-    public void possibleAssecher() {
-        assecherButton.setEnabled(true);
-    }
-    
-    public void impossibleAssecher() {
-        assecherButton.setEnabled(false);
-    }
-    
     // Change le label du nombre d'actions restantes
     public void updateActions(int actions) {
         actionsRemainingLabel.setText(actions + " actions restantes");
     }
     
+    // Affiche les cartes de l'aventurier d'ID id
     public void updateCards(int id, ArrayList<CarteMain> cartes) {
         for (VueAventurier vA : vuesAventuriers) {
             if (vA.getID() == id) {
@@ -453,7 +422,7 @@ public class VueJeu implements Observe{
     }
     
     // aL : joueurs qui peuvent recevoir une carte, numCarte : numéro de la carte à donner
-    // Rajoute un arrière plan bleu clair au panel Nom aux joueurs auxquels on peut donner une carte
+    // Rajoute un arrière plan bleu clair au panel 'Nom' aux joueurs auxquels on peut donner une carte
     public void choisirJoueur(ArrayList<Aventurier> aL, int numCarte) {
         for (Aventurier aventurier : aL) {
             for (VueAventurier vA : vuesAventuriers) {
@@ -465,6 +434,7 @@ public class VueJeu implements Observe{
         }
     }
     
+    // aL : joueurs qui peuvent recevoir une carte
     public void choisirJoueur(ArrayList<Aventurier> aL) {
         for (Aventurier aventurier : aL) {
             for (VueAventurier vA : vuesAventuriers) {
@@ -475,7 +445,7 @@ public class VueJeu implements Observe{
         }
     }
     
-    // Enlève l'arrière plan ajouté à chaque VueAventurier
+    // Enlève l'arrière plan ajouté à chaque nom des VuesAventuriers
     public void cacherNameBackground(){
         for (VueAventurier vA : vuesAventuriers) {
             if (vA.getNamePanel().getBackground() == Parameters.COULEUR_JOUEUR_SELECTIONNABLE) {
@@ -483,11 +453,9 @@ public class VueJeu implements Observe{
             }
         }
     }
+
     
-    public MessageBox getMessageBox() {
-        return messageBox;
-    }
-    
+    // Affiche un arrière plan vert au nom du joueur courant
     public void afficherJoueurCourant(int idAventurierCourant){
         for (VueAventurier vA : vuesAventuriers) {
             if (vA.getID() == idAventurierCourant) {
@@ -519,14 +487,6 @@ public class VueJeu implements Observe{
         leftFrame.setVisible(false);
     }
     
-    public void afficherDefaite() {
-        System.out.println("vous avez perdu");
-    }
-    
-    public void afficherVictoire() {
-       System.out.println("vous avez gagné");
-    }
-    
     public void afficherBoutonRecommencer(){
         recommencerButton.setEnabled(true);
     }
@@ -538,6 +498,10 @@ public class VueJeu implements Observe{
     public void desactiverHelico() {
         helicoButton.setEnabled(false);
     }
+        
+    public MessageBox getMessageBox() {
+        return messageBox;
+    } 
     
     public VueGrille getGrille() {
         return vueGrille;
@@ -549,6 +513,86 @@ public class VueJeu implements Observe{
     
     public ArrayList<VueAventurier> getVuesAventuriers() {
         return vuesAventuriers;
+    }
+
+    public void possibleDeplacer() {
+        seDeplacerButton.setEnabled(true);
+    }
+    
+    public void impossibleDeplacer() {
+        seDeplacerButton.setEnabled(false);
+    }
+    
+    public void possibleDeplacerAutre() {
+        deplacerAutreButton.setEnabled(true);
+    }
+    
+    public void impossibleDeplacerAutre() {
+        deplacerAutreButton.setEnabled(false);
+    }
+        
+    public void possibleGiveCarte() {
+        giveButton.setEnabled(true);
+    }
+    
+    public void impossibleGiveCarte() {
+        giveButton.setEnabled(false);
+    }
+    
+    public void possibleDefausser() {
+        defausserButton.setEnabled(true);
+    }
+    
+    public void impossibleDefausser() {
+        defausserButton.setEnabled(false);
+    }
+    
+    public void possibleRecupererTresor() {
+        recupererButton.setEnabled(true);
+    }
+    
+    public void impossibleRecupererTresor() {
+        recupererButton.setEnabled(false);
+    }
+    
+    public void possibleActionSpeciale() {
+        actionSpecialeButton.setEnabled(true);
+    }
+    
+    public void impossibleActionSpeciale() {
+        actionSpecialeButton.setEnabled(false);
+    }
+    
+    public void possibleAnnuler() {
+        annulerButton.setEnabled(true);
+    }
+    
+    public void impossibleAnnuler() {
+        annulerButton.setEnabled(false);
+    }
+    
+    public void possibleRemplacer() {
+        remplacerButton.setEnabled(true);
+    }
+    
+    public void impossibleRemplacer() {
+        remplacerButton.setEnabled(false);
+    }
+    
+    public void possibleFinTour() {
+        endTurnButton.setEnabled(true);
+    }
+    
+    public void impossibleFinTour() {
+        endTurnButton.setEnabled(false);
+    }
+    
+    public void possibleAssecher() {
+        assecherButton.setEnabled(true);
+    }
+    
+    public void impossibleAssecher() {
+        assecherButton.setEnabled(false);
     }
     
     @Override
@@ -569,62 +613,5 @@ public class VueJeu implements Observe{
             observateur.traiterMessage(m);
         }
     }
-    
-    public void possibleDeplacer() {
-        seDeplacerButton.setEnabled(true);
-    }
-    public void impossibleDeplacer() {
-        seDeplacerButton.setEnabled(false);
-    }
-    
-    public void possibleDeplacerAutre() {
-        deplacerAutreButton.setEnabled(true);
-    }
-    public void impossibleDeplacerAutre() {
-        deplacerAutreButton.setEnabled(false);
-    }
-        
-    public void possibleGiveCarte() {
-        giveButton.setEnabled(true);
-    }
-    public void impossibleGiveCarte() {
-        giveButton.setEnabled(false);
-    }
-    
-    public void possibleDefausser() {
-        defausserButton.setEnabled(true);
-    }
-    public void impossibleDefausser() {
-        defausserButton.setEnabled(false);
-    }
-    
-    public void possibleRecupererTresor() {
-        recupererButton.setEnabled(true);
-    }
-    public void impossibleRecupererTresor() {
-        recupererButton.setEnabled(false);
-    }
-    
-    public void possibleActionSpeciale() {
-        actionSpecialeButton.setEnabled(true);
-    }
-    public void impossibleActionSpeciale() {
-        actionSpecialeButton.setEnabled(false);
-    }
-    
-    public void possibleAnnuler() {
-        annulerButton.setEnabled(true);
-    }
-    public void impossibleAnnuler() {
-        annulerButton.setEnabled(false);
-    }
-    
-    public void possibleRemplacer() {
-        remplacerButton.setEnabled(true);
-    }
-    public void impossibleRemplacer() {
-        remplacerButton.setEnabled(false);
-    }
-    
 }
 

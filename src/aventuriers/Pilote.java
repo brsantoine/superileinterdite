@@ -14,23 +14,17 @@ public class Pilote extends Aventurier {
     }
     
     public ArrayList<Tuile> deplacementHelico(Grille grille) {
-            // TODO - implement Aventurier.deplacement
-            int x = this.getTuile().getX();
-            int y = this.getTuile().getY();
-
-            
-            //Comme pour les TuilesAccessibles, ajoute directement au vecteur final toutes les tuiles de la grille qui sont seche ou inondé
-            ArrayList<Tuile> tuilesAccess = new ArrayList<>();
-            for (Tuile tuile : grille.getTuiles()) {
-                if (!tuile.getEtat().equals("coulé")) {
-                    tuilesAccess.add(tuile);
-                }
+        //Comme pour les TuilesAccessibles, ajoute directement au vecteur final toutes les tuiles de la grille qui sont seche ou inondé
+        ArrayList<Tuile> tuilesAccess = new ArrayList<>();
+        for (Tuile tuile : grille.getTuiles()) {
+            if (!tuile.getEtat().equals("coulé")) {
+                tuilesAccess.add(tuile);
             }
-            tuilesAccess.remove(this.getTuile());
-            return tuilesAccess;
+        }
+        tuilesAccess.remove(this.getTuile());
+        return tuilesAccess;
   
-	}
-    
+    }
     
     public void activerHelico() {
         helico = true;

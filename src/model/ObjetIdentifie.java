@@ -1,9 +1,5 @@
 package model;
 
-/**
- *
- * @author IUT2-Dept Info
- */
 public class ObjetIdentifie {
     private static Integer lastId = 1 ;
     protected Integer id ;

@@ -2,9 +2,7 @@ package view;
  
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 import java.util.*;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import model.*;
@@ -76,23 +74,16 @@ public class VueTuile extends JPanel implements Observe {
     }
     
     public void setInondePanel(String nomTuile) {
-//        this.setLayout(new BorderLayout());
-//        frame.add(lpane, BorderLayout.CENTER);
-
         inondePanel.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.TUILES + nomTuile + ".png").getImage().getScaledInstance(Parameters.TUILE_SIZE,Parameters.TUILE_SIZE, Image.SCALE_SMOOTH))));
     }
 
     public void setSechePanel(String nomTuile){
-//        this.setLayout(new BorderLayout());
-//        frame.add(lpane, BorderLayout.CENTER);
         sechePanel.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.TUILES + nomTuile + ".png").getImage().getScaledInstance(Parameters.TUILE_SIZE,Parameters.TUILE_SIZE, Image.SCALE_SMOOTH))));
     }
 
     public void setPionPanel(ArrayList<Aventurier> aventuriers) {
         for (int i = 0; i < aventuriers.size(); i++) {
             pionsImages.add(new JLabel(new ImageIcon(new ImageIcon(Parameters.PIONS +"pion" + aventuriers.get(i).getCouleur() + ".png").getImage().getScaledInstance(Parameters.PION_SIZE,Parameters.PION_SIZE, Image.SCALE_SMOOTH))));
-//            pionsImages.get(i).setHorizontalAlignment(30*i);
-//            pionsImages.get(i).setVerticalAlignment(30*i);
             pionsImages.get(i).setVisible(false);
             pionPanel.add(pionsImages.get(i));
         }
@@ -123,6 +114,10 @@ public class VueTuile extends JPanel implements Observe {
             pionsImage.setVisible(false);
         }
     }
+
+    public void setNumAv(int numAv) {
+        this.numAv = numAv;
+    }    
     
     @Override
     public void addObservateur(Observateur o) {
@@ -135,10 +130,4 @@ public class VueTuile extends JPanel implements Observe {
             observateur.traiterMessage(m);
         }
     } 
-
-    public void setNumAv(int numAv) {
-        this.numAv = numAv;
-    }
-    
-    
 }

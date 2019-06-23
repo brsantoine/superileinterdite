@@ -5,40 +5,25 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.Scanner;
-import javax.swing.BorderFactory;
 import javax.swing.JEditorPane;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-import util.Parameters;
 import util.Utils;
 
-/**
- *
- * @author IUT2-Dept Info
- */
 public class MessageBox extends JPanel{
-//    private final JFrame window ;
-    private final JEditorPane html ;
+    private final JEditorPane html;
     private final JScrollPane scrollPane;
-    String texte ;
+    String texte;
     private final JPanel panelZephyr;
     private final JPanel panelCalice;
     private final JPanel panelCristal;
     private final JPanel panelPierre;
     
     public MessageBox() {
-//        window = new JFrame() ;
-//        this.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-//        this.setLocation(940, Parameters.TOP_AUTRES_VUES);
-//        this.setSize(310, Parameters.HAUTEUR_AUTRES_VUES);
-//        this.setUndecorated(Parameters.UNDECORATED);
-//        window.setResizable(Parameters.RESIZABLE);
         
         this.setLayout(new BorderLayout());
-//        window.add(mainPanel);
         
         JPanel panelTresors = new JPanel(new GridLayout(1,4));
         this.add(panelTresors, BorderLayout.NORTH);
@@ -71,7 +56,6 @@ public class MessageBox extends JPanel{
         html.setEditable(false);
         html.setContentType("text/html");
         scrollPane = new JScrollPane(html);
-//        this.scrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, false));
         
         html.setMinimumSize(new Dimension(180, 280));
         html.setPreferredSize(new Dimension(180, 280));
@@ -82,8 +66,6 @@ public class MessageBox extends JPanel{
         
         html.setText("<html><h1 style=\"text-align:center; color:black;\">Bienvenue dans<br>l'Île Interdite</h1></html>");
         this.add(scrollPane, BorderLayout.CENTER) ;
-        
-//        window.setVisible(true);
         
         this.texte = "" ;
     }
@@ -140,52 +122,5 @@ public class MessageBox extends JPanel{
                 setCristalVisible();
                 break;
         }
-    }
-
-    public static void main(String[] args) {   
-        MessageBox messageBox = new MessageBox();
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Afficher un message, appuyer sur Entrée");
-        String suite = scanner.nextLine();
-        messageBox.displayMessage("C'est à Manon de joueur", Color.blue, Boolean.TRUE, false);
-        messageBox.displayMessage("Manon peut se déplacer sur les tuiles <ul><li>Héliport</li><li>Jardin des Murmures</li><li>La Porte d'Argent</li></ul>", Color.blue, false, false);
-        messageBox.displayMessage("Manon s'est déplacé vers Héliport", Color.blue, false, false);
-        messageBox.displayMessage("Manon peut se déplacer vers...", Color.blue, false, false);
-
-        System.out.println("Afficher un message, appuyer sur Entrée");
-        suite = scanner.nextLine();
-        messageBox.displayMessage("C'est à Pierre de joueur", Color.blue, Boolean.TRUE, false);
-        messageBox.displayMessage("Pierre peut se déplacer sur les tuiles <ul><li>Héliport</li><li>Jardin des Murmures</li><li>La Porte d'Argent</li></ul>", Color.blue, false, false);
-        messageBox.displayMessage("Pierre s'est déplacé vers Héliport", Color.blue, false, false);
-        messageBox.displayMessage("Pierre peut se déplacer vers...", Color.blue, false, false);
-        messageBox.displayMessage("C'est à Paul de joueur", Color.blue, Boolean.TRUE, false);
-        messageBox.displayMessage("Paul peut se déplacer sur les tuiles <ul><li>Héliport</li><li>Jardin des Murmures</li><li>La Porte d'Argent</li></ul>", Color.blue, false, false);
-        messageBox.displayMessage("Paul s'est déplacé vers Héliport", Color.blue, false, false);
-        messageBox.displayMessage("Paul peut se déplacer vers...", Color.blue, false, false);
-        messageBox.displayMessage("C'est à Jean de joueur", Color.blue, Boolean.TRUE, false);
-        messageBox.displayMessage("Jean peut se déplacer sur les tuiles <ul><li>Héliport</li><li>Jardin des Murmures</li><li>La Porte d'Argent</li></ul>", Color.blue, false, false);
-        messageBox.displayMessage("Jean s'est déplacé vers Héliport", Color.blue, false, false);
-        messageBox.displayMessage("Jean peut se déplacer vers...", Color.blue, false, false);
-
-        System.out.println("Afficher une alerte, appuyer sur Entrée");
-        suite = scanner.nextLine();
-        messageBox.displayAlerte("Vous avez tiré une carte Montée des Eaux");
-
-        System.out.println("Afficher le Calice, appuyer sur Entrée");
-        suite = scanner.nextLine();
-        messageBox.setCaliceVisible();
-
-        System.out.println("Afficher la Pierre, appuyer sur Entrée");
-        suite = scanner.nextLine();
-        messageBox.setPierreVisible();
-
-        System.out.println("Afficher le Zéphyr, appuyer sur Entrée");
-        suite = scanner.nextLine();
-        messageBox.setZephyrVisible();
-
-        System.out.println("Afficher le Cristal, appuyer sur Entrée");
-        suite = scanner.nextLine();
-        messageBox.setCristalVisible();
     }
 }

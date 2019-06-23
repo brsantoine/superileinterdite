@@ -3,8 +3,8 @@ package superileinterdite;
 public class CarteTresors extends CarteMain {
     Tresors tresor;
     
-    public CarteTresors (String nom, String proprio, Tresors tresor) {
-        super(nom, proprio);
+    public CarteTresors (String nom, Tresors tresor) {
+        super(nom);
         this.tresor = tresor;
     }
     

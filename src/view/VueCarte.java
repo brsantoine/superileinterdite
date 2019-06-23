@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
 
 import java.awt.*;
@@ -13,10 +8,6 @@ import model.*;
 import superileinterdite.*;
 import util.*;
 
-/**
- *
- * @author gervraua
- */
 public class VueCarte extends JPanel implements Observe{
     
     private Observateur observateur;
@@ -53,6 +44,7 @@ public class VueCarte extends JPanel implements Observe{
         });   
     }
     
+    // Crée et ajoute l'image de la carte
     public void addCardImage(Carte carte) {
         hasImage = true;
         img.setIcon((new ImageIcon(new ImageIcon(Parameters.CARTES + carte.getNom() + ".png").getImage().getScaledInstance(Parameters.CARD_WIDTH,Parameters.CARD_HEIGHT, Image.SCALE_SMOOTH))));
