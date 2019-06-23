@@ -17,16 +17,15 @@ public class Controleur implements Observateur {
 	private ArrayList<Aventurier> lesJoueurs;
         private VueMenu ihmMenu;
 	private VueJeu ihmJeu;
-	private ArrayList<Pile> sesPiles ;
-	private int niveauEau, nbAction, tour, cardOwnerId, cardSelectedId;
+	private ArrayList<Pile> sesPiles ;  
+  
         private Aventurier lastPlayer;
-        private int tuileInitialeId;
         private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false, modeDefausser = false, 
                         modeDonner = false, modeDeplacerAutre = false, modeActionSpeciale = false, modeChoixHelicoDestination = false, modePiocher = false, modeRemplacer = false;
-        private ArrayList<Tuile> tAssech, tAccess;
         private ArrayList<Carte> montrerCartes;
+	      private int niveauEau, nbAction, tour, cardOwnerId, cardSelectedId, nbtourassech, tuileInitialeId;
+
         private Pile PileTresor,PileInondation,defausseTresor,defausseInondation;
-        
 
         public Controleur() {
             lesJoueurs = new ArrayList();
@@ -390,6 +389,7 @@ public class Controleur implements Observateur {
         // Effectue un nouveau tour
         public void nvtour(){
             this.tour++;
+            doubleAssechement=false;
             ihmJeu.afficherJoueurCourant(this.aQuiLeTour().getId());
 
             this.remettreAJourAction();            
@@ -531,6 +531,10 @@ public class Controleur implements Observateur {
                        i=0;
                     }
                 }
+            }
+
+            ArrayList<Tuile> tAssech = new ArrayList<>();
+            tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
 
                 tAssech = new ArrayList<>();
                 tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
@@ -567,6 +571,28 @@ public class Controleur implements Observateur {
                         }
                     }
                 }
+            }
+            
+           ArrayList<Tuile> tAccess = new ArrayList<>();
+           tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
+           
+            // Regarde si le joueur peut se deplacer en fonction de son rôle
+            if(this.aQuiLeTour().getRole()=="plongeur"){                         
+                ihmJeu.possibleDeplacer();
+            }
+            else if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==true){
+                ihmJeu.possibleDeplacer();
+            }
+            else if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==false && tAccess.size()>0){
+                ihmJeu.possibleDeplacer();
+            }
+            else if(tAccess.size()>0){
+                if(this.aQuiLeTour().getRole()=="ingenieur" && this.doubleAssechement && this.getActions()==1 && !this.deuxiemetouravant){
+                    ihmJeu.impossibleDeplacer();
+                } else{
+                    ihmJeu.possibleDeplacer();
+                }
+            }
 
                tAccess = new ArrayList<>();
                tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
@@ -650,6 +676,10 @@ public class Controleur implements Observateur {
                         }
                     }
                 }
+            }
+            
+            ArrayList<Tuile> tAssech = new ArrayList<>();
+            tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
 
                 tAssech = new ArrayList<>();
                 tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
@@ -679,6 +709,33 @@ public class Controleur implements Observateur {
                     }       
                }    
 
+
+           ArrayList<Tuile> tAccess = new ArrayList<>();
+           tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
+           
+           
+           
+            // Regarde si le joueur peut se deplacer en fonction de son rôle
+            if(this.aQuiLeTour().getRole()=="plongeur"){                         
+                tm.add(Utils.Commandes.SE_DEPLACER);
+                ihmJeu.possibleDeplacer();
+            }
+            else if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==true){
+                ihmJeu.possibleDeplacer();
+                tm.add(Utils.Commandes.SE_DEPLACER);
+            }
+            else if(this.aQuiLeTour().getRole()=="pilote" && ((Pilote) this.aQuiLeTour()).getHelico()==false && tAccess.size()>0){
+                ihmJeu.possibleDeplacer();
+                tm.add(Utils.Commandes.SE_DEPLACER);
+            }
+            else if(tAccess.size()>0){
+                if(this.aQuiLeTour().getRole()=="ingenieur" && this.doubleAssechement && this.getActions()==1 && !this.deuxiemetouravant){
+                    ihmJeu.impossibleDeplacer();
+                } else{
+                    ihmJeu.possibleDeplacer();
+                    tm.add(Utils.Commandes.SE_DEPLACER);
+                }
+            }
 
                tAccess = new ArrayList<>();
                tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
@@ -729,6 +786,7 @@ public class Controleur implements Observateur {
         public void finTour(){            
             
             // Actualiser l'ihm   
+            nbtourassech=0;
             this.piocherTresor(aQuiLeTour());
             
             if (this.aQuiLeTour().getRole().equals("pilote") && ((Pilote) this.aQuiLeTour()).getHelico()==false) {
@@ -785,17 +843,19 @@ public class Controleur implements Observateur {
             for(Aventurier a : lesJoueurs) {
                 if (a.getTuile().getEtat().equals("coulé")) {
                     a.getTuile().removeAventurier(a);
-                    if (a.getRole().equals("explorateur")) {
-                        a.updateTuile(a.TuilesAccessibles(laGrille).get(1));
-                    } else if (a.getRole().equals("plongeur")) {
-                        for(Tuile t : a.TuilesAccessibles(laGrille)) {
-                            if (!t.getEtat().equals("coulé")){
-                                a.updateTuile(t);
+                    if (!a.TuilesAccessibles(laGrille).isEmpty()) {
+                        if (a.getRole().equals("explorateur")) {
+                            a.updateTuile(a.TuilesAccessibles(laGrille).get(0));
+                        } else if (a.getRole().equals("plongeur")) {
+                            for(Tuile t : a.TuilesAccessibles(laGrille)) {
+                                if (!t.getEtat().equals("coulé")){
+                                    a.updateTuile(t);
+                                }
                             }
+                        } else {
+                            a.updateTuile(a.TuilesAccessibles(laGrille).get(0));
                         }
-                    } else {
-                        a.updateTuile(a.TuilesAccessibles(laGrille).get(0));
-                    }
+                    }                       
                 }
                 a.getTuile().addAventurier(a);             
             }
@@ -805,6 +865,10 @@ public class Controleur implements Observateur {
       
         @Override
 	public void traiterMessage(Message m) {
+            
+            ArrayList<Tuile> tAccess = new ArrayList<>();
+            ArrayList<Tuile> tAssech = new ArrayList<>();
+            
             switch (m.getCommande()) {
                 
                 case COMMENCER_JEU:
@@ -963,25 +1027,48 @@ public class Controleur implements Observateur {
                         } else {
 
                             ihmJeu.getGrille().afficherTuilesAssecher(tAssech);
-
                             // Gere le double assechement d'un ingenieur
                             if(this.aQuiLeTour().getRole()=="ingenieur" && !doubleAssechement){            
                                 if(this.getActions()==1){
                                     //appeler fonction qui desactive tous les boutons sauf celui de assechement et fintour
                                     doubleAssechement=true;
+                                    ihmJeu.impossibleAssecher();
+                                    ihmJeu.impossibleDefausser();
+                                    ihmJeu.impossibleDeplacer();
+                                    ihmJeu.impossibleDeplacerAutre();
+                                    ihmJeu.impossibleGiveCarte();
+                                    ihmJeu.impossibleRecupererTresor(); 
+                                    ihmJeu.desactiverHelico();
+                                    ihmJeu.impossibleActionSpeciale();
+                                    nbtourassech=this.nbAction;
                                 }
                                 else{
-                                    this.actionFinie();
-                                    doubleAssechement=true;
+                                    if(this.nbAction==2){
+                                        this.deuxiemetouravant=true;
+                                        this.actionFinie();
+                                        nbtourassech=this.nbAction;
+                                        doubleAssechement=true;
+                                        ihmJeu.possibleDeplacer();
+                                    } else{
+                                        this.actionFinie();
+                                        nbtourassech=this.nbAction;
+                                        doubleAssechement=true;
+                                        ihmJeu.possibleDeplacer();                                        
+                                    }
                                 }
                             } 
                             else if(this.aQuiLeTour().getRole()=="ingenieur" && doubleAssechement){
-                                if(doubleAssechement=false && this.getActions()==1){
-                                    this.actionFinie();
+                                if(nbtourassech!=this.nbAction){
+                                    this.doubleAssechement=true;
+                                   nbtourassech=this.nbAction;
+                                }
+                                else if(doubleAssechement=true && this.getActions()==1 && !this.deuxiemetouravant){
+                                   this.actionFinie();
                                     doubleAssechement=false;
                                 }
-                                else{
+                                else {
                                 doubleAssechement=false;
+                                this.deuxiemetouravant=false;
 
                                 }
                             } else {
@@ -1058,12 +1145,12 @@ public class Controleur implements Observateur {
                     ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
                     ihmJeu.getGrille().afficherPions(lesJoueurs);
                                         
-                    this.tAccess = this.aQuiLeTour().TuilesAccessibles(this.laGrille);
+                    tAccess = this.aQuiLeTour().TuilesAccessibles(this.laGrille);
 
                     if(this.aQuiLeTour().getRole().equals("pilote")){
 
                         if (m.getHelico()) {
-                            this.tAccess = (((Pilote) this.aQuiLeTour()).deplacementHelico(this.getGrille()));
+                            tAccess = (((Pilote) this.aQuiLeTour()).deplacementHelico(this.getGrille()));
                             ((Pilote)this.aQuiLeTour()).activerHelico();
                             ihmJeu.desactiverHelico();
                         } else if (((Pilote) this.aQuiLeTour()).getHelico()) {
@@ -1513,7 +1600,8 @@ public class Controleur implements Observateur {
             int x=0;
             // Regarde si un aventurier est mort
             for(Aventurier a : this.getJoueurs()){
-                if(!a.getEtat()){                                     
+                if(!a.getEtat()){      
+                    ihmJeu.getMessageBox().displayMessage("<h2 style=\"text-align:center;\">" + a.getRole() + " est mort </h2>", Color.red, true, true);
                     return false;
                 }
             }
@@ -1523,7 +1611,8 @@ public class Controleur implements Observateur {
                 for(TuileTresor tt : t.getSesTuiles()){                                                                                
                     if(tt.getEtat()=="coulé"){                              
                         x++;
-                        if(t.getEtat()==false && x==2){                             
+                        if(t.getEtat()==false && x==2){   
+                            ihmJeu.getMessageBox().displayMessage("<h2 style=\"text-align:center;\">Les tuiles du trésor " + t.getNom() + " \" sont coulés</h2>", Color.red, true, true);
                             return false;                                         
                         }
                     }
@@ -1538,12 +1627,14 @@ public class Controleur implements Observateur {
             
             
             // Regarde si le niveau d'eau est egal a 10
-            if(this.getNiveauEau()>=10){                                         
+            if(this.getNiveauEau()>=10){    
+                ihmJeu.getMessageBox().displayMessage("<h2 style=\"text-align:center;\">Niveau d'eau a atteint 10</h2>", Color.red, true, true);
                 return false;
             }
             
             for(Tuile t : this.getGrille().sesTuiles) {
                 if (t.getNom().equals("Heliport") && t.getEtat().equals("coulé")) {
+                ihmJeu.getMessageBox().displayMessage("<h2 style=\"text-align:center;\">Heliport coulé</h2>", Color.red, true, true);
                   return false;
                 }
             }
