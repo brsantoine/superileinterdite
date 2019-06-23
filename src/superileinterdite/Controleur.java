@@ -60,7 +60,6 @@ public class Controleur implements Observateur {
             this.lesJoueurs.add(messager);
             this.lesJoueurs.add(navigateur);
             this.lesJoueurs.add(explorateur);
-            Collections.shuffle(this.lesJoueurs);
             // Creation des tuiles
             laGrille.addTuile(new Tuile("Le Val Du Crepuscule"));
             laGrille.addTuile(new Tuile("Le Marais Brumeux"));
@@ -813,6 +812,8 @@ public class Controleur implements Observateur {
                         listeJoueurs.get(i).setCouleur((String) (m.getCouleurs().get(i).getSelectedItem()));
                     }
                     
+                    
+                    
                     this.lesJoueurs=listeJoueurs;
 
                     this.setIhmVueJeu(new VueJeu(lesJoueurs, m.getNoms()));
@@ -820,9 +821,29 @@ public class Controleur implements Observateur {
                     ihmJeu.getMessageBox().displayMessage("<h1 style=\"text-align:center;\">Bienvenue dans<br>l'Île Interdite</h1>", Color.black, false, false);
                     ihmJeu.getMessageBox().displayMessage("", Color.black, true, false);   
                     
+                    
+                    this.PileInondation.RemoveCarte(new CarteInondation(laGrille.sesTuiles.get(6)));
+                    
                     piocherInondationDebut();                    
                     piocherTresorDebut();
                     
+                    this.lesJoueurs.get(0).getTuile().removeAventurier(this.lesJoueurs.get(0));
+                    // Change la tuile de l'aventurier
+                    this.lesJoueurs.get(0).updateTuile(this.getGrille().getTuiles().get(6));                 
+                    // Met un aventurier sur la nouvelle tuile
+                    this.getGrille().getTuiles().get(6).addAventurier(this.lesJoueurs.get(0));
+                    
+                    this.laGrille.sesTuiles.get(6).inonderTuile();
+                    this.laGrille.sesTuiles.get(7).inonderTuile();
+                    this.laGrille.sesTuiles.get(7).inonderTuile();
+                    this.laGrille.sesTuiles.get(12).inonderTuile();
+                    this.laGrille.sesTuiles.get(12).inonderTuile();
+                    
+                    this.PileInondation.getSesCartes().removeAll(this.PileInondation.getSesCartes());
+
+                    this.PileInondation.addPile(new CarteInondation(laGrille.sesTuiles.get(6)));
+                    
+
                     this.ihmJeu.getGrille().initialiserGrille(this.laGrille.getTuiles(), lesJoueurs);
                     this.ihmJeu.getGrille().afficherPions(lesJoueurs);
                     this.ihmJeu.afficher();
@@ -830,8 +851,10 @@ public class Controleur implements Observateur {
 //                        this.recupererTresor(t);
 //                        this.enleverRecup(t);                               
 //                    }
-                    
+    
                     this.setNiveauEau(m.getNiveauEau().getSelectedIndex()+1);
+                    
+                    
                     
                     
                     this.nvtour();
@@ -1456,7 +1479,8 @@ public class Controleur implements Observateur {
             int x=0;
             // Regarde si un aventurier est mort
             for(Aventurier a : this.getJoueurs()){
-                if(!a.getEtat()){                                     
+                if(!a.getEtat()){      
+                    ihmJeu.getMessageBox().displayMessage("<h2 style=\"text-align:center;\">" + a.getRole() + " est mort </h2>", Color.red, true, true);
                     return false;
                 }
             }
@@ -1466,7 +1490,8 @@ public class Controleur implements Observateur {
                 for(TuileTresor tt : t.getSesTuiles()){                                                                                
                     if(tt.getEtat()=="coulé"){                              
                         x++;
-                        if(t.getEtat()==false && x==2){                             
+                        if(t.getEtat()==false && x==2){   
+                            ihmJeu.getMessageBox().displayMessage("<h2 style=\"text-align:center;\">Les tuiles du trésor " + t.getNom() + " \" sont coulés</h2>", Color.red, true, true);
                             return false;                                         
                         }
                     }
@@ -1481,12 +1506,14 @@ public class Controleur implements Observateur {
             
             
             // Regarde si le niveau d'eau est egal a 10
-            if(this.getNiveauEau()>=10){                                         
+            if(this.getNiveauEau()>=10){    
+                ihmJeu.getMessageBox().displayMessage("<h2 style=\"text-align:center;\">Niveau d'eau a atteint 10</h2>", Color.red, true, true);
                 return false;
             }
             
             for(Tuile t : this.getGrille().sesTuiles) {
                 if (t.getNom().equals("Heliport") && t.getEtat().equals("coulé")) {
+                ihmJeu.getMessageBox().displayMessage("<h2 style=\"text-align:center;\">Heliport coulé</h2>", Color.red, true, true);
                   return false;
                 }
             }
