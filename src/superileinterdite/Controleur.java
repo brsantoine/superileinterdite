@@ -1066,10 +1066,10 @@ public class Controleur implements Observateur {
                     modeDefausser = false;
                     modeAssechement = false;
                     modeDeplacerAutre = false;
-                    
-                    if (!m.getHelico()) {
+                    modeDeplacement = true;
+                    if (m.getHelico()) {
                         ihmJeu.impossibleDeplacer();
-                        modeDeplacement = true;
+                        
                     }
                     
                     ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
