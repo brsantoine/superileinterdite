@@ -205,6 +205,8 @@ public class Controleur implements Observateur {
             ArrayList montrerCartes = new ArrayList<Carte>();
             
             for (int i = 0; i <= 1; i++) {
+                
+                // Si la pile trésor est vide, la défausse est mélangée et rajoutée
                 if (PileTresor.getSesCartes().isEmpty()) {
                     defausseTresor.randomizePile();
                     PileTresor.setSesCartes(defausseTresor.getSesCartes());
@@ -237,29 +239,23 @@ public class Controleur implements Observateur {
                     PileTresor.RemoveCarte(PileTresor.getSesCartes().get(0));             
                          
                     
-                } else if (a.getCartes().size() == 5) {                 
-                    if (i == 0 && PileTresor.getSesCartes().size() >= 2) {
-                        montrerCartes.add(PileTresor.getSesCartes().get(i+1));  
-                        montrerCartes.add(PileTresor.getSesCartes().get(i));     
-                    } else {
-                        montrerCartes.add(PileTresor.getSesCartes().get(0));   
-                    }                  
-                    break;
+                } else if (a.getCartes().size() == 5) {                
+
+                    montrerCartes.add(PileTresor.getSesCartes().get(0));   
                     
                 } else {
-                    ((CarteMain)PileTresor.getSesCartes().get(0)).changerProprio(a.getRole());
                     a.addCarte((CarteMain) PileTresor.getSesCartes().get(0));
                     PileTresor.RemoveCarte(PileTresor.getSesCartes().get(0));             
                 }    
 
             }
             ihmJeu.updateCards(a.getId(), a.getCartes());
-           
             if (montrerCartes.size() > 0) {
                 modeDefausser = false;
                 modeDonner = false;
                 modeActionSpeciale = false;
-                modePiocher = true;                
+                
+                modePiocher = true;      
                 lastPlayer = this.aQuiLeTour();
                 
                 ihmJeu.afficherCartesPioche(montrerCartes);   
@@ -1268,7 +1264,6 @@ public class Controleur implements Observateur {
                 
                 case REMPLACER: 
                     modeRemplacer = true;
-                    modePiocher = false;
                     modeDonner = false;
                     modeDefausser = false;
                     modeActionSpeciale = false;
@@ -1353,32 +1348,40 @@ public class Controleur implements Observateur {
                                 ihmJeu.cacherCardsBorder(m.getIdCarte(), m.getIdAventurier());
                             }
                         }
-                    } else if (modePiocher) {
+                    } else if (modePiocher) {                     
+
+                        System.out.println("dab");
                         
-                        cardSelectedId = m.getIdCarte();
-                        ihmJeu.possibleRemplacer();
-                        ihmJeu.cacherCardsPiocheBorder(m.getIdCarte());
-                        
-                    } else if (modeRemplacer) {
-                        
-                        // Enleve la carte remplacée de l'aventurier, et l'ajoute à la défausse
-                        lastPlayer.getCartes().remove(this.lastPlayer.getCartes().get(m.getIdCarte()));
-                        this.defausseTresor.addPile(this.lastPlayer.getCartes().get(m.getIdCarte()));                        
-                        
-                        // Ajoute la carte choisie à l'aventurier
-                        this.lastPlayer.getCartes().add((CarteMain) PileTresor.getSesCartes().get(cardSelectedId));
-                        PileTresor.getSesCartes().remove(cardSelectedId);
-                        
-                        // Met à jour les cartes de l'aventurier
-                        ihmJeu.updateCards(this.lastPlayer.getId(), this.lastPlayer.getCartes());
-                        
-                        // Enlève l'image de la carte choisie, ainsi que sa bordure
-                        ihmJeu.removeCardReplaced(cardSelectedId);
-                        
-                        // Cache les bordures rouges autour de chaque carte de chaque aventurier
-                        ihmJeu.cacherCardsBorder();
-                        
-                    }                    
+                        if (modeRemplacer) {
+                            
+                            System.out.println("yeet");
+                            
+                           // Enleve la carte remplacée de l'aventurier, et l'ajoute à la défausse
+                           lastPlayer.getCartes().remove(this.lastPlayer.getCartes().get(m.getIdCarte()));
+                           this.defausseTresor.addPile(this.lastPlayer.getCartes().get(m.getIdCarte()));                        
+
+                           // Ajoute la carte choisie à l'aventurier
+                           this.lastPlayer.getCartes().add((CarteMain) PileTresor.getSesCartes().get(cardSelectedId));
+                           PileTresor.getSesCartes().remove(cardSelectedId);
+
+                           // Met à jour les cartes de l'aventurier
+                           ihmJeu.updateCards(this.lastPlayer.getId(), this.lastPlayer.getCartes());
+
+                           // Enlève l'image de la carte choisie, ainsi que sa bordure
+                           ihmJeu.removeCardReplaced(cardSelectedId);
+
+                           // Cache les bordures rouges autour de chaque carte de chaque aventurier
+                           ihmJeu.cacherCardsBorder();
+
+                           modeRemplacer = false;
+
+                        } else {
+                            cardSelectedId = m.getIdCarte();
+                            System.out.println(cardSelectedId);
+                            ihmJeu.possibleRemplacer();
+                            ihmJeu.cacherCardsPiocheBorder(m.getIdCarte());
+                        }
+                    }
                     
                     AfficherActionsPossibles();
                     

@@ -383,7 +383,9 @@ public class VueJeu implements Observe{
             if (vC.getNumCarte() == idCarte) {
                 vC.removeCardImage();
                 vC.setBorder(new LineBorder(new JButton().getBackground()));
-            } 
+            } else if (vC.getHasImage()){
+                vC.setBorder(new LineBorder(Color.RED, 3));
+            }
         }
     }
     
