@@ -419,6 +419,8 @@ public class Controleur implements Observateur {
                     break;
             }
             this.tourDeJeu();
+            
+            
         }
         
         // Renvoie la grille contenant les tuiles 
@@ -729,6 +731,26 @@ public class Controleur implements Observateur {
                 ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
                 ihmJeu.getGrille().afficherPions(lesJoueurs);
             }
+            
+            for(Aventurier a : lesJoueurs) {
+                if (a.getTuile().getEtat().equals("inondé")) {
+                    a.getTuile().removeAventurier(a);
+                    if (a.getRole().equals("explorateur")) {
+                        a.updateTuile(a.TuilesAccessibles(laGrille).get(1));
+                    } else if (a.getRole().equals("plongeur")) {
+                        for(Tuile t : a.TuilesAccessibles(laGrille)) {
+                            if (!t.getEtat().equals("coulé")){
+                                a.updateTuile(t);
+                            }
+                        }
+                    } else {
+                        a.updateTuile(a.TuilesAccessibles(laGrille).get(0));
+                    }
+                }
+                a.getTuile().addAventurier(a);             
+            }
+            ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
+            ihmJeu.getGrille().afficherPions(lesJoueurs);
         }
         
       
