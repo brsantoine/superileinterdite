@@ -213,7 +213,7 @@ public class VueJeu implements Observe{
             cardsProposesButtonsPanel.add(new JPanel(), BorderLayout.EAST);
             
             remplacerButton = new JButton("Remplacer");
-            annulerButton = new JButton("Annuler");   
+            annulerButton = new JButton("Tout défausser");   
             
             cardsProposesButtonsCenterPanel.add(remplacerButton);
             cardsProposesButtonsCenterPanel.add(annulerButton);
