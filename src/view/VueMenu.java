@@ -105,12 +105,12 @@ public class VueMenu implements Observe {
         JPanel panelVide = new JPanel();
         panelBoutons.add(panelVide);
 
-        playButton.setEnabled(false);
+        playButton.setEnabled(true);
         
-        nomsJoueurs.get(2).setVisible(false);
-        nomsJoueurs.get(3).setVisible(false);
-        couleursJoueurs.get(2).setVisible(false);
-        couleursJoueurs.get(3).setVisible(false);
+        nomsJoueurs.get(2).setVisible(true);
+        nomsJoueurs.get(3).setVisible(true);
+        couleursJoueurs.get(2).setVisible(true);
+        couleursJoueurs.get(3).setVisible(true);
         
         for (JTextField nom : nomsJoueurs) {
             nom.addKeyListener(new KeyAdapter() {
@@ -122,162 +122,162 @@ public class VueMenu implements Observe {
             });
         }
         
-        nomsJoueurs.get(0).getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) {
-              changed();
-            }
-            public void removeUpdate(DocumentEvent e) {
-              changed();
-            }
-            public void insertUpdate(DocumentEvent e) {
-              changed();
-            }
+//        nomsJoueurs.get(0).getDocument().addDocumentListener(new DocumentListener() {
+//            public void changedUpdate(DocumentEvent e) {
+//              changed();
+//            }
+//            public void removeUpdate(DocumentEvent e) {
+//              changed();
+//            }
+//            public void insertUpdate(DocumentEvent e) {
+//              changed();
+//            }
+//
+//            public void changed() {
+//                if (estPret(2)) {
+//                    playButton.setEnabled(true);
+//                    nouveauJoueur(2);
+//                } else {
+//                    playButton.setEnabled(false);
+//                    if (nomsJoueurs.get(0).getText().equals("")) {
+//                        nomReset(0);
+//                    }
+//                }
+//            }
+//        });
+//
 
-            public void changed() {
-                if (estPret(2)) {
-                    playButton.setEnabled(true);
-                    nouveauJoueur(2);
-                } else {
-                    playButton.setEnabled(false);
-                    if (nomsJoueurs.get(0).getText().equals("")) {
-                        nomReset(0);
-                    }
-                }
-            }
-        });
-
-
-        nomsJoueurs.get(1).getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) {
-              changed();
-            }
-            public void removeUpdate(DocumentEvent e) {
-              changed();
-            }
-            public void insertUpdate(DocumentEvent e) {
-              changed();
-            }
-
-            public void changed() {
-               if (estPret(2)) {
-                    playButton.setEnabled(true);
-                   nouveauJoueur(2);
-               } else {
-                   playButton.setEnabled(false);
-                   if (nomsJoueurs.get(1).getText().equals("")) {
-                        nomReset(1);
-                    }
-               }
-            }
-        });
-
-
-        nomsJoueurs.get(2).getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) {
-              changed();
-            }
-            public void removeUpdate(DocumentEvent e) {
-              changed();
-            }
-            public void insertUpdate(DocumentEvent e) {
-              changed();
-            }
-
-            public void changed() {
-               if (estPret(3)) {
-                    playButton.setEnabled(true);
-                   nouveauJoueur(3);
-               } else {
-                   playButton.setEnabled(false);
-                   if (nomsJoueurs.get(2).getText().equals("")) {
-                        nomReset(2);
-                    }
-               }
-            }
-        });
-
-        nomsJoueurs.get(3).getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) {
-              changed();
-            }
-            public void removeUpdate(DocumentEvent e) {
-              changed();
-            }
-            public void insertUpdate(DocumentEvent e) {
-              changed();
-            }
-
-            public void changed() {
-               if (estPret(4)) {
-                   playButton.setEnabled(true);
-               } else {
-                   playButton.setEnabled(false);
-                   if (nomsJoueurs.get(3).getText().equals("")) {
-                        nomReset(3);
-                    }
-               }
-            }
-        });
-        
-        couleursJoueurs.get(0).addItemListener(new ItemListener(){
-            public void itemStateChanged(ItemEvent e) {
-                if(e.getStateChange() == ItemEvent.SELECTED) {
-                    couleurChoisi(0);
-                    if (estPret(2)) {
-                       playButton.setEnabled(true);
-                       nouveauJoueur(2);
-                    } else {
-                        playButton.setEnabled(false);
-                        deleteJoueur(2);
-                        deleteJoueur(3);
-                    }
-                }
-            }
-        });
-
-        couleursJoueurs.get(1).addItemListener(new ItemListener(){
-            public void itemStateChanged(ItemEvent e) {
-                if(e.getStateChange() == ItemEvent.SELECTED) {
-                    couleurChoisi(1);
-                    if (estPret(2)) {
-                        playButton.setEnabled(true);
-                        nouveauJoueur(2);
-                    } else {
-                        playButton.setEnabled(false);
-                        deleteJoueur(2);
-                        deleteJoueur(3);
-                    }
-                }
-            }
-        });
-
-        couleursJoueurs.get(2).addItemListener(new ItemListener(){
-            public void itemStateChanged(ItemEvent e) {
-                if(e.getStateChange() == ItemEvent.SELECTED) {
-                    couleurChoisi(2);
-                    if (estPret(3)) {
-                        playButton.setEnabled(true);
-                        nouveauJoueur(3);
-                    } else {
-                        playButton.setEnabled(false);
-                        deleteJoueur(3);
-                    }
-                }
-            }
-        });
-
-        couleursJoueurs.get(3).addItemListener(new ItemListener(){
-            public void itemStateChanged(ItemEvent e) {
-                if(e.getStateChange() == ItemEvent.SELECTED) {
-                    couleurChoisi(3);
-                    if (estPret(4)) {
-                        playButton.setEnabled(true);
-                    } else {
-                        playButton.setEnabled(false);
-                    }
-                }
-            }
-        });
+//        nomsJoueurs.get(1).getDocument().addDocumentListener(new DocumentListener() {
+//            public void changedUpdate(DocumentEvent e) {
+//              changed();
+//            }
+//            public void removeUpdate(DocumentEvent e) {
+//              changed();
+//            }
+//            public void insertUpdate(DocumentEvent e) {
+//              changed();
+//            }
+//
+//            public void changed() {
+//               if (estPret(2)) {
+//                    playButton.setEnabled(true);
+//                   nouveauJoueur(2);
+//               } else {
+//                   playButton.setEnabled(false);
+//                   if (nomsJoueurs.get(1).getText().equals("")) {
+//                        nomReset(1);
+//                    }
+//               }
+//            }
+//        });
+//
+//
+//        nomsJoueurs.get(2).getDocument().addDocumentListener(new DocumentListener() {
+//            public void changedUpdate(DocumentEvent e) {
+//              changed();
+//            }
+//            public void removeUpdate(DocumentEvent e) {
+//              changed();
+//            }
+//            public void insertUpdate(DocumentEvent e) {
+//              changed();
+//            }
+//
+//            public void changed() {
+//               if (estPret(3)) {
+//                    playButton.setEnabled(true);
+//                   nouveauJoueur(3);
+//               } else {
+//                   playButton.setEnabled(false);
+//                   if (nomsJoueurs.get(2).getText().equals("")) {
+//                        nomReset(2);
+//                    }
+//               }
+//            }
+//        });
+//
+//        nomsJoueurs.get(3).getDocument().addDocumentListener(new DocumentListener() {
+//            public void changedUpdate(DocumentEvent e) {
+//              changed();
+//            }
+//            public void removeUpdate(DocumentEvent e) {
+//              changed();
+//            }
+//            public void insertUpdate(DocumentEvent e) {
+//              changed();
+//            }
+//
+//            public void changed() {
+//               if (estPret(4)) {
+//                   playButton.setEnabled(true);
+//               } else {
+//                   playButton.setEnabled(false);
+//                   if (nomsJoueurs.get(3).getText().equals("")) {
+//                        nomReset(3);
+//                    }
+//               }
+//            }
+//        });
+//        
+//        couleursJoueurs.get(0).addItemListener(new ItemListener(){
+//            public void itemStateChanged(ItemEvent e) {
+//                if(e.getStateChange() == ItemEvent.SELECTED) {
+//                    couleurChoisi(0);
+//                    if (estPret(2)) {
+//                       playButton.setEnabled(true);
+//                       nouveauJoueur(2);
+//                    } else {
+//                        playButton.setEnabled(false);
+//                        deleteJoueur(2);
+//                        deleteJoueur(3);
+//                    }
+//                }
+//            }
+//        });
+//
+//        couleursJoueurs.get(1).addItemListener(new ItemListener(){
+//            public void itemStateChanged(ItemEvent e) {
+//                if(e.getStateChange() == ItemEvent.SELECTED) {
+//                    couleurChoisi(1);
+//                    if (estPret(2)) {
+//                        playButton.setEnabled(true);
+//                        nouveauJoueur(2);
+//                    } else {
+//                        playButton.setEnabled(false);
+//                        deleteJoueur(2);
+//                        deleteJoueur(3);
+//                    }
+//                }
+//            }
+//        });
+//
+//        couleursJoueurs.get(2).addItemListener(new ItemListener(){
+//            public void itemStateChanged(ItemEvent e) {
+//                if(e.getStateChange() == ItemEvent.SELECTED) {
+//                    couleurChoisi(2);
+//                    if (estPret(3)) {
+//                        playButton.setEnabled(true);
+//                        nouveauJoueur(3);
+//                    } else {
+//                        playButton.setEnabled(false);
+//                        deleteJoueur(3);
+//                    }
+//                }
+//            }
+//        });
+//
+//        couleursJoueurs.get(3).addItemListener(new ItemListener(){
+//            public void itemStateChanged(ItemEvent e) {
+//                if(e.getStateChange() == ItemEvent.SELECTED) {
+//                    couleurChoisi(3);
+//                    if (estPret(4)) {
+//                        playButton.setEnabled(true);
+//                    } else {
+//                        playButton.setEnabled(false);
+//                    }
+//                }
+//            }
+//        });
             
         // Jouer: change les fenêtres lorsque l'on appuie sur le bouton Jouer   
         
@@ -310,11 +310,14 @@ public class VueMenu implements Observe {
     
     public void afficher() {
         this.menuWindow.setVisible(true);
-        this.deleteJoueur(3);
-        this.deleteJoueur(2);
-        nomsJoueurs.get(0).setText("");
-        nomsJoueurs.get(1).setText("");
-        niveauxDifficulte.setSelectedIndex(0);
+        nomsJoueurs.get(0).setText("Telmo");
+        nomsJoueurs.get(1).setText("Adrien");
+        nomsJoueurs.get(2).setText("Alexis");
+        nomsJoueurs.get(3).setText("Antoine");
+        couleursJoueurs.get(0).setSelectedIndex(1);
+        couleursJoueurs.get(1).setSelectedIndex(2);
+        couleursJoueurs.get(2).setSelectedIndex(3);
+        couleursJoueurs.get(3).setSelectedIndex(4);;
     }
     
     public void cacher() {
