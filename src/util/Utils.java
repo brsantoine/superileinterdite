@@ -31,8 +31,9 @@ public class Utils {
         DEFAUSSER_CARTE("Defausse une carte"),
         ACTION_SPECIALE("Quand l'utilisateur clique sur une carte AS"),
         HELICO("deplacement du pilote avec l'hélicoptere"),
-        RECOMMENCER("Recommence la partie");
-        
+        RECOMMENCER("Recommence la partie"),
+        REMPLACER("Pour remplacer une carte par une carte piochée"),
+        DEFAUSSER_PIOCHE("Défausse toutes les cartes piochées");
         
         private final String libelle ;  
 

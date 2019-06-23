@@ -43,10 +43,13 @@ public class Parameters {
     public static final Integer VERTICAL_SPACE = GAME_FRAME_HEIGHT/50; // Hauteur entre chaque panel de VueJeu
     public static final Integer HORIZONTAL_SPACE = (int) screenSize.getWidth()/100; // Largeur entre chaque panel de VueJeu
     
-    public static final Integer BUTTONS_PANEL_HEIGHT = GAME_FRAME_HEIGHT/20; // Hauteur des panels contenant les boutons
+    public static final Integer BUTTONS_PANEL_HEIGHT = GAME_FRAME_HEIGHT/10; // Hauteur des panels contenant les boutons
     
     public static final Integer GRID_WIDTH = (int) GAME_FRAME_WIDTH*3/5; // Largeur de la grille (3/5 de la fenêtre de jeu)
     public static final Integer GRID_HEIGHT = (int) GAME_FRAME_HEIGHT - BUTTONS_PANEL_HEIGHT - VERTICAL_SPACE*2; // Hauteur de la grille
+    
+    public static final Integer PIOCHER_FRAME_WIDTH = (int) GRID_WIDTH/2; // Largeur de la grille (3/5 de la fenêtre de jeu)
+    public static final Integer PIOCHER_FRAME_HEIGHT = (int) GRID_HEIGHT/3; // Hauteur de la grille
     
     public static final Integer VUE_AVENTURIER_WIDTH = (int) GAME_FRAME_WIDTH - GRID_WIDTH; // Largeur des fenêtres Aventuriers
     public static final Integer VUE_AVENTURIER_HEIGHT = (int) (GAME_FRAME_HEIGHT/4) - BUTTONS_PANEL_HEIGHT - VERTICAL_SPACE*2; // Hauteur des fenêtres Aventuriers
@@ -62,7 +65,7 @@ public class Parameters {
     public static final Integer CARD_VERTICAL_SPACE = 5; // Ecart vertical entre une carte et le nom du joueur
     public static final Integer CARD_HORIZONTAL_SPACE = 10; // Ecart horizontal entre chaque cartes
     public static final Integer CARD_WIDTH = (int) (VUE_AVENTURIER_WIDTH - HORIZONTAL_SPACE*2 - CARD_HORIZONTAL_SPACE*4)/5; // Longueur de chaque carte
-    public static final Integer CARD_HEIGHT = (int) CARD_WIDTH*7/5 -12; // Hauteur de chaque carte (ratio 7/5 - bordures)
+    public static final Integer CARD_HEIGHT = (int) CARD_WIDTH*7/5 -20; // Hauteur de chaque carte (ratio 7/5 - bordures)
     
     
     

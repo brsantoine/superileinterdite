@@ -24,16 +24,16 @@ public class VueJeu implements Observe{
      * @param args the command line arguments
      */
     
-    private JFrame leftFrame, gameFrame;
+    private JFrame leftFrame, gameFrame, piocherFrame;
     private Observateur observateur;
     private VueNiveau vueNiveau;
     private VueGrille vueGrille;
     private MessageBox messageBox;
     private ArrayList<VueAventurier> vuesAventuriers;
-    private JButton seDeplacerButton, assecherButton, endTurnButton, helicoButton, giveButton, defausserButton, recupererButton, deplacerAutreButton, actionSpecialeButton, recommencerButton;
-
-    private JPanel westPanel, eastPanel, gridButtonsPanel, aventurierButtonsPanel, aventuriersPanel;  
-    private JLabel actionsRemainingLabel;
+    private ArrayList<VueCarte> vuesCartesPioche;
+    private JButton seDeplacerButton, assecherButton, endTurnButton, helicoButton, giveButton, defausserButton, recupererButton, deplacerAutreButton, actionSpecialeButton, recommencerButton, annulerButton, remplacerButton;
+    private JPanel westPanel, eastPanel, gridButtonsPanel, aventurierButtonsPanel, aventuriersPanel, cardsProposesPanel, cardsProposesButtonsPanel, cardsProposesButtonsCenterPanel, cardsProposesGridPanel;  
+    private JLabel actionsRemainingLabel, cartesPiocheesLabel;
 
     public VueJeu(ArrayList<Aventurier> aventuriers, ArrayList<JTextField> noms){
 
@@ -53,8 +53,6 @@ public class VueJeu implements Observe{
         
         leftFrame.add(vueNiveau);
         leftFrame.add(messageBox);
-        
-        leftFrame.setVisible(true);
         
         // ---------------------------------------------------------------------
         // ---------------------------  GAME WINDOW  ---------------------------
@@ -160,6 +158,66 @@ public class VueJeu implements Observe{
             aventurierButtonsPanel.add(recupererButton);
             aventurierButtonsPanel.add(actionSpecialeButton);
             
+            
+        // --------------------------------------------------------------------
+        // -------------------------  PIOCHER WINDOW  -------------------------
+        // --------------------------------------------------------------------     
+        
+        piocherFrame = new JFrame();     
+        cardsProposesPanel = new JPanel();
+        cardsProposesButtonsPanel = new JPanel();
+        
+
+        piocherFrame.setLayout(new BorderLayout());
+//        piocherFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
+        piocherFrame.setResizable(Parameters.RESIZABLE);
+        piocherFrame.setUndecorated(Parameters.UNDECORATED);
+        piocherFrame.setLocation(Parameters.LEFT_FRAME_WIDTH + Parameters.HORIZONTAL_BUFFER + Parameters.HORIZONTAL_SPACE + (Parameters.GRID_WIDTH/4),
+                                 Parameters.VERTICAL_BUFFER - Parameters.TASKBAR_BUFFER + Parameters.VERTICAL_SPACE*2 + (Parameters.GRID_HEIGHT/3));
+        piocherFrame.setSize(Parameters.PIOCHER_FRAME_WIDTH, Parameters.PIOCHER_FRAME_HEIGHT);  
+        
+        piocherFrame.add(cardsProposesPanel, BorderLayout.NORTH);
+        piocherFrame.add(cardsProposesButtonsPanel, BorderLayout.CENTER);
+        piocherFrame.add(new JPanel(), BorderLayout.SOUTH);
+        
+        
+            // ------------- cardsProposesPanel -------------
+            
+            cardsProposesPanel.setPreferredSize(new Dimension(Parameters.PIOCHER_FRAME_WIDTH, Parameters.PIOCHER_FRAME_HEIGHT*87/100));            
+            cardsProposesPanel.setLayout(new BorderLayout());
+            
+            cartesPiocheesLabel = new JLabel("Cartes piochées: ", SwingConstants.CENTER);            
+            cartesPiocheesLabel.setFont(cartesPiocheesLabel.getFont ().deriveFont (20.0f));
+            cardsProposesGridPanel = new JPanel();
+            
+            cardsProposesPanel.add(cartesPiocheesLabel, BorderLayout.NORTH);
+            cardsProposesPanel.add(cardsProposesGridPanel, BorderLayout.CENTER);
+            
+            vuesCartesPioche = new ArrayList<>();
+            for (int j = 0; j < 2; j++) {
+                VueCarte vC = new VueCarte(-1, j);
+                vuesCartesPioche.add(vC);
+            }
+            for (VueCarte vueCarte : vuesCartesPioche) {
+                cardsProposesGridPanel.add(vueCarte);
+            }
+
+            // ------------- cardsProposesButtonsPanel -------------
+            
+            cardsProposesButtonsPanel.setLayout(new BorderLayout());
+            
+            cardsProposesButtonsCenterPanel = new JPanel(new GridLayout(1,2,30,0));
+            
+            cardsProposesButtonsPanel.add(cardsProposesButtonsCenterPanel, BorderLayout.CENTER);
+            cardsProposesButtonsPanel.add(new JPanel(), BorderLayout.WEST);
+            cardsProposesButtonsPanel.add(new JPanel(), BorderLayout.EAST);
+            
+            remplacerButton = new JButton("Remplacer");
+            annulerButton = new JButton("Tout défausser");   
+            
+            cardsProposesButtonsCenterPanel.add(remplacerButton);
+            cardsProposesButtonsCenterPanel.add(annulerButton);
+            
         // ============= LISTENERS: GRIDBUTTONS =============
         
         // -------- seDeplacerButton et assecherButton (changer le mode d'actions) --------
@@ -251,6 +309,25 @@ public class VueJeu implements Observe{
                 notifierObservateur(m);
             }
         });
+        
+        // ============= LISTENERS: CARDSPROPOSESBUTTONS =============
+        
+        annulerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    Message m = new Message(Utils.Commandes.DEFAUSSER_PIOCHE, 0, 0, null, 0);
+                notifierObservateur(m);
+            }
+        });
+        
+        remplacerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Message m = new Message(Utils.Commandes.REMPLACER, 0, 0, null, 0);
+                notifierObservateur(m);
+            }
+        });
+
     }
     
     // ===================================== METHODES =====================================
@@ -285,10 +362,37 @@ public class VueJeu implements Observe{
         }
     }
     
+    // Affiche les cartes piochées si le joueur courant en a déjà 5 dans sa main
+    public void afficherCartesPioche(ArrayList<Carte> cartes) {
+        // Enleve toutes les cartes affichées
+        for (VueCarte vC : vuesCartesPioche) {
+            vC.removeCardImage();
+        }
+        // Affiche les nouvelles cartes piochées avec une bordure rouge
+        int x = 0;
+        for (Carte carte : cartes) {    
+            vuesCartesPioche.get(x).addCardImage(carte);
+            vuesCartesPioche.get(x).setBorder(new LineBorder(Color.RED, 3)); 
+            x++;
+        }
+    }
+    
+    // Enlève l'image de la carte d'id idCarte du panel piocherPanel
+    public void removeCardPiochee(int idCarte) {
+        for (VueCarte vC : vuesCartesPioche) {
+            if (vC.getNumCarte() == idCarte) {
+                vC.removeCardImage();
+                vC.setBorder(new LineBorder(new JButton().getBackground()));
+            } else if (vC.getHasImage()){
+                vC.setBorder(new LineBorder(Color.RED, 3));
+            }
+        }
+    }
+    
     // Enleve l'image de la derniere carte après une défausse
-    public void defausseLastCard(int id) {
+    public void defausseLastCard(int idAventurier) {
         for (VueAventurier vA : vuesAventuriers) {
-            if (vA.getID() == id) {
+            if (vA.getID() == idAventurier) {
                 vA.defausseLastCard();
             }
         }
@@ -317,6 +421,17 @@ public class VueJeu implements Observe{
         }   
     }
     
+    // Enlève les bordures des cartes affichées après une pioche, sauf celle choisie auquelle on met une bordure bleue
+    public void cacherCardsPiocheBorder(int numCarte) {
+        for (VueCarte vC : vuesCartesPioche) {
+            if (vC.getNumCarte() == numCarte) {
+                vC.setBorder(new LineBorder(Color.BLUE, 3)); 
+            } else {
+                vC.setBorder(new LineBorder(new JButton().getBackground()));
+            }
+        }
+    }
+    
     // Enlève les bordures de toutes les cartes
     public void cacherCardsBorder() {
         for (VueAventurier vA : vuesAventuriers) {
@@ -324,7 +439,7 @@ public class VueJeu implements Observe{
         }
     }
     
-    // Enlève les bordures de toutes les cartes sauf celle choisie (numCarte)
+    // Enlève les bordures de toutes les cartes de chaque vueAventuriker sauf celle choisie  auquelle on met une bordure bleue
     public void cacherCardsBorder(int numCarte, int idAventurier) {
         for (VueAventurier vA : vuesAventuriers) {
             if (vA.getID() != idAventurier) {
@@ -383,10 +498,18 @@ public class VueJeu implements Observe{
             
     public void afficher() {
         gameFrame.setVisible(true);
+        leftFrame.setVisible(true);
         for (VueAventurier va : vuesAventuriers) {
             va.afficher();
         }
-        vueGrille.setVisible(true);
+    }
+    
+    public void afficherPioche() {
+        piocherFrame.setVisible(true);
+    }
+    
+    public void cacherPioche() {
+        piocherFrame.setVisible(false);
     }
     
     public void cacher(){
@@ -432,6 +555,9 @@ public class VueJeu implements Observe{
         vueGrille.addObservateur(o);
         for (VueAventurier vA : vuesAventuriers) {
             vA.addObservateur(o);
+        }
+        for (VueCarte vC : vuesCartesPioche) {
+            vC.addObservateur(o);
         }
     }
     
@@ -484,5 +610,19 @@ public class VueJeu implements Observe{
         actionSpecialeButton.setEnabled(false);
     }
     
+    public void possibleAnnuler() {
+        annulerButton.setEnabled(true);
+    }
+    public void impossibleAnnuler() {
+        annulerButton.setEnabled(false);
+    }
+    
+    public void possibleRemplacer() {
+        remplacerButton.setEnabled(true);
+    }
+    public void impossibleRemplacer() {
+        remplacerButton.setEnabled(false);
+    }
     
 }
+
