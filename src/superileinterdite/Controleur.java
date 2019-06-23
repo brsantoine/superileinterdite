@@ -731,6 +731,7 @@ public class Controleur implements Observateur {
                 ihmJeu.impossibleGiveCarte();
                 ihmJeu.impossibleRecupererTresor(); 
                 ihmJeu.desactiverHelico();
+                ihmJeu.impossibleActionSpeciale();
                 ihmJeu.getMessageBox().displayMessage("<h1 style=\"text-align:center;\">Vous avez <br>Gagné</h1>", Color.green, true, true);              
                 ihmJeu.getMessageBox().displayMessage("", Color.black, true, false);           
             } else {
@@ -752,6 +753,7 @@ public class Controleur implements Observateur {
                    ihmJeu.impossibleGiveCarte();
                    ihmJeu.impossibleRecupererTresor(); 
                    ihmJeu.desactiverHelico();
+                   ihmJeu.impossibleActionSpeciale();
                    ihmJeu.getMessageBox().displayMessage("<h1 style=\"text-align:center;\">Vous avez <br>Perdu</h1>", Color.red, true, true);
                    ihmJeu.getMessageBox().displayMessage("", Color.black, true, false);
 
@@ -1390,6 +1392,8 @@ public class Controleur implements Observateur {
                     modeDefausser = false; 
                     modeDonner = false; 
                     modeDeplacerAutre = false; 
+                    modeChoixHelicoDestination = false;
+                    modeActionSpeciale = false;
                     tAssech.removeAll(tAssech);
                     tAccess.removeAll(tAccess);
                     for (Aventurier a : this.getJoueurs()) {
