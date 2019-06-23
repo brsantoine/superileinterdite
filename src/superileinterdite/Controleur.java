@@ -21,7 +21,7 @@ public class Controleur implements Observateur {
   
         private Aventurier lastPlayer;
         private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false, modeDefausser = false, 
-                        modeDonner = false, modeDeplacerAutre = false, modeActionSpeciale = false, modeChoixHelicoDestination = false, modePiocher = false, modeRemplacer = false;
+                        modeDonner = false, modeDeplacerAutre = false, modeActionSpeciale = false, modeChoixHelicoDestination = false, modePiocher = false, modeRemplacer = false, deuxiemeTourAvant = false;
         private ArrayList<Carte> montrerCartes;
 	      private int niveauEau, nbAction, tour, cardOwnerId, cardSelectedId, nbtourassech, tuileInitialeId;
 
@@ -571,7 +571,7 @@ public class Controleur implements Observateur {
                         }
                     }
                 }
-            }
+            
             
            ArrayList<Tuile> tAccess = new ArrayList<>();
            tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
@@ -587,7 +587,7 @@ public class Controleur implements Observateur {
                 ihmJeu.possibleDeplacer();
             }
             else if(tAccess.size()>0){
-                if(this.aQuiLeTour().getRole()=="ingenieur" && this.doubleAssechement && this.getActions()==1 && !this.deuxiemetouravant){
+                if(this.aQuiLeTour().getRole()=="ingenieur" && this.doubleAssechement && this.getActions()==1 && !this.deuxiemeTourAvant){
                     ihmJeu.impossibleDeplacer();
                 } else{
                     ihmJeu.possibleDeplacer();
@@ -620,8 +620,9 @@ public class Controleur implements Observateur {
                        }
                     }
                 }
-            }
         }
+            
+        
        
         // Renvoie toutes les actions possibles en fonction des multiples parametres du joueur(tuile,carte, role ect..)
         public void tourDeJeu(){                       
@@ -729,7 +730,7 @@ public class Controleur implements Observateur {
                 tm.add(Utils.Commandes.SE_DEPLACER);
             }
             else if(tAccess.size()>0){
-                if(this.aQuiLeTour().getRole()=="ingenieur" && this.doubleAssechement && this.getActions()==1 && !this.deuxiemetouravant){
+                if(this.aQuiLeTour().getRole()=="ingenieur" && this.doubleAssechement && this.getActions()==1 && !this.deuxiemeTourAvant){
                     ihmJeu.impossibleDeplacer();
                 } else{
                     ihmJeu.possibleDeplacer();
@@ -780,7 +781,7 @@ public class Controleur implements Observateur {
                 }
                 ihmJeu.getMessageBox().displayMessage("<ul>" + actions + "</ul>", Color.black, false, false);
             }
-        }
+        
 
         // Effectue toutes les actions nécessaires apres qu'un joueur ai fini ses actions  
         public void finTour(){            
@@ -1044,7 +1045,7 @@ public class Controleur implements Observateur {
                                 }
                                 else{
                                     if(this.nbAction==2){
-                                        this.deuxiemetouravant=true;
+                                        this.deuxiemeTourAvant=true;
                                         this.actionFinie();
                                         nbtourassech=this.nbAction;
                                         doubleAssechement=true;
@@ -1062,13 +1063,13 @@ public class Controleur implements Observateur {
                                     this.doubleAssechement=true;
                                    nbtourassech=this.nbAction;
                                 }
-                                else if(doubleAssechement=true && this.getActions()==1 && !this.deuxiemetouravant){
+                                else if(doubleAssechement=true && this.getActions()==1 && !this.deuxiemeTourAvant){
                                    this.actionFinie();
                                     doubleAssechement=false;
                                 }
                                 else {
                                 doubleAssechement=false;
-                                this.deuxiemetouravant=false;
+                                this.deuxiemeTourAvant=false;
 
                                 }
                             } else {
@@ -1136,11 +1137,11 @@ public class Controleur implements Observateur {
                     modeDefausser = false;
                     modeAssechement = false;
                     modeDeplacerAutre = false;
-                    
-                    if (!m.getHelico()) {
-                        ihmJeu.impossibleDeplacer();
-                        modeDeplacement = true;
-                    }
+                    modeDeplacement = true;
+
+//                    if (m.getHelico()) {
+//                        ihmJeu.impossibleDeplacer();
+//                    }
                     
                     ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
                     ihmJeu.getGrille().afficherPions(lesJoueurs);

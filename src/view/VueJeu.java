@@ -164,6 +164,8 @@ public class VueJeu implements Observe{
         // --------------------------------------------------------------------     
         
         piocherFrame = new JFrame();     
+        piocherFrame.getRootPane().setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, Color.BLACK));
+
         cardsProposesPanel = new JPanel();
         cardsProposesButtonsPanel = new JPanel();
         
@@ -183,7 +185,7 @@ public class VueJeu implements Observe{
         
             // ------------- cardsProposesPanel -------------
             
-            cardsProposesPanel.setPreferredSize(new Dimension(Parameters.PIOCHER_FRAME_WIDTH, Parameters.PIOCHER_FRAME_HEIGHT*87/100));            
+            cardsProposesPanel.setPreferredSize(new Dimension(Parameters.PIOCHER_FRAME_WIDTH, Parameters.PIOCHER_FRAME_HEIGHT*80/100));            
             cardsProposesPanel.setLayout(new BorderLayout());
             
             cartesPiocheesLabel = new JLabel("Cartes piochées: ", SwingConstants.CENTER);            
