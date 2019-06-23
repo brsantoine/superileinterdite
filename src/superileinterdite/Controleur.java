@@ -712,8 +712,20 @@ public class Controleur implements Observateur {
             // Detecte si la victoire est encore possible
             if(cestgagne()){
                 ihmJeu.afficherVictoire();
+                ihmJeu.afficherBoutonRecommencer();
+                ihmJeu.afficherDefaite();
+                ihmJeu.afficherBoutonRecommencer();
+                ihmJeu.impossibleAssecher();
+                ihmJeu.impossibleDefausser();
+                ihmJeu.impossibleDeplacer();
+                ihmJeu.impossibleDeplacerAutre();
+                ihmJeu.impossibleFinTour();
+                ihmJeu.impossibleGiveCarte();
+                ihmJeu.impossibleRecupererTresor(); 
+                ihmJeu.desactiverHelico();
                 ihmJeu.getMessageBox().displayMessage("<h1 style=\"text-align:center;\">Vous avez <br>Gagné</h1>", Color.green, true, true);              
-                ihmJeu.getMessageBox().displayMessage("", Color.black, true, false);            } else {
+                ihmJeu.getMessageBox().displayMessage("", Color.black, true, false);           
+            } else {
                 for(Aventurier a : this.lesJoueurs) {
                     if(a.getTuile().getEtat().equals("coulé") && a.TuilesAccessibles(laGrille).size()==0) {
                         a.setEtat(false);
@@ -723,6 +735,15 @@ public class Controleur implements Observateur {
                     this.nvtour();
                 } else {
                    ihmJeu.afficherDefaite();
+                   ihmJeu.afficherBoutonRecommencer();
+                   ihmJeu.impossibleAssecher();
+                   ihmJeu.impossibleDefausser();
+                   ihmJeu.impossibleDeplacer();
+                   ihmJeu.impossibleDeplacerAutre();
+                   ihmJeu.impossibleFinTour();
+                   ihmJeu.impossibleGiveCarte();
+                   ihmJeu.impossibleRecupererTresor(); 
+                   ihmJeu.desactiverHelico();
                    ihmJeu.getMessageBox().displayMessage("<h1 style=\"text-align:center;\">Vous avez <br>Perdu</h1>", Color.red, true, true);
                    ihmJeu.getMessageBox().displayMessage("", Color.black, true, false);
 
@@ -1251,6 +1272,37 @@ public class Controleur implements Observateur {
                     AfficherActionsPossibles();
                     modeDefausser = false;
                     this.finTour();
+                break;
+                
+                case RECOMMENCER:
+                    this.ihmMenu.afficher();
+                    for(Tuile t : this.laGrille.getTuiles()){
+                        t.setEtat("seche");
+                    }
+                    doubleAssechement = false;
+                    modeDeplacement = false; 
+                    modeAssechement = false; 
+                    modeDefausser = false; 
+                    modeDonner = false; 
+                    modeDeplacerAutre = false; 
+                    usingHelico = false;
+                    tAssech.removeAll(tAssech);
+                    tAccess.removeAll(tAccess);
+                    for (Aventurier a : this.getJoueurs()) {
+                        a.getCartes().removeAll(a.getCartes());
+                    }
+                    for (Tresors t : this.lesTresors) {
+                        t.setEtat(false);
+                    }
+                    this.PileInondation.ViderPile();
+                    this.PileTresor.ViderPile();
+                    this.defausseInondation.ViderPile();
+                    this.defausseTresor.ViderPile();
+                    this.lesTresors.removeAll(this.lesTresors);
+                    this.laGrille.getTuiles().removeAll(laGrille.getTuiles());
+                    
+                    
+                    this.ihmJeu.cacher();
                 break;
 
             }

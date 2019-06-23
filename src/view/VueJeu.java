@@ -31,7 +31,7 @@ public class VueJeu implements Observe{
     private MessageBox messageBox;
     private ArrayList<VueAventurier> vuesAventuriers;
 
-    private JButton seDeplacerButton, assecherButton, endTurnButton, helicoButton, giveButton, defausserButton, recupererButton, deplacerAutre;
+    private JButton seDeplacerButton, assecherButton, endTurnButton, helicoButton, giveButton, defausserButton, recupererButton, deplacerAutre,recommencerButton;
     private JPanel westPanel, eastPanel, gridButtonsPanel, aventurierButtonsPanel, aventuriersPanel;  
     private JLabel actionsRemainingLabel;
 
@@ -98,10 +98,14 @@ public class VueJeu implements Observe{
             assecherButton = new JButton("Assécher");  
             endTurnButton = new JButton("Fin tour");      
             deplacerAutre = new JButton("Deplacer autre joueur");      
-            recupererButton = new JButton("Recuperer Trésor");      
+            recupererButton = new JButton("Recuperer Trésor");  
+            recommencerButton = new JButton("Recommencer");
+            recommencerButton.setEnabled(false);
             
             actionsRemainingLabel = new JLabel("3 actions restantes");
-
+            
+            
+            gridButtonsPanel.add(recommencerButton);
             gridButtonsPanel.add(actionsRemainingLabel);
             gridButtonsPanel.add(seDeplacerButton);
             gridButtonsPanel.add(assecherButton);
@@ -234,6 +238,15 @@ public class VueJeu implements Observe{
                 notifierObservateur(m);
             }
         });
+        
+        recommencerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                recupererButton.setEnabled(false);
+                Message m = new Message(Utils.Commandes.RECOMMENCER, 0, 0, null, 0);
+                notifierObservateur(m);
+            }
+        });
     }
     
     public void possibleFinTour() {
@@ -362,14 +375,21 @@ public class VueJeu implements Observe{
         
     }
     
+    public void cacher(){
+        gameFrame.setVisible(false);
+        leftFrame.setVisible(false);
+    }
+    
     public void afficherDefaite() {
-      gameFrame.setEnabled(false);
       System.out.println("vous avez perdu");
     }
     
     public void afficherVictoire() {
-      gameFrame.setEnabled(false);
       System.out.println("vous avez gagné");
+    }
+    
+    public void afficherBoutonRecommencer(){
+        recommencerButton.setEnabled(true);
     }
     
     public void activerHelico() {

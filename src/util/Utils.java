@@ -30,7 +30,8 @@ public class Utils {
         CARTE_MAIN_PLEINE("Envoyé si le joueur pioche des cartes et que sa main est pleine"),
         DEFAUSSER_CARTE("Defausse une carte"),
         ACTION_SPECIALE("Quand l'utilisateur clique sur une carte AS"),
-        HELICO("deplacement du pilote avec l'hélicoptere");
+        HELICO("deplacement du pilote avec l'hélicoptere"),
+        RECOMMENCER("Recommence la partie");
         
         
         private final String libelle ;  
