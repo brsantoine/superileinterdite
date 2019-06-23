@@ -20,7 +20,7 @@ public class Grille {
             sesTuiles.add(tuile);
         }
         public void randomizeGrille() {
-            Collections.shuffle(sesTuiles);
+            //Collections.shuffle(sesTuiles);
             //On obtient les tuiles dans la grille par un indice et on affecte x et y;
             
             

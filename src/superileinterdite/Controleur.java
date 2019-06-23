@@ -21,6 +21,10 @@ public class Controleur implements Observateur {
 	private int niveauEau;
         private int nbAction;
         private int tour;
+        private Tresors Calice;
+        private Tresors Cristal;
+        private Tresors Statue;
+        private Tresors Pierre;
         private int cardOwnerId, cardUsedId;
         private int tuileInitialeId;
         private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false, modeDefausser = false, 
@@ -55,47 +59,47 @@ public class Controleur implements Observateur {
             Aventurier pilote = new Pilote();
             Aventurier explorateur = new Explorateur();
             this.lesJoueurs.add(pilote);
-            this.lesJoueurs.add(plongeur);
-            this.lesJoueurs.add(ingenieur);
+            //this.lesJoueurs.add(plongeur);
+           // this.lesJoueurs.add(ingenieur);
             this.lesJoueurs.add(messager);
             this.lesJoueurs.add(navigateur);
             this.lesJoueurs.add(explorateur);
-            Collections.shuffle(this.lesJoueurs);
+            //Collections.shuffle(this.lesJoueurs);
             // Creation des tuiles
-            laGrille.addTuile(new Tuile("Le Val Du Crepuscule"));
-            laGrille.addTuile(new Tuile("Le Marais Brumeux"));
-            laGrille.addTuile(new Tuile("Le Pont Des Abimes"));
-            laGrille.addTuile(new Tuile("Les Dunes De LIllusion"));
-            laGrille.addTuile(new Tuile("Les Falaises De LOubli"));
-            laGrille.addTuile(new Tuile("Observatoire"));
-            laGrille.addTuile(new Tuile("Le Rocher Fantome"));
-            laGrille.addTuile(new Tuile("La Foret Pourpre"));
-            laGrille.addTuile(new Tuile("Le Lagon Perdu"));
-            laGrille.addTuile(new Tuile("La Tour Du Guet"));
-            // Creation des Tuiles depart
-            laGrille.addTuile(new TuilePion("Heliport",pilote));
-            laGrille.addTuile(new TuilePion("La Porte De Bronze",ingenieur));
-            laGrille.addTuile(new TuilePion("La Porte De Fer",plongeur));
-            laGrille.addTuile(new TuilePion("La Porte DOr",navigateur));
-            laGrille.addTuile(new TuilePion("La Porte DArgent",messager));
-            laGrille.addTuile(new TuilePion("La Porte De Cuivre",explorateur));
-            // Creation des trésors
-            Tresors Pierre = new Tresors("La Pierre sacrée");
-            Tresors Statue = new Tresors("La Statue du zéphyr");            
-            Tresors Cristal = new Tresors("Le Cristal ardent");            
-            Tresors Calice = new Tresors("Le Calice de l’onde");   
+             Pierre = new Tresors("La Pierre sacrée");
+             Statue = new Tresors("La Statue du zéphyr");            
+             Cristal = new Tresors("Le Cristal ardent");            
+             Calice = new Tresors("Le Calice de l’onde");   
             lesTresors.add(Pierre);
             lesTresors.add(Statue);
             lesTresors.add(Cristal);
             lesTresors.add(Calice);
-            // Creation des tuilesTresors
-            laGrille.addTuile(new TuileTresor("La Caverne Du Brasier",Cristal));
+            laGrille.addTuile(new Tuile("Le Val Du Crepuscule"));
+            laGrille.addTuile(new Tuile("Observatoire"));
+            laGrille.addTuile(new TuilePion("La Porte De Fer",plongeur));
             laGrille.addTuile(new TuileTresor("La Caverne Des Ombres",Cristal));
+            laGrille.addTuile(new Tuile("Le Marais Brumeux"));
             laGrille.addTuile(new TuileTresor("Le Jardin Des Hurlements",Statue));
+            laGrille.addTuile(new TuilePion("La Porte DOr",navigateur));
+            laGrille.addTuile(new Tuile("Le Rocher Fantome"));
+            laGrille.addTuile(new Tuile("Le Lagon Perdu"));
             laGrille.addTuile(new TuileTresor("Le Jardin Des Murmures",Statue));
             laGrille.addTuile(new TuileTresor("Le Temple Du Soleil",Pierre));
-            laGrille.addTuile(new TuileTresor("Le Temple De La Lune",Pierre));
+            laGrille.addTuile(new Tuile("La Tour Du Guet"));
+            // Creation des Tuiles depart
+            laGrille.addTuile(new TuilePion("Heliport",pilote));
+            laGrille.addTuile(new TuilePion("La Porte De Bronze",ingenieur));
             laGrille.addTuile(new TuileTresor("Le Palais De Corail",Calice));
+            laGrille.addTuile(new TuilePion("La Porte DArgent",messager));
+            // Creation des trésors
+            // Creation des tuilesTresors
+            laGrille.addTuile(new TuileTresor("La Caverne Du Brasier",Cristal));
+            laGrille.addTuile(new Tuile("Le Pont Des Abimes"));
+            laGrille.addTuile(new Tuile("Les Dunes De LIllusion"));
+            laGrille.addTuile(new Tuile("Les Falaises De LOubli"));
+            laGrille.addTuile(new TuileTresor("Le Temple De La Lune",Pierre));
+            laGrille.addTuile(new TuilePion("La Porte De Cuivre",explorateur));
+            laGrille.addTuile(new Tuile("La Foret Pourpre"));
             laGrille.addTuile(new TuileTresor("Le Palais Des Marees",Calice));
             // Randomizer la grille du jeu
             laGrille.randomizeGrille();
@@ -108,10 +112,6 @@ public class Controleur implements Observateur {
             this.niveauEau=1;                                                                         
             PileTresor = new Pile("Pile Trésor");
             PileTresor.addPile(new CarteTresors("Calice",null,Calice));
-            PileTresor.addPile(new CarteTresors("Calice",null,Calice));
-            PileTresor.addPile(new CarteTresors("Calice",null,Calice));
-            PileTresor.addPile(new CarteTresors("Calice",null,Calice));
-            PileTresor.addPile(new CarteTresors("Calice",null,Calice));
             //
             PileTresor.addPile(new CarteTresors("Statue",null,Statue));
             PileTresor.addPile(new CarteTresors("Statue",null,Statue));
@@ -123,17 +123,11 @@ public class Controleur implements Observateur {
             PileTresor.addPile(new CarteTresors("Cristal",null,Cristal));
             PileTresor.addPile(new CarteTresors("Cristal",null,Cristal));
             PileTresor.addPile(new CarteTresors("Cristal",null,Cristal));
-            PileTresor.addPile(new CarteTresors("Cristal",null,Cristal));
             //
-            PileTresor.addPile(new CarteTresors("Pierre",null,Pierre));
-            PileTresor.addPile(new CarteTresors("Pierre",null,Pierre));
             PileTresor.addPile(new CarteTresors("Pierre",null,Pierre));
             PileTresor.addPile(new CarteTresors("Pierre",null,Pierre));
             PileTresor.addPile(new CarteTresors("Pierre",null,Pierre));
             // Heli = Helicoptere
-            PileTresor.addPile(new CarteActionSpeciale("Heli",null));
-            PileTresor.addPile(new CarteActionSpeciale("Heli",null));
-            PileTresor.addPile(new CarteActionSpeciale("Heli",null));
             // MDeaux = Montée des eaux
             PileTresor.addPile(new CarteActionSpeciale("MDeaux",null));
             PileTresor.addPile(new CarteActionSpeciale("MDeaux",null));
@@ -808,8 +802,33 @@ public class Controleur implements Observateur {
                     ihmJeu.getMessageBox().displayMessage("<h1 style=\"text-align:center;\">Bienvenue dans<br>l'Île Interdite</h1>", Color.black, false, false);
                     ihmJeu.getMessageBox().displayMessage("", Color.black, true, false);   
                     
-                    piocherInondationDebut();                    
-                    piocherTresorDebut();
+                    piocherInondationDebut();  
+                    for(int i=0;i<=2;i++){
+                        this.recupererTresor(this.lesTresors.get(i));
+                    }
+                    for(Aventurier a : this.lesJoueurs){
+                if(a.getRole()=="messager"){
+                    a.addCarte(new CarteTresors("Calice","messager",Calice));
+                    a.addCarte(new CarteActionSpeciale("Heli","messager"));
+                    a.addCarte(new CarteTresors("Cristal","messager",Cristal));
+                }
+                if(a.getRole()=="pilote"){
+                    a.addCarte(new CarteTresors("Pierre","pilote",Pierre));
+                    a.addCarte(new CarteActionSpeciale("Heli","pilote"));
+                }
+                if(a.getRole()=="explorateur"){
+                    a.addCarte(new CarteTresors("Calice","explorateur",Calice));
+                    a.addCarte(new CarteTresors("Calice","explorateur",Calice));
+                    a.addCarte(new CarteTresors("Calice","explorateur",Calice));
+                }
+                if(a.getRole()=="navigateur"){
+                    a.addCarte(new CarteActionSpeciale("Heli","navigateur"));
+                    a.addCarte(new CarteTresors("Pierre","navigateur",Pierre));
+
+                }
+                ihmJeu.updateCards(a.getId(), a.getCartes());
+            }
+                    //piocherTresorDebut();
                     
                     this.ihmJeu.getGrille().initialiserGrille(this.laGrille.getTuiles(), lesJoueurs);
                     this.ihmJeu.getGrille().afficherPions(lesJoueurs);
