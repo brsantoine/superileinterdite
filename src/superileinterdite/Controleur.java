@@ -822,6 +822,7 @@ public class Controleur implements Observateur {
                     
                     piocherInondationDebut();                    
                     piocherTresorDebut();
+          
                     
                     this.ihmJeu.getGrille().initialiserGrille(this.laGrille.getTuiles(), lesJoueurs);
                     this.ihmJeu.getGrille().afficherPions(lesJoueurs);
@@ -832,6 +833,13 @@ public class Controleur implements Observateur {
 //                    }
                     
                     this.setNiveauEau(m.getNiveauEau().getSelectedIndex()+1);
+                    this.niveauEau = 9;
+                    this.ihmJeu.getVueNiveau().setNiveau(9);
+                    
+                    this.PileTresor.getSesCartes().removeAll(this.PileTresor.getSesCartes());
+
+                    this.PileTresor.addPile(new CarteActionSpeciale("MDeaux",null));
+                    this.PileTresor.addPile(new CarteActionSpeciale("Sac",null));
                     
                     
                     this.nvtour();
