@@ -28,7 +28,6 @@ public class Parameters {
     public static final Integer TOP_AUTRES_VUES = 265 - (UNDECORATED ? 0 : DECORATION_HEIGHT) ; // Position des fenêtres Niveau, Plateau et Message en NoPic
     public static final Integer HAUTEUR_AUTRES_VUES = 491 + (UNDECORATED ? 0 : DECORATION_HEIGHT) ; // Hauteur des fenêtres Niveau, Plateau et Message    
     
-    
     // RESPONSIVE
     public static final Integer HORIZONTAL_BUFFER = (int) screenSize.getWidth()/100; // Espace de 1% entre les bords horizontaux de l'écran et les fenêtres
     public static final Integer VERTICAL_BUFFER = (int) screenSize.getHeight()/20; // Espace de 5% entre les bords horizontaux de l'écran et les fenêtres
@@ -43,7 +42,7 @@ public class Parameters {
     public static final Integer VERTICAL_SPACE = GAME_FRAME_HEIGHT/50; // Hauteur entre chaque panel de VueJeu
     public static final Integer HORIZONTAL_SPACE = (int) screenSize.getWidth()/100; // Largeur entre chaque panel de VueJeu
     
-    public static final Integer BUTTONS_PANEL_HEIGHT = GAME_FRAME_HEIGHT/20; // Hauteur des panels contenant les boutons
+    public static final Integer BUTTONS_PANEL_HEIGHT = GAME_FRAME_HEIGHT/15; // Hauteur des panels contenant les boutons
     
     public static final Integer GRID_WIDTH = (int) GAME_FRAME_WIDTH*3/5; // Largeur de la grille (3/5 de la fenêtre de jeu)
     public static final Integer GRID_HEIGHT = (int) GAME_FRAME_HEIGHT - BUTTONS_PANEL_HEIGHT - VERTICAL_SPACE*2; // Hauteur de la grille

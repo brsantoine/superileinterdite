@@ -74,6 +74,7 @@ public class VueMenu implements Observe {
         for (int i = 0; i < 4; i++) {
             nomsJoueurs.add(new JTextField());
         }
+
         
         for (int i = 0; i < 4; i++) {
             couleursJoueurs.add(new JComboBox(couleurs));
@@ -104,13 +105,11 @@ public class VueMenu implements Observe {
 
         JPanel panelVide = new JPanel();
         panelBoutons.add(panelVide);
-
-        playButton.setEnabled(false);
         
-        nomsJoueurs.get(2).setVisible(false);
-        nomsJoueurs.get(3).setVisible(false);
-        couleursJoueurs.get(2).setVisible(false);
-        couleursJoueurs.get(3).setVisible(false);
+        nomsJoueurs.get(2).setVisible(true);
+        nomsJoueurs.get(3).setVisible(true);
+        couleursJoueurs.get(2).setVisible(true);
+        couleursJoueurs.get(3).setVisible(true);
         
         for (JTextField nom : nomsJoueurs) {
             nom.addKeyListener(new KeyAdapter() {
@@ -121,7 +120,7 @@ public class VueMenu implements Observe {
                 }
             });
         }
-        
+        /*
         nomsJoueurs.get(0).getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
               changed();
@@ -277,7 +276,7 @@ public class VueMenu implements Observe {
                     }
                 }
             }
-        });
+        });*/
             
         // Jouer: change les fenêtres lorsque l'on appuie sur le bouton Jouer   
         
@@ -310,11 +309,19 @@ public class VueMenu implements Observe {
     
     public void afficher() {
         this.menuWindow.setVisible(true);
-        this.deleteJoueur(3);
-        this.deleteJoueur(2);
-        nomsJoueurs.get(0).setText("");
-        nomsJoueurs.get(1).setText("");
-        niveauxDifficulte.setSelectedIndex(0);
+        nomsJoueurs.get(0).setText("Saint-Exupéry");
+        nomsJoueurs.get(1).setText("Manaudou");
+        nomsJoueurs.get(2).setText("Firefox");
+        nomsJoueurs.get(3).setText("Colomb");
+        couleursJoueurs.get(0).setSelectedIndex(1);
+        couleursJoueurs.get(1).setSelectedIndex(2);
+        couleursJoueurs.get(2).setSelectedIndex(3);
+        couleursJoueurs.get(3).setSelectedIndex(4);
+       
+        
+        
+        
+        niveauxDifficulte.setSelectedIndex(3);
     }
     
     public void cacher() {

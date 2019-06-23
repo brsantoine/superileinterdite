@@ -20,12 +20,12 @@ public class Controleur implements Observateur {
 	private ArrayList<Pile> sesPiles ;
 	private int niveauEau;
         private int nbAction;
-        private int tour;
+        private int tour,nbtourassech;
         private int cardOwnerId, cardUsedId;
         private int tuileInitialeId;
-        private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false, modeDefausser = false, 
+        private boolean doubleAssechement = false, modeDeplacement = false, modeAssechement = false, modeDefausser = false, deuxiemetouravant=false,
                         modeDonner = false, modeDeplacerAutre = false, modeActionSpeciale = false, modeChoixHelicoDestination = false;
-        private ArrayList<Tuile> tAssech, tAccess;
+       //private ArrayList<Tuile> tAssech, tAccess;
         private Pile PileTresor,PileInondation,defausseTresor,defausseInondation;
         
 
@@ -56,11 +56,11 @@ public class Controleur implements Observateur {
             Aventurier explorateur = new Explorateur();
             this.lesJoueurs.add(pilote);
             this.lesJoueurs.add(plongeur);
-            this.lesJoueurs.add(ingenieur);
-            this.lesJoueurs.add(messager);
+            //this.lesJoueurs.add(ingenieur);
+            //this.lesJoueurs.add(messager);
             this.lesJoueurs.add(navigateur);
             this.lesJoueurs.add(explorateur);
-            Collections.shuffle(this.lesJoueurs);
+            //Collections.shuffle(this.lesJoueurs);
             // Creation des tuiles
             laGrille.addTuile(new Tuile("Le Val Du Crepuscule"));
             laGrille.addTuile(new Tuile("Le Marais Brumeux"));
@@ -119,6 +119,7 @@ public class Controleur implements Observateur {
             PileTresor.addPile(new CarteTresors("Statue",null,Statue));
             PileTresor.addPile(new CarteTresors("Statue",null,Statue));
             //
+            PileTresor.addPile(new CarteActionSpeciale("MDeaux",null));
             PileTresor.addPile(new CarteTresors("Cristal",null,Cristal));
             PileTresor.addPile(new CarteTresors("Cristal",null,Cristal));
             PileTresor.addPile(new CarteTresors("Cristal",null,Cristal));
@@ -127,6 +128,7 @@ public class Controleur implements Observateur {
             //
             PileTresor.addPile(new CarteTresors("Pierre",null,Pierre));
             PileTresor.addPile(new CarteTresors("Pierre",null,Pierre));
+            PileTresor.addPile(new CarteActionSpeciale("MDeaux",null));
             PileTresor.addPile(new CarteTresors("Pierre",null,Pierre));
             PileTresor.addPile(new CarteTresors("Pierre",null,Pierre));
             PileTresor.addPile(new CarteTresors("Pierre",null,Pierre));
@@ -136,20 +138,18 @@ public class Controleur implements Observateur {
             PileTresor.addPile(new CarteActionSpeciale("Heli",null));
             // MDeaux = Montée des eaux
             PileTresor.addPile(new CarteActionSpeciale("MDeaux",null));
-            PileTresor.addPile(new CarteActionSpeciale("MDeaux",null));
-            PileTresor.addPile(new CarteActionSpeciale("MDeaux",null));
             // Sac = Sac de sables
             PileTresor.addPile(new CarteActionSpeciale("Sac",null));
             PileTresor.addPile(new CarteActionSpeciale("Sac",null));
             //
-            PileTresor.randomizePile();
+            //PileTresor.randomizePile();
 
             
             PileInondation = new Pile("Pile Inondation");
             for (Tuile tuile : laGrille.getTuiles()) {
                 PileInondation.addPile(new CarteInondation(tuile));
             }
-            PileInondation.randomizePile();
+            //PileInondation.randomizePile();
             
             defausseTresor = new Pile("Defausse Tresor");
             defausseInondation = new Pile("Defausse Inondation");
@@ -264,7 +264,7 @@ public class Controleur implements Observateur {
             
 	}
         
-        
+        //
         public void piocherInondation(){
             for (int i = 0; i < nbCarteInonAPiocher(); i++) {
                 if (!PileInondation.getSesCartes().isEmpty()) {
@@ -382,6 +382,7 @@ public class Controleur implements Observateur {
         // Effectue un nouveau tour
         public void nvtour(){
             this.tour++;
+            doubleAssechement=false;
             ihmJeu.afficherJoueurCourant(this.aQuiLeTour().getId());
 
             this.remettreAJourAction();            
@@ -521,7 +522,7 @@ public class Controleur implements Observateur {
                 }
             }
             
-            tAssech = new ArrayList<>();
+            ArrayList<Tuile> tAssech = new ArrayList<>();
             tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
 
             if (tAssech.size()>0) {
@@ -557,7 +558,7 @@ public class Controleur implements Observateur {
                 }
             }
             
-           tAccess = new ArrayList<>();
+           ArrayList<Tuile> tAccess = new ArrayList<>();
            tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
            
             // Regarde si le joueur peut se deplacer en fonction de son rôle
@@ -571,7 +572,11 @@ public class Controleur implements Observateur {
                 ihmJeu.possibleDeplacer();
             }
             else if(tAccess.size()>0){
-                ihmJeu.possibleDeplacer();
+                if(this.aQuiLeTour().getRole()=="ingenieur" && this.doubleAssechement && this.getActions()==1 && !this.deuxiemetouravant){
+                    ihmJeu.impossibleDeplacer();
+                } else{
+                    ihmJeu.possibleDeplacer();
+                }
             }
 
             // Regarde si le navigateur peut se déplacer
@@ -634,7 +639,7 @@ public class Controleur implements Observateur {
                 }
             }
             
-            tAssech = new ArrayList<>();
+            ArrayList<Tuile> tAssech = new ArrayList<>();
             tAssech = this.aQuiLeTour().TuilesAssechables(this.getGrille());
 
             if (tAssech.size()>0) {
@@ -663,7 +668,7 @@ public class Controleur implements Observateur {
            }    
            
 
-           tAccess = new ArrayList<>();
+            ArrayList<Tuile> tAccess = new ArrayList<>();
            tAccess = this.aQuiLeTour().TuilesAccessibles(laGrille);
            
            
@@ -682,8 +687,12 @@ public class Controleur implements Observateur {
                 tm.add(Utils.Commandes.SE_DEPLACER);
             }
             else if(tAccess.size()>0){
-                ihmJeu.possibleDeplacer();
-                tm.add(Utils.Commandes.SE_DEPLACER);
+                if(this.aQuiLeTour().getRole()=="ingenieur" && this.doubleAssechement && this.getActions()==1 && !this.deuxiemetouravant){
+                    ihmJeu.impossibleDeplacer();
+                } else{
+                    ihmJeu.possibleDeplacer();
+                    tm.add(Utils.Commandes.SE_DEPLACER);
+                }
             }
 
             // Regarde si le navigateur peut se déplacer
@@ -711,6 +720,7 @@ public class Controleur implements Observateur {
         public void finTour(){            
             
             // Actualiser l'ihm   
+            nbtourassech=0;
             this.piocherTresor(aQuiLeTour());
             
             if (this.aQuiLeTour().getRole().equals("pilote") && ((Pilote) this.aQuiLeTour()).getHelico()==false) {
@@ -787,6 +797,8 @@ public class Controleur implements Observateur {
       
         @Override
 	public void traiterMessage(Message m) {
+            ArrayList<Tuile> tAccess = new ArrayList<>();
+            ArrayList<Tuile> tAssech = new ArrayList<>();
             switch (m.getCommande()) {
                 
                 case COMMENCER_JEU:
@@ -945,25 +957,48 @@ public class Controleur implements Observateur {
                         } else {
 
                             ihmJeu.getGrille().afficherTuilesAssecher(tAssech);
-
                             // Gere le double assechement d'un ingenieur
                             if(this.aQuiLeTour().getRole()=="ingenieur" && !doubleAssechement){            
                                 if(this.getActions()==1){
                                     //appeler fonction qui desactive tous les boutons sauf celui de assechement et fintour
                                     doubleAssechement=true;
+                                    ihmJeu.impossibleAssecher();
+                                    ihmJeu.impossibleDefausser();
+                                    ihmJeu.impossibleDeplacer();
+                                    ihmJeu.impossibleDeplacerAutre();
+                                    ihmJeu.impossibleGiveCarte();
+                                    ihmJeu.impossibleRecupererTresor(); 
+                                    ihmJeu.desactiverHelico();
+                                    ihmJeu.impossibleActionSpeciale();
+                                    nbtourassech=this.nbAction;
                                 }
                                 else{
-                                    this.actionFinie();
-                                    doubleAssechement=true;
+                                    if(this.nbAction==2){
+                                        this.deuxiemetouravant=true;
+                                        this.actionFinie();
+                                        nbtourassech=this.nbAction;
+                                        doubleAssechement=true;
+                                        ihmJeu.possibleDeplacer();
+                                    } else{
+                                        this.actionFinie();
+                                        nbtourassech=this.nbAction;
+                                        doubleAssechement=true;
+                                        ihmJeu.possibleDeplacer();                                        
+                                    }
                                 }
                             } 
                             else if(this.aQuiLeTour().getRole()=="ingenieur" && doubleAssechement){
-                                if(doubleAssechement=false && this.getActions()==1){
-                                    this.actionFinie();
+                                if(nbtourassech!=this.nbAction){
+                                    this.doubleAssechement=true;
+                                   nbtourassech=this.nbAction;
+                                }
+                                else if(doubleAssechement=true && this.getActions()==1 && !this.deuxiemetouravant){
+                                   this.actionFinie();
                                     doubleAssechement=false;
                                 }
-                                else{
+                                else {
                                 doubleAssechement=false;
+                                this.deuxiemetouravant=false;
 
                                 }
                             } else {
@@ -1040,12 +1075,12 @@ public class Controleur implements Observateur {
                     ihmJeu.getGrille().resetGrille(laGrille.getTuiles());
                     ihmJeu.getGrille().afficherPions(lesJoueurs);
                                         
-                    this.tAccess = this.aQuiLeTour().TuilesAccessibles(this.laGrille);
+                    tAccess = this.aQuiLeTour().TuilesAccessibles(this.laGrille);
 
                     if(this.aQuiLeTour().getRole().equals("pilote")){
 
                         if (m.getHelico()) {
-                            this.tAccess = (((Pilote) this.aQuiLeTour()).deplacementHelico(this.getGrille()));
+                            tAccess = (((Pilote) this.aQuiLeTour()).deplacementHelico(this.getGrille()));
                             ((Pilote)this.aQuiLeTour()).activerHelico();
                             ihmJeu.desactiverHelico();
                         } else if (((Pilote) this.aQuiLeTour()).getHelico()) {
