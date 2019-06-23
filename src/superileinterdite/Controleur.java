@@ -777,17 +777,19 @@ public class Controleur implements Observateur {
             for(Aventurier a : lesJoueurs) {
                 if (a.getTuile().getEtat().equals("coulé")) {
                     a.getTuile().removeAventurier(a);
-                    if (a.getRole().equals("explorateur")) {
-                        a.updateTuile(a.TuilesAccessibles(laGrille).get(1));
-                    } else if (a.getRole().equals("plongeur")) {
-                        for(Tuile t : a.TuilesAccessibles(laGrille)) {
-                            if (!t.getEtat().equals("coulé")){
-                                a.updateTuile(t);
+                    if (!a.TuilesAccessibles(laGrille).isEmpty()) {
+                        if (a.getRole().equals("explorateur")) {
+                            a.updateTuile(a.TuilesAccessibles(laGrille).get(0));
+                        } else if (a.getRole().equals("plongeur")) {
+                            for(Tuile t : a.TuilesAccessibles(laGrille)) {
+                                if (!t.getEtat().equals("coulé")){
+                                    a.updateTuile(t);
+                                }
                             }
+                        } else {
+                            a.updateTuile(a.TuilesAccessibles(laGrille).get(0));
                         }
-                    } else {
-                        a.updateTuile(a.TuilesAccessibles(laGrille).get(0));
-                    }
+                    }                       
                 }
                 a.getTuile().addAventurier(a);             
             }
@@ -1454,7 +1456,8 @@ public class Controleur implements Observateur {
             int x=0;
             // Regarde si un aventurier est mort
             for(Aventurier a : this.getJoueurs()){
-                if(!a.getEtat()){                                     
+                if(!a.getEtat()){      
+                    ihmJeu.getMessageBox().displayMessage("<h2 style=\"text-align:center;\">" + a.getRole() + " est mort </h2>", Color.red, true, true);
                     return false;
                 }
             }
@@ -1464,7 +1467,8 @@ public class Controleur implements Observateur {
                 for(TuileTresor tt : t.getSesTuiles()){                                                                                
                     if(tt.getEtat()=="coulé"){                              
                         x++;
-                        if(t.getEtat()==false && x==2){                             
+                        if(t.getEtat()==false && x==2){   
+                            ihmJeu.getMessageBox().displayMessage("<h2 style=\"text-align:center;\">Les tuiles du trésor " + t.getNom() + " \" sont coulés</h2>", Color.red, true, true);
                             return false;                                         
                         }
                     }
@@ -1479,12 +1483,14 @@ public class Controleur implements Observateur {
             
             
             // Regarde si le niveau d'eau est egal a 10
-            if(this.getNiveauEau()>=10){                                         
+            if(this.getNiveauEau()>=10){    
+                ihmJeu.getMessageBox().displayMessage("<h2 style=\"text-align:center;\">Niveau d'eau a atteint 10</h2>", Color.red, true, true);
                 return false;
             }
             
             for(Tuile t : this.getGrille().sesTuiles) {
                 if (t.getNom().equals("Heliport") && t.getEtat().equals("coulé")) {
+                ihmJeu.getMessageBox().displayMessage("<h2 style=\"text-align:center;\">Heliport coulé</h2>", Color.red, true, true);
                   return false;
                 }
             }
