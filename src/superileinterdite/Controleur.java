@@ -1393,6 +1393,7 @@ public class Controleur implements Observateur {
                     modeDonner = false; 
                     modeDeplacerAutre = false; 
                     modeChoixHelicoDestination = false;
+                    modeActionSpeciale = false;
                     tAssech.removeAll(tAssech);
                     tAccess.removeAll(tAccess);
                     for (Aventurier a : this.getJoueurs()) {
