@@ -833,13 +833,14 @@ public class Controleur implements Observateur {
 //                    }
                     
                     this.setNiveauEau(m.getNiveauEau().getSelectedIndex()+1);
-                    this.niveauEau = 9;
-                    this.ihmJeu.getVueNiveau().setNiveau(9);
+                    this.niveauEau = 8;
+                    this.ihmJeu.getVueNiveau().setNiveau(8);
                     
                     this.PileTresor.getSesCartes().removeAll(this.PileTresor.getSesCartes());
 
                     this.PileTresor.addPile(new CarteActionSpeciale("MDeaux",null));
-                    this.PileTresor.addPile(new CarteActionSpeciale("Sac",null));
+                    this.PileTresor.addPile(new CarteActionSpeciale("MDeaux",null));
+
                     
                     
                     this.nvtour();
