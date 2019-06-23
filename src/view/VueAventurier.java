@@ -104,14 +104,22 @@ public class VueAventurier extends JPanel implements Observe {
         }
     }
     
-    // Enlève les bordures rouges de toutes les cartes)
+    public void afficherCardsActionSpecialeBorder() {
+        for (VueCarte vC : cardsList) {
+            if (vC.getIsSpecial()){
+                vC.setBorder(new LineBorder(Color.RED, 3));
+            }
+        }
+    }
+    
+    // Enlève les bordures de toutes les cartes
     public void cacherCardsBorder() {
         for (VueCarte vC : cardsList) {
             vC.setBorder(new LineBorder(new JButton().getBackground()));
         }
     }
     
-    // Enlève les bordures rouges de toutes les cartes sauf celle choisie (numCarte)
+    // Enlève les bordures de toutes les cartes sauf celle choisie (numCarte)
     public void cacherCardsBorder(int numCarte, int idAventurier) {
         for (VueCarte vC : cardsList) {
             if (vC.getNumCarte() != numCarte) {

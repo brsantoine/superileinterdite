@@ -32,7 +32,7 @@ public class Pilote extends Aventurier {
 	}
     
     
-    public void resetHelico() {
+    public void activerHelico() {
         helico = true;
     }
     

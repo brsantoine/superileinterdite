@@ -82,10 +82,10 @@ public class VueGrille extends JPanel implements Observe{
         return grid;
     }
     
-    // Affiche en vert toutes les tuiles accessibles par l'aventurier courant
-    public void afficherTuilesDeplacer(ArrayList<Tuile> tuiles) {
+    // Affiche en vert toutes les tuiles accessibles par l'aventurier courant (ou avec la carte Heli)
+    public void afficherTuilesDeplacer(ArrayList<Tuile> tuilesAccessibles) {
 
-        for (Tuile tuile : tuiles) {
+        for (Tuile tuile : tuilesAccessibles) {
             for (VueTuile vTuile : grid) {
 //                vTuile.setEnabled(false);
                 if (vTuile.getID() == tuile.getID()) {
@@ -95,6 +95,7 @@ public class VueGrille extends JPanel implements Observe{
             }
         }
     }
+    
     public void afficherTuilesDeplacer(ArrayList<Tuile> tuiles, int numAv) {
 
         for (Tuile tuile : tuiles) {
@@ -109,7 +110,7 @@ public class VueGrille extends JPanel implements Observe{
         }
     }
     
-    // Affiche en bleu toutes les tuiles asséchables par l'aventurier courant
+    // Affiche en bleu toutes les tuiles asséchables par l'aventurier courant (ou avec la carte Sac)
     public void afficherTuilesAssecher(ArrayList<Tuile> tuiles) {
         
         for (Tuile tuile : tuiles) {
